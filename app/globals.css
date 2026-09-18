@@ -1,26 +1,262 @@
 @import "tailwindcss";
 
+/* Aktifkan dark mode berbasis class (.dark di <html>), bukan cuma
+   prefers-color-scheme -- karena ThemeProvider kita toggle class manual. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Font (CSS variable dari next/font di layout.tsx) */
+  --font-sans: var(--font-plus-jakarta), sans-serif;
+  --font-display: var(--font-space-grotesk), sans-serif;
+
+  /* Brand colors */
+  --color-koleksi-green: #22c55e;
+  --color-koleksi-green-dark: #16a34a;
+  --color-koleksi-navy: #1a3a6b;
+  --color-koleksi-navy-dark: #0a1628;
+  --color-koleksi-navy-deep: #0d1f3c;
+
+  --color-koleksi-blue: #3b82f6;
+
+  --color-koleksi-amber: #f59e0b;
+  --color-surface-light: #ffffff;
+  --color-surface-dark: #0a1628;
+
+  --color-muted-light: #f5f7fa;
+  --color-muted-dark: #101e33;
+
+  --color-border-light: rgba(10, 22, 40, 0.1);
+  --color-border-dark: rgba(255, 255, 255, 0.08);
+
+  --color-ink-light: #0a1628;
+  --color-ink-dark: #f5f7fa;
+
+  --color-badge-artikel: #9900e5;
+  --color-badge-video: #ff2a00;
+  --color-badge-liputan: #ffff33;
+
+  /* Breakpoint tambahan -- dipakai buat utility "xxl:" (min-width 1440px). */
+  --breakpoint-xxl: 92rem;
+}
+
+/* Title kartu promo/video (mis. WelcomeStats): Plus Jakarta 20px/24px,
+   warna koleksi-navy (~#1A3A6B). Reusable di section lain lewat class
+   "text-card-title". */
+@utility text-card-title {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  line-height: 24px;
+  color: var(--color-koleksi-navy);
+}
+
+/* Caption di bawah title kartu (mis. "Tonton di YouTube"): Plus Jakarta
+   14px/14px, warna #0A1628 (= --color-ink-light). Reusable lewat class
+   "text-card-caption". */
+@utility text-card-caption {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 14px;
+  color: var(--color-ink-light);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Frame desain totalnya 1400px: ornament (--gutter) makan jatah di
+     kiri+kanan DARI 1400px itu, sisanya baru jadi max-width div content
+     (--content-max-w). Jadi ornament gak nambah lebar di luar 1400,
+     tapi motong dari situ -- makanya div content di-max-w-in pakai
+     --content-max-w, bukan 1400 mentah, biar ornament-nya beneran
+     "masuk" ke frame dan gak pernah nembus/numpuk konten.
+     Floor 80px di bawah 1440px, 105px di 1440px ke atas. min() di
+     --content-max-w jadi jaring pengaman: di layar sempit (viewport
+     belum nyentuh 1400px sekalipun) tetap dijamin ada ruang selebar
+     --gutter buat ornament di kiri-kanan, gak akan ke-overlap konten. */
+  --gutter: 70px;
+  --content-max-w: min(1240px, calc(100% - 2 * var(--gutter)));
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@media (max-width: 767px) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --gutter: 25px;
   }
 }
 
+@media (min-width: 1440px) {
+  :root {
+    --gutter: 105px;
+    --content-max-w: min(1240px, calc(100% - 2 * var(--gutter)));
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply bg-surface-light text-ink-light dark:bg-surface-dark dark:text-ink-dark;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Ornament diagonal-hatch di margin luar section tertentu saja
+   (Selamat Datang, Kegiatan Terbaru, Partner Kami). */
+.section-ornament::before,
+.section-ornament::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--gutter);
+  background-image: url("/images/ornament-side.png");
+  background-repeat: repeat-y;
+  background-size: 100% auto;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.dark .section-ornament::before,
+.dark .section-ornament::after {
+  opacity: 0.15;
+  filter: invert(1);
+}
+
+.section-ornament::before {
+  left: 0;
+}
+
+.section-ornament::after {
+  right: 0;
+  transform: scaleX(-1);
+}
+
+/* Di bawah 768px, ornament pindah dari sisi kiri/kanan jadi strip
+   horizontal di atas & bawah section -- gutter vertikal segini kurang
+   masuk akal buat jadi strip tegak yang sempit di layar HP. */
+@media (max-width: 767px) {
+  .section-ornament::before,
+  .section-ornament::after {
+    left: 0;
+    right: 0;
+    width: auto;
+    height: var(--gutter);
+    background-repeat: repeat-x;
+    /* Source image portrait (tinggi & sempit) buat strip vertikal --
+       jangan pakai "auto 100%" (lebar ngikut rasio asli) karena hasilnya
+       cuma ~1-2px, nyaris gak keliatan. Fixed tile width di sini. */
+    background-size: 60px 100%;
+  }
+
+  .section-ornament::before {
+    top: 0;
+    bottom: auto;
+  }
+
+  .section-ornament::after {
+    top: auto;
+    bottom: 0;
+    transform: scaleY(-1);
+  }
+}
+
+/* Guide-line vertikal -- elemen <div> asli (bukan pseudo-element) supaya
+   tidak pernah ketiban/ketimpa ornament. opacity:0.1 #0A1628. */
+.guide-line {
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: #0a1628;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+/* Di bawah 768px, guide-line kiri/kanan gak relevan (nempel ke depan
+   ornament yang udah pindah ke atas/bawah) -- diganti garis horizontal
+   tipis di bawah section sebagai pembatas antar section. */
+.section-divider-h {
+  position: absolute;
+  z-index: 10;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background-color: #0a1628;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+/* Plus-mark hijau 40x40px di beberapa boundary section */
+.plus-divider-mark {
+  position: absolute;
+  z-index: 20;
+  top: 0;
+  width: 40px;
+  height: 40px;
+  transform: translateY(-50%);
+}
+
+.plus-divider-mark::before,
+.plus-divider-mark::after {
+  content: "";
+  position: absolute;
+  background-color: var(--color-koleksi-green);
+}
+
+.plus-divider-mark::before {
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  transform: translateY(-50%);
+}
+
+.plus-divider-mark::after {
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+
+/* Hero slider pagination dots (Swiper) */
+.hero-pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-pagination .swiper-pagination-bullet {
+  margin: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background: #ffffff;
+  opacity: 0.4;
+  transition:
+    width 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.hero-pagination .swiper-pagination-bullet-active {
+  width: 30px;
+  height: 10px;
+  opacity: 1;
+}
+
+/* Panduan Praktis slider: biar card terakhir bisa bleed/terpotong */
+.panduan-swiper {
+  overflow: visible !important;
 }
