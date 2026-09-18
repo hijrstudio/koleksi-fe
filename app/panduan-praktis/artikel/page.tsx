@@ -227,7 +227,7 @@ export default function ArtikelPage() {
         </div>
 
         {/* Right widgets */}
-        <aside className="flex flex-col gap-8">
+        <aside className="flex flex-col gap-12">
           <div className="relative flex aspect-270/320 w-full flex-col overflow-hidden rounded-[20px] bg-[linear-gradient(180deg,#F1F5F9_50%,#3B82F6_75%,#1A3A6B_100%)] p-5">
             <span className="absolute right-4 top-4 rounded-full bg-koleksi-amber px-2.5 py-1 text-[12px] font-bold uppercase text-koleksi-navy-deep">
               NEW
@@ -244,13 +244,13 @@ export default function ArtikelPage() {
           </div>
 
           <div>
-            <h3 className="text-base font-bold text-koleksi-navy-dark dark:text-ink-dark">
+            <h3 className="text-xl leading-6 font-bold text-koleksi-navy-dark dark:text-ink-dark">
               Terpopuler
             </h3>
-            <ul className="mt-3 divide-y divide-border-light dark:divide-border-dark">
+            <ul className="mt-8 divide-y divide-border-light dark:divide-border-dark">
               {popularArticles.map((item) => (
                 <li key={item.id} className="py-3 first:pt-0">
-                  <p className="text-sm font-semibold leading-5 text-koleksi-navy-dark dark:text-ink-dark">
+                  <p className="text-sm font-semibold leading-[21px] text-koleksi-navy-dark dark:text-ink-dark">
                     {item.title}
                   </p>
                   <p className="mt-1 text-xs text-koleksi-navy-dark/50 dark:text-ink-dark/50">

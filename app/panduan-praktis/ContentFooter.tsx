@@ -12,10 +12,10 @@ const socialLinks = [
 export default function ContentFooter() {
   return (
     <footer className="mt-16">
-      <h3 className="text-sm font-bold text-koleksi-navy-dark dark:text-ink-dark">
+      <h3 className="text-xl leading-6 font-bold text-koleksi-navy-dark dark:text-ink-dark">
         Ikuti Kami
       </h3>
-      <div className="mt-3 flex gap-3">
+      <div className="mt-5 flex gap-5">
         {socialLinks.map(({ icon: Icon, href, label }) => (
           <a
             key={label}
@@ -25,12 +25,12 @@ export default function ContentFooter() {
             aria-label={label}
             className="text-koleksi-navy-dark/40 transition hover:text-koleksi-green dark:text-ink-dark/40"
           >
-            <Icon size={18} />
+            <Icon size={32} />
           </a>
         ))}
       </div>
 
-      <div className="mt-16 flex gap-4 text-xs font-semibold text-koleksi-navy-dark dark:text-ink-dark">
+      <div className="mt-16 flex gap-4 text-xs font-bold text-koleksi-navy-dark dark:text-ink-dark">
         <Link href="/syarat-ketentuan" className="underline">
           Syarat & Ketentuan
         </Link>
