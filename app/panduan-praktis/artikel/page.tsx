@@ -6,90 +6,10 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ChevronDown, Loader2, Rss, Search } from "lucide-react";
 import clsx from "@/lib/clsx";
+import { articles, categoryColor } from "./data";
 
 const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const PAGE_SIZE = 5;
-
-const articles = [
-  {
-    id: "art-1",
-    category: "Kendaraan",
-    title: "Apakah EV Pilihan Tepat Sebagai Mobil Pertama?",
-    author: "Luki Cahyadi (KOLEKSI 104)",
-    image: "/images/sample-image1.png",
-  },
-  {
-    id: "art-2",
-    category: "Bisnis",
-    title:
-      'Membongkar Fakta Hemat "Bedah Dompet" 5 Tahun: TCO BYD ATTO 1 vs HONDA BRIO SATYA',
-    author: "Carlos Christian Lie (KOLEKSI 110)",
-    image: "/images/sample-image2.png",
-  },
-  {
-    id: "art-3",
-    category: "Infrastruktur",
-    title: "Baterai EV dan Ketakutan Publik",
-    author: "KOLEKSI",
-    image: "/images/sample-image3.png",
-  },
-  {
-    id: "art-4",
-    category: "Kendaraan",
-    title: "Panduan Praktis Seputar Kendaraan Listrik",
-    author: "Hendro Sutiono (Pengamat dan Pengguna EV)",
-    image: "/images/sample-image1.png",
-  },
-  {
-    id: "art-5",
-    category: "Bisnis",
-    title:
-      'Membongkar Fakta Hemat "Bedah Dompet" 5 Tahun: TCO BYD ATTO 1 vs HONDA BRIO SATYA',
-    author: "Carlos Christian Lie (KOLEKSI 110)",
-    image: "/images/sample-image1.png",
-  },
-  {
-    id: "art-6",
-    category: "Infrastruktur",
-    title: "Peta Sebaran SPKLU di Jabodetabek Terbaru",
-    author: "KOLEKSI",
-    image: "/images/sample-image2.png",
-  },
-  {
-    id: "art-7",
-    category: "Kendaraan",
-    title: "Tips Merawat Baterai EV Supaya Awet",
-    author: "Luki Cahyadi (KOLEKSI 104)",
-    image: "/images/sample-image3.png",
-  },
-  {
-    id: "art-8",
-    category: "Bisnis",
-    title: "Insentif Pajak Kendaraan Listrik 2026, Apa Saja yang Berubah?",
-    author: "Carlos Christian Lie (KOLEKSI 110)",
-    image: "/images/sample-image1.png",
-  },
-  {
-    id: "art-9",
-    category: "Infrastruktur",
-    title: "Charging di Rumah vs Charging Publik, Mana yang Lebih Hemat?",
-    author: "Hendro Sutiono (Pengamat dan Pengguna EV)",
-    image: "/images/sample-image2.png",
-  },
-  {
-    id: "art-10",
-    category: "Kendaraan",
-    title: "Panduan Memilih EV Bekas untuk Pemula",
-    author: "KOLEKSI",
-    image: "/images/sample-image3.png",
-  },
-];
-
-const categoryColor: Record<string, string> = {
-  Kendaraan: "bg-badge-artikel",
-  Bisnis: "bg-fuchsia-500",
-  Infrastruktur: "bg-sky-500",
-};
 
 const popularArticles = Array.from({ length: 5 }, (_, i) => ({
   id: `popular-${i}`,
@@ -182,33 +102,38 @@ export default function ArtikelPage() {
                   ease: EASE_OUT,
                   delay: (index % PAGE_SIZE) * 0.08,
                 }}
-                className="flex gap-4 py-5 first:pt-0"
+                className="py-5 first:pt-0"
               >
-                <div className="relative aspect-270/183 w-[130px] shrink-0 overflow-hidden rounded-xl sm:w-[200px] lg:w-[270px]">
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    fill
-                    className="object-cover"
-                    sizes="270px"
-                  />
-                </div>
-                <div className="min-w-0">
-                  <span
-                    className={clsx(
-                      "inline-flex w-fit items-center rounded-full px-3 py-1 text-[12px] leading-3 font-semibold text-white",
-                      categoryColor[item.category],
-                    )}
-                  >
-                    {item.category}
-                  </span>
-                  <h3 className="mt-2 text-[20px] font-bold leading-6 text-koleksi-navy-dark dark:text-ink-dark">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 text-[14px] leading-[14px] text-koleksi-navy-dark/60 dark:text-ink-dark/50">
-                    Oleh: {item.author}
-                  </p>
-                </div>
+                <Link
+                  href={`/panduan-praktis/artikel/${item.slug}`}
+                  className="group flex gap-4"
+                >
+                  <div className="relative aspect-270/183 w-[130px] shrink-0 overflow-hidden rounded-xl sm:w-[200px] lg:w-[270px]">
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-cover transition duration-500 group-hover:scale-105"
+                      sizes="270px"
+                    />
+                  </div>
+                  <div className="min-w-0">
+                    <span
+                      className={clsx(
+                        "inline-flex w-fit items-center rounded-full px-3 py-1 text-[12px] leading-3 font-semibold text-white",
+                        categoryColor[item.category],
+                      )}
+                    >
+                      {item.category}
+                    </span>
+                    <h3 className="mt-2 text-[20px] font-bold leading-6 text-koleksi-navy-dark transition group-hover:text-koleksi-green dark:text-ink-dark">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-[14px] leading-[14px] text-koleksi-navy-dark/60 dark:text-ink-dark/50">
+                      Oleh: {item.author}
+                    </p>
+                  </div>
+                </Link>
               </motion.article>
             ))}
           </div>
