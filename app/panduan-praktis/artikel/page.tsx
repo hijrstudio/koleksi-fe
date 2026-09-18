@@ -1,15 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ChevronDown, Loader2, Rss, Search } from "lucide-react";
+import { Loader2, Rss, Search } from "lucide-react";
 import clsx from "@/lib/clsx";
 import { articles, categoryColor } from "./data";
+import FilterDropdown from "@/components/ui/FilterDropdown";
 
 const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const PAGE_SIZE = 5;
+const SORT_OPTIONS = ["Terbaru", "Terlama"] as const;
+const CATEGORY_OPTIONS = ["Kendaraan", "Bisnis", "Infrastruktur"];
 
 const popularArticles = Array.from({ length: 5 }, (_, i) => ({
   id: `popular-${i}`,
@@ -18,14 +21,54 @@ const popularArticles = Array.from({ length: 5 }, (_, i) => ({
 }));
 
 export default function ArtikelPage() {
+  const [search, setSearch] = useState("");
+  const [sortOrder, setSortOrder] =
+    useState<(typeof SORT_OPTIONS)[number]>("Terbaru");
+  const [category, setCategory] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [isLoading, setIsLoading] = useState(false);
-  const hasMore = visibleCount < articles.length;
+
+  // Client-side filter/sort over the local mock array below. Swap this
+  // block for an API call (passing search/category/sortOrder as query
+  // params) once a real backend is wired up -- the state shape here is
+  // already what that request would need.
+  const filteredArticles = useMemo(() => {
+    const query = search.trim().toLowerCase();
+
+    const result = articles.filter((item) => {
+      const matchesQuery =
+        !query ||
+        item.title.toLowerCase().includes(query) ||
+        item.author.toLowerCase().includes(query);
+      const matchesCategory = !category || item.category === category;
+      return matchesQuery && matchesCategory;
+    });
+
+    result.sort((a, b) => {
+      const diff = new Date(a.date).getTime() - new Date(b.date).getTime();
+      return sortOrder === "Terbaru" ? -diff : diff;
+    });
+
+    return result;
+  }, [search, category, sortOrder]);
+
+  // Reset pagination whenever the filters change so "Muat lebih banyak"
+  // always starts from the first page of the new result set. Adjusting
+  // state during render (React's recommended pattern) instead of an
+  // effect avoids an extra render pass.
+  const filterKey = `${search}|${category}|${sortOrder}`;
+  const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
+  if (filterKey !== prevFilterKey) {
+    setPrevFilterKey(filterKey);
+    setVisibleCount(PAGE_SIZE);
+  }
+
+  const hasMore = visibleCount < filteredArticles.length;
 
   function handleLoadMore() {
     setIsLoading(true);
     setTimeout(() => {
-      setVisibleCount((c) => Math.min(c + PAGE_SIZE, articles.length));
+      setVisibleCount((c) => Math.min(c + PAGE_SIZE, filteredArticles.length));
       setIsLoading(false);
     }, 600);
   }
@@ -71,28 +114,34 @@ export default function ArtikelPage() {
               />
               <input
                 type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
                 placeholder="Cari"
-                className="w-full rounded-full border border-border-light bg-transparent py-2 pl-10 pr-4 text-sm text-koleksi-navy-dark placeholder:text-koleksi-navy-dark/40 transition focus:border-koleksi-navy-deep focus:outline-none dark:border-border-dark dark:text-ink-dark"
+                className="w-full rounded-full border border-border-light bg-transparent py-2.5 pl-10 pr-4 text-sm text-koleksi-navy-dark placeholder:text-koleksi-navy-dark/40 transition focus:border-koleksi-navy-deep focus:outline-none dark:border-border-dark dark:text-ink-dark"
               />
             </div>
-            <button
-              type="button"
-              className="flex items-center gap-1 rounded-full border border-border-light px-4 py-2 text-sm text-koleksi-navy-dark transition hover:border-koleksi-navy-deep dark:border-border-dark dark:text-ink-dark"
-            >
-              Terbaru
-              <ChevronDown size={14} />
-            </button>
-            <button
-              type="button"
-              className="flex items-center gap-1 rounded-full border border-border-light px-4 py-2 text-sm text-koleksi-navy-dark transition hover:border-koleksi-navy-deep dark:border-border-dark dark:text-ink-dark"
-            >
-              Kategori/Tag
-              <ChevronDown size={14} />
-            </button>
+            <FilterDropdown
+              label="Terbaru"
+              options={[...SORT_OPTIONS]}
+              value={sortOrder}
+              onChange={(v) => setSortOrder(v as (typeof SORT_OPTIONS)[number])}
+            />
+            <FilterDropdown
+              label="Kategori/Tag"
+              options={CATEGORY_OPTIONS}
+              value={category}
+              onChange={setCategory}
+            />
           </div>
 
+          {filteredArticles.length === 0 && (
+            <p className="mt-6 text-sm text-koleksi-navy-dark/50 dark:text-ink-dark/50">
+              Tidak ada artikel yang cocok dengan pencarian/filter ini.
+            </p>
+          )}
+
           <div className="mt-6 divide-y divide-border-light dark:divide-border-dark">
-            {articles.slice(0, visibleCount).map((item, index) => (
+            {filteredArticles.slice(0, visibleCount).map((item, index) => (
               <motion.article
                 key={item.id}
                 initial={{ opacity: 0, y: 20 }}

@@ -34,7 +34,7 @@ export default function AboutTabs() {
             className={clsx(
               "rounded-[22px] px-5 py-2.5 text-base font-bold leading-6 transition cursor-pointer",
               isActive
-                ? "bg-[#64748B] text-white"
+                ? "bg-muted-steel text-white"
                 : "bg-koleksi-navy-deep/10 text-koleksi-navy-deep hover:bg-koleksi-navy-deep/15",
             )}
           >

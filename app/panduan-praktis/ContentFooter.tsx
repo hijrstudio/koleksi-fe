@@ -11,7 +11,7 @@ const socialLinks = [
 
 export default function ContentFooter() {
   return (
-    <footer className="mt-16">
+    <footer className="mt-16 lg:mt-30">
       <h3 className="text-xl leading-6 font-bold text-koleksi-navy-dark dark:text-ink-dark">
         Ikuti Kami
       </h3>

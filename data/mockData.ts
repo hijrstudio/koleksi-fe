@@ -23,18 +23,21 @@ export const navItems: NavItem[] = [
     label: "Kegiatan",
     href: "/kegiatan",
     children: [
-      { label: "Kegiatan", href: "/kegiatan/kegiatan" },
-      { label: "Galeri", href: "/kegiatan/galeri" },
-      { label: "Video", href: "/kegiatan/video" },
+      { label: "Kegiatan", href: "/kegiatan" },
+      { label: "Galeri", href: "/panduan-praktis/galeri-foto" },
+      { label: "Video", href: "/panduan-praktis/video-edukasi" },
     ],
   },
   {
     label: "Berita",
     href: "/berita",
     children: [
-      { label: "News Release", href: "/berita/news-release" },
-      { label: "Berita EV", href: "/berita/berita-ev" },
-      { label: "Liputan", href: "/berita/liputan" },
+      {
+        label: "News Release",
+        href: "/panduan-praktis/berita?tags=news-release",
+      },
+      { label: "Berita EV", href: "/panduan-praktis/berita?tags=berita-ev" },
+      { label: "Liputan", href: "/panduan-praktis/berita?tags=liputan" },
     ],
   },
   { label: "Produk", href: "/produk" },

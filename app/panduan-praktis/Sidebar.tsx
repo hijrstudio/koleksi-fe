@@ -21,7 +21,7 @@ const navItems = [
   { label: "Web Playbook", href: "/panduan-praktis/web-playbook" },
   { label: "Dokumen Regulasi", href: "/panduan-praktis/dokumen-regulasi" },
   { label: "Glosarium EV", href: "/panduan-praktis/glosarium-ev" },
-  { label: "Pencarian", href: "/panduan-praktis/pencarian" },
+  // { label: "Pencarian", href: "/panduan-praktis/pencarian" },
 ];
 
 export default function Sidebar() {
@@ -105,7 +105,8 @@ export default function Sidebar() {
 
       <nav className="mt-4 flex flex-col px-4">
         {navItems.map((item) => {
-          const isActive = pathname === item.href;
+          const isActive =
+            pathname === item.href || pathname.startsWith(`${item.href}/`);
           return (
             <Link
               key={item.href}

@@ -46,7 +46,7 @@ export default function PlaybookSection() {
         ))}
       </RevealGrid>
 
-      <ViewAllLink href="/playbook" />
+      <ViewAllLink href="/panduan-praktis/web-playbook" />
     </SectionContainer>
   );
 }

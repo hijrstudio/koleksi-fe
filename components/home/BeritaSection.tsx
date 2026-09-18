@@ -29,7 +29,7 @@ export default function BeritaSection() {
         ))}
       </RevealGrid>
 
-      <ViewAllLink href="/berita" />
+      <ViewAllLink href="/panduan-praktis/berita" />
     </SectionContainer>
   );
 }
