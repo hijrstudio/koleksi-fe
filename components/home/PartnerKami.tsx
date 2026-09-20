@@ -13,7 +13,7 @@ export default function PartnerKami() {
   return (
     <SectionContainer withGuides withOrnament topDivider variant="white">
       <RevealItem>
-        <h2 className="font-display text-center text-2xl font-bold text-koleksi-navy dark:text-ink-dark leading-10 sm:text-[32px]">
+        <h2 className="font-display text-center text-2xl font-bold text-koleksi-navy dark:text-ink-dark leading-10 md:text-[32px]">
           Partner Kami
         </h2>
       </RevealItem>

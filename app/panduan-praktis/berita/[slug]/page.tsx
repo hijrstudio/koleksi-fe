@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Bookmark, Share2 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import NewsTag from "@/components/ui/NewsTag";
+import ContentActions from "../../ContentActions";
 import { beritaItems } from "../data";
 
 export default async function BeritaDetailPage({
@@ -42,7 +43,7 @@ export default async function BeritaDetailPage({
             />
           </div>
 
-          <h1 className="mt-8 text-[28px] font-bold leading-9 text-koleksi-navy-dark dark:text-ink-dark sm:text-[32px] sm:leading-10">
+          <h1 className="mt-8 text-[32px] font-bold leading-10 text-koleksi-navy-dark dark:text-ink-dark">
             {berita.title}
           </h1>
 
@@ -61,6 +62,9 @@ export default async function BeritaDetailPage({
 
           <div className="mt-8 h-px w-full bg-koleksi-navy-dark/10" />
 
+          {/* Aksi berita -- mobile only, di atas Berita Terkait */}
+          <ContentActions className="mt-8 md:hidden" />
+
           {/* Related berita */}
           <div className="mt-12">
             <h2 className="text-xl font-bold text-koleksi-navy-dark dark:text-ink-dark">
@@ -73,7 +77,7 @@ export default async function BeritaDetailPage({
                   href={`/panduan-praktis/berita/${item.slug}`}
                   className="group flex gap-4 py-5 first:pt-0"
                 >
-                  <div className="relative aspect-270/183 w-[130px] shrink-0 overflow-hidden rounded-xl sm:w-[200px] lg:w-[270px]">
+                  <div className="relative aspect-270/183 w-[160px] shrink-0 overflow-hidden rounded-xl sm:w-[200px] lg:w-[270px]">
                     <Image
                       src={item.image}
                       alt={item.title}
@@ -100,21 +104,8 @@ export default async function BeritaDetailPage({
         </div>
 
         {/* Right widget */}
-        <aside className="flex flex-col gap-3">
-          <button
-            type="button"
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-koleksi-green px-5 py-2.5 text-sm font-bold text-white transition hover:bg-koleksi-green-dark"
-          >
-            <Bookmark size={16} />
-            Simpan
-          </button>
-          <button
-            type="button"
-            className="flex w-full items-center justify-center gap-2 rounded-full border border-border-light px-5 py-2.5 text-sm font-bold text-koleksi-navy-dark transition hover:border-koleksi-navy-deep dark:border-border-dark dark:text-ink-dark"
-          >
-            <Share2 size={16} />
-            Bagikan
-          </button>
+        <aside className="hidden md:block">
+          <ContentActions />
         </aside>
       </div>
     </div>

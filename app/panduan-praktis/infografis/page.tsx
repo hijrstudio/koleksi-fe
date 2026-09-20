@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { Search, X } from "lucide-react";
+import { X } from "lucide-react";
+import SearchFilterBar from "@/components/ui/SearchFilterBar";
 import FilterDropdown from "@/components/ui/FilterDropdown";
 import Pagination from "@/components/ui/Pagination";
 import { INFOGRAFIS_PER_PAGE, InfografisItem, infografisItems } from "./data";
@@ -48,27 +49,18 @@ export default function InfografisPage() {
           Infografis
         </h2>
 
-        <div className="mt-6 flex flex-wrap items-center gap-3">
-          <div className="relative min-w-[160px] flex-1">
-            <Search
-              size={16}
-              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-koleksi-navy-dark/40"
-            />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Cari"
-              className="w-full rounded-full border border-border-light bg-transparent py-2.5 pl-10 pr-4 text-sm text-koleksi-navy-dark placeholder:text-koleksi-navy-dark/40 transition focus:border-koleksi-navy-deep focus:outline-none dark:border-border-dark dark:text-ink-dark"
-            />
-          </div>
+        <SearchFilterBar
+          className="mt-6"
+          search={search}
+          onSearchChange={setSearch}
+        >
           <FilterDropdown
             label="Kategori/Tag"
             options={CATEGORY_OPTIONS}
             value={category}
             onChange={setCategory}
           />
-        </div>
+        </SearchFilterBar>
 
         {pageItems.length === 0 && (
           <p className="mt-6 text-sm text-koleksi-navy-dark/50 dark:text-ink-dark/50">
@@ -76,7 +68,7 @@ export default function InfografisPage() {
           </p>
         )}
 
-        <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 sm:gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
           {pageItems.map((item, index) => (
             <motion.button
               key={item.id}

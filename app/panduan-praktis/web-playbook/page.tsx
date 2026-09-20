@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { Search } from "lucide-react";
+import SearchFilterBar from "@/components/ui/SearchFilterBar";
 import { FaLock } from "react-icons/fa";
 import clsx from "@/lib/clsx";
 import { LEVELS, Level, playbookItems } from "./data";
@@ -27,21 +27,13 @@ export default function WebPlaybookPage() {
           Web Playbook
         </h2>
 
-        <div className="mt-6 relative min-w-[160px] max-w-sm">
-          <Search
-            size={16}
-            className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-koleksi-navy-dark/40"
-          />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Cari"
-            className="w-full rounded-full border border-border-light bg-transparent py-2.5 pl-10 pr-4 text-sm text-koleksi-navy-dark placeholder:text-koleksi-navy-dark/40 transition focus:border-koleksi-navy-deep focus:outline-none dark:border-border-dark dark:text-ink-dark"
-          />
-        </div>
+        <SearchFilterBar
+          className="mt-6"
+          search={search}
+          onSearchChange={setSearch}
+        />
 
-        <div className="mt-6 flex flex-wrap gap-3">
+        <div className="mt-6 flex flex-wrap gap-1 sm:gap-3">
           {LEVELS.map((opt) => {
             const isActive = opt === level;
             return (
@@ -89,7 +81,7 @@ export default function WebPlaybookPage() {
                 }}
                 className="group relative overflow-hidden rounded-2xl"
               >
-                <div className="relative aspect-270/320 w-full">
+                <div className="relative aspect-388/200 sm:aspect-270/320 w-full">
                   <Image
                     src={item.image}
                     alt={item.title}

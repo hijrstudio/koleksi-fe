@@ -4,11 +4,7 @@ import ContentFooter from "@/components/layout/ContentFooter";
 import OrnamentStrip from "@/components/layout/OrnamentStrip";
 import Sidebar from "./Sidebar";
 
-export default function PanduanPraktisLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function ForumLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <Header />

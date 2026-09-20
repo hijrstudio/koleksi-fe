@@ -48,6 +48,11 @@
   font-size: 20px;
   line-height: 24px;
   color: var(--color-koleksi-navy);
+
+  @media (max-width: 767px) {
+    font-size: 16px;
+    line-height: 20px;
+  }
 }
 
 /* Caption di bawah title kartu (mis. "Tonton di YouTube"): Plus Jakarta
@@ -58,6 +63,35 @@
   font-size: 14px;
   line-height: 14px;
   color: var(--color-ink-light);
+}
+
+/* Skala font-size mobile (< 768px), berlaku untuk semua page:
+     32px -> 24px (line-height 32px)
+     24px -> 20px (line-height 24px)
+     20px -> 16px (line-height 20px)
+   16px dan 14px tidak berubah. Sengaja ditulis di luar @layer supaya
+   menang atas utility Tailwind (termasuk leading-*), jadi cukup pakai
+   text-[32px] / text-2xl / text-[24px] / text-xl / text-[20px] seperti
+   biasa. text-card-title diatur langsung di @utility-nya di atas.
+   Menu mobile Header (#mobile-menu) dikecualikan karena ukuran 24px-nya
+   mengikuti desain tersendiri. */
+@media (max-width: 767px) {
+  .text-\[32px\] {
+    font-size: 24px;
+    line-height: 32px;
+  }
+
+  .text-2xl:not(#mobile-menu *),
+  .text-\[24px\] {
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  .text-xl,
+  .text-\[20px\] {
+    font-size: 16px;
+    line-height: 20px;
+  }
 }
 
 :root {

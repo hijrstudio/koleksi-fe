@@ -22,7 +22,7 @@ export default function SectionHeader({
 }: SectionHeaderProps) {
   return (
     <div className="mb-9 flex items-center justify-between">
-      <h2 className="font-display text-2xl leading-8 font-bold tracking-[-3%] text-koleksi-navy sm:text-[32px] sm:leading-10 dark:text-ink-dark">
+      <h2 className="font-display text-2xl leading-8 font-bold tracking-[-3%] text-koleksi-navy md:text-[32px] md:leading-10 dark:text-ink-dark">
         {title}
       </h2>
       {showArrows && (
