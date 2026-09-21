@@ -16,7 +16,7 @@ export const navItems: NavItem[] = [
     href: "/komunitas",
     children: [
       { label: "Panduan Praktis", href: "/panduan-praktis" },
-      { label: "Forum", href: "/komunitas/forum" },
+      { label: "Forum", href: "/forum" },
     ],
   },
   {

@@ -39,11 +39,11 @@ export default function FilterDropdown({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1 rounded-full border border-border-light px-4 py-2.5 text-base leading-6 font-bold text-koleksi-navy-dark transition hover:border-koleksi-navy-deep dark:border-border-dark dark:text-ink-dark"
+        className="flex items-center gap-4 rounded-full border border-border-light px-5 py-2.5 text-base leading-6 font-bold text-koleksi-navy-dark transition hover:border-koleksi-navy-deep dark:border-border-dark dark:text-ink-dark"
       >
         {value ?? label}
         <ChevronDown
-          size={14}
+          size={16}
           className={clsx(
             "transition-transform duration-300",
             open && "rotate-180",

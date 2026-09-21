@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import clsx from "@/lib/clsx";
-import ContentActions from "../../ContentActions";
+import ContentActions from "@/components/ui/ContentActions";
 import { articles, categoryColor } from "../data";
 
 export default async function ArtikelDetailPage({

@@ -19,6 +19,8 @@
   --color-koleksi-blue: #3b82f6;
 
   --color-koleksi-amber: #f59e0b;
+  /* Bar & persen pemenang di hasil polling (diambil dari desain). */
+  --color-koleksi-orange: #f5510b;
   --color-surface-light: #ffffff;
   --color-surface-dark: #0a1628;
 

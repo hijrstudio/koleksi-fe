@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import NewsTag from "@/components/ui/NewsTag";
-import ContentActions from "../../ContentActions";
+import ContentActions from "@/components/ui/ContentActions";
 import { beritaItems } from "../data";
 
 export default async function BeritaDetailPage({

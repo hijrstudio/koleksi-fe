@@ -7,6 +7,8 @@ import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import SearchFilterBar from "@/components/ui/SearchFilterBar";
 import FilterDropdown from "@/components/ui/FilterDropdown";
+import Dot from "@/components/ui/Dot";
+import RoleBadge from "@/components/ui/RoleBadge";
 import {
   activeMembers,
   diskusiItems,
@@ -18,16 +20,6 @@ import {
 const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const PAGE_SIZE = 10;
 const SORT_OPTIONS = ["Terbaru", "Terlama"] as const;
-
-// Pemisah meta 4x4px; warna ikut text parent (bg-current).
-function Dot() {
-  return (
-    <span
-      aria-hidden="true"
-      className="size-1 shrink-0 rounded-full bg-koleksi-navy-dark/20 dark:bg-ink-dark/50"
-    />
-  );
-}
 
 export default function DiskusiPage() {
   const [search, setSearch] = useState("");
@@ -256,9 +248,7 @@ export default function DiskusiPage() {
                     className="size-12 shrink-0 rounded-full object-cover"
                   />
                   <div className="min-w-0">
-                    <span className="inline-block rounded-full border border-muted-steel px-2 py-0.5 text-[10px] leading-3 font-bold text-muted-steel">
-                      {member.role}
-                    </span>
+                    <RoleBadge role={member.role} />
                     <p className="mt-1 truncate text-sm font-bold text-koleksi-navy-dark dark:text-ink-dark">
                       {member.name}
                     </p>
