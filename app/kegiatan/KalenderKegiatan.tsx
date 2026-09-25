@@ -3,13 +3,11 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Search } from "lucide-react";
 import { motion } from "framer-motion";
 import SectionContainer from "@/components/ui/SectionContainer";
 import SectionHeader from "@/components/ui/SectionHeader";
 import Pagination from "@/components/ui/Pagination";
-import clsx from "@/lib/clsx";
-import FilterButton from "./FilterButton";
+import CatalogToolbar from "@/components/ui/CatalogToolbar";
 import {
   CATEGORY_ALL,
   CATEGORY_OPTIONS,
@@ -57,53 +55,18 @@ export default function KalenderKegiatan() {
     <SectionContainer withGuides withOrnament topDivider variant="white">
       <SectionHeader title="Kalender Kegiatan" />
 
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        {/* Status: On Going / On Plan / Done -- satu aktif sekaligus */}
-        <div className="flex flex-wrap gap-3">
-          {STATUS_OPTIONS.map((opt) => {
-            const isActive = opt === status;
-            return (
-              <button
-                key={opt}
-                type="button"
-                aria-pressed={isActive}
-                onClick={() => setStatus(opt)}
-                className={clsx(
-                  "cursor-pointer rounded-full px-5 py-2 text-sm font-bold transition",
-                  isActive
-                    ? "bg-koleksi-navy-deep text-white"
-                    : "bg-koleksi-navy-deep/10 text-koleksi-navy-deep hover:bg-koleksi-navy-deep/15 dark:bg-white/10 dark:text-ink-dark dark:hover:bg-white/15",
-                )}
-              >
-                {opt}
-              </button>
-            );
-          })}
-        </div>
-
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <Search
-              size={16}
-              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-koleksi-navy-dark/40"
-            />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Cari"
-              aria-label="Cari"
-              className="w-28 rounded-full border border-border-light bg-transparent py-2 pl-9 pr-4 text-sm text-koleksi-navy-dark placeholder:text-koleksi-navy-dark/40 transition focus:w-40 focus:border-koleksi-navy-deep focus:outline-none sm:w-32 sm:focus:w-44 dark:border-border-dark dark:text-ink-dark"
-            />
-          </div>
-
-          <FilterButton
-            options={CATEGORY_OPTIONS}
-            value={category}
-            onChange={(v) => setCategory(v === CATEGORY_ALL ? null : v)}
-          />
-        </div>
-      </div>
+      <CatalogToolbar
+        tabs={STATUS_OPTIONS}
+        activeTab={status}
+        onTabChange={setStatus}
+        search={search}
+        onSearchChange={setSearch}
+        dropdown={{
+          options: CATEGORY_OPTIONS,
+          value: category,
+          onChange: (v) => setCategory(v === CATEGORY_ALL ? null : v),
+        }}
+      />
 
       {pageItems.length === 0 && (
         <p className="mt-6 text-sm text-koleksi-navy-dark/50 dark:text-ink-dark/50">

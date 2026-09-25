@@ -1,25 +1,34 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Filter } from "lucide-react";
+import { ListFilter } from "lucide-react";
 import clsx from "@/lib/clsx";
 
+interface FilterButtonProps {
+  options: string[];
+  value: string | null;
+  onChange: (value: string) => void;
+  /** Label tombol -- tetap (tidak berubah jadi nilai terpilih). Default "Filter". */
+  label?: string;
+  icon?: ReactNode;
+  /** Titik hijau saat `value` terisi (untuk filter). Matikan untuk sort. */
+  showActiveDot?: boolean;
+}
+
 /**
- * Tombol "Filter" (ikon corong + label tetap, tidak berubah jadi nilai
- * terpilih -- beda dari FilterDropdown biasa). Titik hijau muncul saat ada
- * filter aktif. Panel & animasinya sama dengan FilterDropdown supaya
- * konsisten dengan dropdown lain di situs.
+ * Tombol dropdown bergaya pill: ikon + label tetap. Beda dari FilterDropdown
+ * (label berubah jadi nilai + chevron). Panel & animasinya sama dengan
+ * FilterDropdown supaya konsisten dengan dropdown lain di situs.
  */
 export default function FilterButton({
   options,
   value,
   onChange,
-}: {
-  options: string[];
-  value: string | null;
-  onChange: (value: string) => void;
-}) {
+  label = "Filter",
+  icon = <ListFilter size={20} />,
+  showActiveDot = true,
+}: FilterButtonProps) {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -42,14 +51,14 @@ export default function FilterButton({
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="relative flex items-center gap-2 rounded-full border border-border-light px-4 py-2 text-sm font-bold text-koleksi-navy-dark transition hover:border-koleksi-navy-deep dark:border-border-dark dark:text-ink-dark"
+        className="relative flex items-center gap-3 rounded-full border border-border-light px-5 py-2.5 text-base leading-6 font-bold text-koleksi-navy-dark transition hover:border-koleksi-navy-deep dark:border-border-dark dark:text-ink-dark"
       >
-        <Filter size={16} />
-        Filter
-        {value && (
+        {icon}
+        {label}
+        {showActiveDot && value && (
           <span
             aria-hidden="true"
-            className="absolute right-1.5 top-1.5 size-1.5 rounded-full bg-koleksi-green"
+            className="absolute right-2.5 top-2 size-1.5 rounded-full bg-koleksi-green"
           />
         )}
       </button>
