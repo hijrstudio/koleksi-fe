@@ -6,9 +6,9 @@ import clsx from "@/lib/clsx";
 import FilterButton from "@/components/ui/FilterButton";
 
 interface CatalogToolbarProps<T extends string> {
-  /** Tab kategori/status -- satu aktif sekaligus. */
+  /** Tab kategori/status -- maksimal satu aktif; null = tidak ada yang aktif. */
   tabs: readonly T[];
-  activeTab: T;
+  activeTab: T | null;
   onTabChange: (tab: T) => void;
   search: string;
   onSearchChange: (value: string) => void;

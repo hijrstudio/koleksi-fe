@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -8,48 +8,103 @@ import SectionContainer from "@/components/ui/SectionContainer";
 import SectionHeader from "@/components/ui/SectionHeader";
 import Pagination from "@/components/ui/Pagination";
 import CatalogToolbar from "@/components/ui/CatalogToolbar";
+import clsx from "@/lib/clsx";
+import type { EventCategory, EventPage, EventPhase } from "@/types";
 import {
   CATEGORY_ALL,
-  CATEGORY_OPTIONS,
   KEGIATAN_PER_PAGE,
   STATUS_OPTIONS,
-  kegiatanList,
   type KegiatanStatus,
 } from "./data";
 
 const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
+const SEARCH_DEBOUNCE_MS = 400;
 
-export default function KalenderKegiatan() {
-  const [status, setStatus] = useState<KegiatanStatus>("On Going");
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
+/** Label tab -> fase di backend (dihitung dari start_date & end_date). */
+const STATUS_PHASE: Record<KegiatanStatus, EventPhase> = {
+  "On Going": "ongoing",
+  "On Plan": "upcoming",
+  Done: "done",
+};
 
-  const query = search.trim().toLowerCase();
-  const filteredItems = kegiatanList.filter((item) => {
-    const matchesStatus = item.status === status;
-    const matchesQuery = !query || item.title.toLowerCase().includes(query);
-    const matchesCategory = !category || item.category === category;
-    return matchesStatus && matchesQuery && matchesCategory;
+interface Filters {
+  /** null = semua kegiatan (belum ada tab yang diklik). */
+  status: KegiatanStatus | null;
+  search: string;
+  category: EventCategory | null;
+}
+
+/**
+ * Kalender kegiatan: tab fase, pencarian, filter kategori, paginasi bernomor (8 per halaman).
+ * Halaman pertama (semua kegiatan) dirender server; perubahan berikutnya diambil lewat /api/events.
+ * Klik tab yang sedang aktif = kembali ke semua kegiatan.
+ */
+export default function KalenderKegiatan({
+  initialPage,
+  categories,
+}: {
+  initialPage: EventPage;
+  categories: EventCategory[];
+}) {
+  const [filters, setFilters] = useState<Filters>({
+    status: null,
+    search: "",
+    category: null,
   });
+  const [data, setData] = useState(initialPage);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
-  // Reset ke halaman 1 saat tab/pencarian/filter berubah (adjust state
-  // saat render, sama seperti page lain, tanpa effect).
-  const filterKey = `${status}|${search}|${category}`;
-  const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
-  if (filterKey !== prevFilterKey) {
-    setPrevFilterKey(filterKey);
-    setPage(1);
+  const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
+
+  useEffect(
+    () => () => {
+      if (searchTimer.current) clearTimeout(searchTimer.current);
+      abortRef.current?.abort();
+    },
+    [],
+  );
+
+  async function load(next: Filters, page: number) {
+    // Batalkan request sebelumnya supaya hasil lama tidak menimpa hasil terbaru
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
+    setLoading(true);
+    setError(false);
+
+    const params = new URLSearchParams({ page: String(page) });
+    if (next.status) params.set("phase", STATUS_PHASE[next.status]);
+    if (next.search.trim()) params.set("search", next.search.trim());
+    if (next.category) params.set("category", String(next.category.id));
+
+    try {
+      const res = await fetch(`/api/events?${params}`, { signal: controller.signal });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      setData(await res.json());
+    } catch (e) {
+      if ((e as Error).name === "AbortError") return;
+      setError(true);
+    } finally {
+      if (abortRef.current === controller) setLoading(false);
+    }
   }
 
-  const totalPages = Math.max(
-    1,
-    Math.ceil(filteredItems.length / KEGIATAN_PER_PAGE),
-  );
-  const pageItems = filteredItems.slice(
-    (page - 1) * KEGIATAN_PER_PAGE,
-    page * KEGIATAN_PER_PAGE,
-  );
+  function applyFilters(next: Filters) {
+    if (searchTimer.current) clearTimeout(searchTimer.current);
+    setFilters(next);
+    void load(next, 1);
+  }
+
+  function handleSearchChange(search: string) {
+    const next = { ...filters, search };
+    setFilters(next);
+
+    if (searchTimer.current) clearTimeout(searchTimer.current);
+    searchTimer.current = setTimeout(() => void load(next, 1), SEARCH_DEBOUNCE_MS);
+  }
 
   return (
     <SectionContainer withGuides withOrnament topDivider variant="white">
@@ -57,25 +112,46 @@ export default function KalenderKegiatan() {
 
       <CatalogToolbar
         tabs={STATUS_OPTIONS}
-        activeTab={status}
-        onTabChange={setStatus}
-        search={search}
-        onSearchChange={setSearch}
+        activeTab={filters.status}
+        onTabChange={(status) =>
+          applyFilters({
+            ...filters,
+            status: status === filters.status ? null : status,
+          })
+        }
+        search={filters.search}
+        onSearchChange={handleSearchChange}
         dropdown={{
-          options: CATEGORY_OPTIONS,
-          value: category,
-          onChange: (v) => setCategory(v === CATEGORY_ALL ? null : v),
+          options: [CATEGORY_ALL, ...categories.map((c) => c.name)],
+          value: filters.category?.name ?? null,
+          onChange: (name) =>
+            applyFilters({
+              ...filters,
+              category: categories.find((c) => c.name === name) ?? null,
+            }),
         }}
       />
 
-      {pageItems.length === 0 && (
-        <p className="mt-6 text-sm text-koleksi-navy-dark/50 dark:text-ink-dark/50">
-          Tidak ada kegiatan {status} yang cocok dengan pencarian/filter ini.
+      {error && (
+        <p className="mt-6 text-sm text-red-500">
+          Gagal memuat kegiatan. Silakan coba lagi.
         </p>
       )}
 
-      <div className="mt-10 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-        {pageItems.map((item, index) => (
+      {!error && !loading && data.items.length === 0 && (
+        <p className="mt-6 text-sm text-koleksi-navy-dark/50 dark:text-ink-dark/50">
+          Tidak ada kegiatan{filters.status ? ` ${filters.status}` : ""} yang
+          cocok dengan pencarian/filter ini.
+        </p>
+      )}
+
+      <div
+        className={clsx(
+          "mt-10 grid grid-cols-1 gap-x-8 gap-y-10 transition-opacity sm:grid-cols-2 lg:grid-cols-4",
+          loading && "opacity-50",
+        )}
+      >
+        {data.items.map((item, index) => (
           <motion.div
             key={item.id}
             initial={{ opacity: 0, y: 20 }}
@@ -87,14 +163,16 @@ export default function KalenderKegiatan() {
             }}
           >
             <Link href={`/kegiatan/${item.slug}`} className="group block">
-              <div className="relative aspect-video w-full overflow-hidden rounded-2xl">
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  className="object-cover transition duration-500 group-hover:scale-105"
-                  sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-                />
+              <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-koleksi-navy-dark/10">
+                {item.image && (
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    className="object-cover transition duration-500 group-hover:scale-105"
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                  />
+                )}
               </div>
               <h3 className="mt-4 line-clamp-2 text-[20px] font-bold leading-6 text-koleksi-navy-dark transition group-hover:text-koleksi-green dark:text-ink-dark">
                 {item.title}
@@ -113,12 +191,14 @@ export default function KalenderKegiatan() {
         ))}
       </div>
 
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={setPage}
-        className="mt-16"
-      />
+      {data.totalPages > 1 && (
+        <Pagination
+          currentPage={data.page}
+          totalPages={data.totalPages}
+          onPageChange={(page) => void load(filters, page)}
+          className="mt-16"
+        />
+      )}
     </SectionContainer>
   );
 }

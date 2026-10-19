@@ -5,11 +5,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import clsx from "@/lib/clsx";
 import { RevealGrid, RevealItem } from "@/components/ui/Reveal";
-
-interface FaqItemData {
-  question: string;
-  answer: string;
-}
+import RichText from "@/components/ui/RichText";
+import type { FaqItem as FaqItemData } from "@/types";
 
 function FaqItem({ question, answer }: FaqItemData) {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,9 +39,10 @@ function FaqItem({ question, answer }: FaqItemData) {
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden"
           >
-            <p className="px-5 pb-4 text-[14px] font-normal leading-[21px] text-koleksi-navy-dark/80">
-              {answer}
-            </p>
+            <RichText
+              html={answer}
+              className="space-y-2 px-5 pb-4 text-[14px] font-normal leading-[21px] text-koleksi-navy-dark/80"
+            />
           </motion.div>
         )}
       </AnimatePresence>
@@ -56,7 +54,7 @@ export default function FaqAccordion({ items }: { items: FaqItemData[] }) {
   return (
     <RevealGrid className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       {items.map((item) => (
-        <RevealItem key={item.question}>
+        <RevealItem key={item.id}>
           <FaqItem {...item} />
         </RevealItem>
       ))}

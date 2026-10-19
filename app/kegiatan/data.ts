@@ -21,6 +21,10 @@ export interface KegiatanItem {
   category: string;
   /** Field detail (halaman /kegiatan/[slug]) -- opsional, kosong = pakai default di bawah. */
   timeRange?: string;
+  /** Rentang hari pelaksanaan (ISO "YYYY-MM-DD") untuk kalender Dasbor.
+   *  Kosong = pakai `date` sebagai acara satu hari. */
+  startDate?: string;
+  endDate?: string;
   location?: string;
   /** "lat,lng" dummy untuk embed Google Maps. */
   mapQuery?: string;
@@ -56,8 +60,10 @@ export const kegiatanList: KegiatanItem[] = [
     image: "/images/koleksi-goes-iims.png",
     status: "On Going",
     category: "Touring",
-    timeRange: "14 Ags 2026, 19:00 – 17 Ags 2026, 11:50",
-    location: "Pulau Pahawang, Lampung",
+    timeRange: "14 Agu 2026, 19.00 – 17 Agu 2026, 11.50",
+    startDate: "2026-08-14",
+    endDate: "2026-08-17",
+    location: "Pahawang Pulau Wisata Lampung",
     mapQuery: "-5.7167,105.2167",
     registrationHref: "https://forms.gle/u2xV9Zmy2NQDEwR99",
     registrationNotes: [
@@ -309,3 +315,46 @@ export const kegiatanList: KegiatanItem[] = [
     category: "Touring",
   },
 ];
+
+const BULAN = [
+  "januari",
+  "februari",
+  "maret",
+  "april",
+  "mei",
+  "juni",
+  "juli",
+  "agustus",
+  "september",
+  "oktober",
+  "november",
+  "desember",
+];
+
+function toIso(y: number, m: number, d: number) {
+  return `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+}
+
+/** "31 Agustus 2026" -> "2026-08-31" (null kalau format tak dikenali). */
+export function parseTanggalIndo(value: string): string | null {
+  const [d, month, y] = value.trim().toLowerCase().split(/\s+/);
+  const m = BULAN.indexOf(month);
+  if (m < 0 || !Number(d) || !Number(y)) return null;
+  return toIso(Number(y), m, Number(d));
+}
+
+/** Semua hari (ISO) sebuah kegiatan berlangsung -- dipakai kalender Dasbor. */
+export function getKegiatanDays(item: KegiatanItem): string[] {
+  const start = item.startDate ?? parseTanggalIndo(item.date);
+  if (!start) return [];
+  const end = item.endDate ?? start;
+  const days: string[] = [];
+  // Pakai UTC supaya gak geser hari karena zona waktu.
+  const cur = new Date(`${start}T00:00:00Z`);
+  const last = new Date(`${end}T00:00:00Z`);
+  while (cur <= last) {
+    days.push(toIso(cur.getUTCFullYear(), cur.getUTCMonth(), cur.getUTCDate()));
+    cur.setUTCDate(cur.getUTCDate() + 1);
+  }
+  return days;
+}

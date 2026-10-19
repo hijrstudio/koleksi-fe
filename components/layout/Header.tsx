@@ -9,13 +9,20 @@ import { useTheme } from "@/components/providers/ThemeProvider";
 import clsx from "@/lib/clsx";
 import { TbMoonFilled, TbSunHighFilled } from "react-icons/tb";
 import { ID, GB } from "country-flag-icons/react/3x2";
+import { logout } from "@/app/actions/auth";
+import UserMenu, { type HeaderUser } from "./UserMenu";
+import NotificationBell from "./NotificationBell";
+
+export type { HeaderUser };
 
 const LANGUAGES = [
   { code: "id", label: "Indonesia", Flag: ID },
   { code: "en", label: "English", Flag: GB },
 ];
 
-export default function Header() {
+/** `user` diisi = sudah login: tombol "Masuk" diganti lonceng notifikasi +
+ *  avatar (dropdown Dasbor/Keluar) di paling kanan. */
+export default function Header({ user }: { user?: HeaderUser }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [langOpen, setLangOpen] = useState(false);
@@ -121,12 +128,14 @@ export default function Header() {
           <div className="flex items-center gap-4">
             {/* Desktop only — di mobile semuanya pindah ke dalam menu */}
             <div className="hidden items-center gap-4 lg:flex">
-              <Link
-                href="/masuk"
-                className="inline-flex rounded-full bg-[#0D1F3C] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-ink-light"
-              >
-                Masuk
-              </Link>
+              {!user && (
+                <Link
+                  href="/masuk"
+                  className="inline-flex rounded-full bg-[#0D1F3C] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-ink-light"
+                >
+                  Masuk
+                </Link>
+              )}
 
               <button
                 type="button"
@@ -178,6 +187,15 @@ export default function Header() {
                 )}
               </div>
             </div>
+
+            {/* Login: lonceng (semua ukuran) + avatar (desktop; di mobile
+                Dasbor/Keluar ada di dalam menu). */}
+            {user && <NotificationBell />}
+            {user && (
+              <div className="hidden lg:block">
+                <UserMenu user={user} />
+              </div>
+            )}
 
             {/* Hamburger — mobile only */}
             <button
@@ -292,12 +310,32 @@ export default function Header() {
           {/* Masuk + Cari */}
           <div className="mt-15.5 flex flex-col gap-5">
             <Link
-              href="/masuk"
+              href={user ? "/dasbor" : "/masuk"}
               onClick={closeMobileMenu}
-              className="flex h-15 items-center justify-center rounded-full bg-koleksi-green text-lg font-bold text-white transition hover:bg-koleksi-green-dark"
+              className="flex h-15 items-center justify-center gap-3 rounded-full bg-koleksi-green text-lg font-bold text-white transition hover:bg-koleksi-green-dark"
             >
-              Masuk
+              {user && (
+                <Image
+                  src={user.avatar}
+                  alt=""
+                  width={36}
+                  height={36}
+                  className="size-9 rounded-full object-cover"
+                />
+              )}
+              {user ? "Dasbor" : "Masuk"}
             </Link>
+
+            {user && (
+              <form action={logout}>
+                <button
+                  type="submit"
+                  className="flex h-15 w-full items-center justify-center rounded-full border-2 border-white/20 text-lg font-bold text-white transition hover:border-white/40"
+                >
+                  Keluar
+                </button>
+              </form>
+            )}
 
             <label className="flex h-15 items-center gap-5 rounded-full border-2 border-white/20 bg-transparent pl-7 pr-6 text-white focus-within:border-white/40">
               <Search size={22} className="shrink-0" />

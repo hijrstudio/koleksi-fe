@@ -1,78 +1,18 @@
-"use client";
-
-import { useMemo, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { Loader2, Rss } from "lucide-react";
-import SearchFilterBar from "@/components/ui/SearchFilterBar";
-import clsx from "@/lib/clsx";
-import { articles, categoryColor } from "./data";
-import FilterDropdown from "@/components/ui/FilterDropdown";
+import { Rss } from "lucide-react";
+import {
+  getArticleCategories,
+  getArticles,
+  getPopularArticles,
+} from "@/services/guideArticle";
+import ArticleList from "./ArticleList";
 
-const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
-const PAGE_SIZE = 5;
-const SORT_OPTIONS = ["Terbaru", "Terlama"] as const;
-const CATEGORY_OPTIONS = ["Kendaraan", "Bisnis", "Infrastruktur"];
-
-const popularArticles = Array.from({ length: 5 }, (_, i) => ({
-  id: `popular-${i}`,
-  title: "Panduan Praktis Seputar Kendaraan Listrik",
-  date: "31 Agustus 2026",
-}));
-
-export default function ArtikelPage() {
-  const [search, setSearch] = useState("");
-  const [sortOrder, setSortOrder] =
-    useState<(typeof SORT_OPTIONS)[number]>("Terbaru");
-  const [category, setCategory] = useState<string | null>(null);
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Client-side filter/sort over the local mock array below. Swap this
-  // block for an API call (passing search/category/sortOrder as query
-  // params) once a real backend is wired up -- the state shape here is
-  // already what that request would need.
-  const filteredArticles = useMemo(() => {
-    const query = search.trim().toLowerCase();
-
-    const result = articles.filter((item) => {
-      const matchesQuery =
-        !query ||
-        item.title.toLowerCase().includes(query) ||
-        item.author.toLowerCase().includes(query);
-      const matchesCategory = !category || item.category === category;
-      return matchesQuery && matchesCategory;
-    });
-
-    result.sort((a, b) => {
-      const diff = new Date(a.date).getTime() - new Date(b.date).getTime();
-      return sortOrder === "Terbaru" ? -diff : diff;
-    });
-
-    return result;
-  }, [search, category, sortOrder]);
-
-  // Reset pagination whenever the filters change so "Muat lebih banyak"
-  // always starts from the first page of the new result set. Adjusting
-  // state during render (React's recommended pattern) instead of an
-  // effect avoids an extra render pass.
-  const filterKey = `${search}|${category}|${sortOrder}`;
-  const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
-  if (filterKey !== prevFilterKey) {
-    setPrevFilterKey(filterKey);
-    setVisibleCount(PAGE_SIZE);
-  }
-
-  const hasMore = visibleCount < filteredArticles.length;
-
-  function handleLoadMore() {
-    setIsLoading(true);
-    setTimeout(() => {
-      setVisibleCount((c) => Math.min(c + PAGE_SIZE, filteredArticles.length));
-      setIsLoading(false);
-    }, 600);
-  }
+export default async function ArtikelPage() {
+  const [initialPage, categories, popularArticles] = await Promise.all([
+    getArticles({ sort: "latest", page: 1 }),
+    getArticleCategories(),
+    getPopularArticles(),
+  ]);
 
   return (
     <div>
@@ -102,95 +42,7 @@ export default function ArtikelPage() {
 
       <div className="mt-10 grid grid-cols-1 gap-10 md:mt-16 xl:grid-cols-[1fr_270px]">
         {/* Article list */}
-        <div>
-          <h2 className="text-xl font-bold text-koleksi-navy-dark dark:text-ink-dark">
-            Artikel
-          </h2>
-
-          <SearchFilterBar
-            className="mt-4"
-            search={search}
-            onSearchChange={setSearch}
-          >
-            <FilterDropdown
-              label="Terbaru"
-              options={[...SORT_OPTIONS]}
-              value={sortOrder}
-              onChange={(v) => setSortOrder(v as (typeof SORT_OPTIONS)[number])}
-            />
-            <FilterDropdown
-              label="Kategori/Tag"
-              options={CATEGORY_OPTIONS}
-              value={category}
-              onChange={setCategory}
-            />
-          </SearchFilterBar>
-
-          {filteredArticles.length === 0 && (
-            <p className="mt-6 text-sm text-koleksi-navy-dark/50 dark:text-ink-dark/50">
-              Tidak ada artikel yang cocok dengan pencarian/filter ini.
-            </p>
-          )}
-
-          <div className="mt-6 divide-y divide-border-light dark:divide-border-dark">
-            {filteredArticles.slice(0, visibleCount).map((item, index) => (
-              <motion.article
-                key={item.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.5,
-                  ease: EASE_OUT,
-                  delay: (index % PAGE_SIZE) * 0.08,
-                }}
-                className="py-5 first:pt-0"
-              >
-                <Link
-                  href={`/panduan-praktis/artikel/${item.slug}`}
-                  className="group flex gap-4"
-                >
-                  <div className="relative aspect-270/183 w-[160px] shrink-0 overflow-hidden rounded-xl sm:w-[200px] lg:w-[270px]">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className="object-cover transition duration-500 group-hover:scale-105"
-                      sizes="270px"
-                    />
-                  </div>
-                  <div className="min-w-0">
-                    <span
-                      className={clsx(
-                        "inline-flex w-fit items-center rounded-full px-3 py-1 text-[12px] leading-3 font-semibold text-white",
-                        categoryColor[item.category],
-                      )}
-                    >
-                      {item.category}
-                    </span>
-                    <h3 className="mt-2 text-[20px] font-bold leading-6 text-koleksi-navy-dark transition group-hover:text-koleksi-green dark:text-ink-dark">
-                      {item.title}
-                    </h3>
-                    <p className="mt-2 text-[14px] leading-[14px] text-koleksi-navy-dark/60 dark:text-ink-dark/50">
-                      Oleh: {item.author}
-                    </p>
-                  </div>
-                </Link>
-              </motion.article>
-            ))}
-          </div>
-
-          {hasMore && (
-            <button
-              type="button"
-              onClick={handleLoadMore}
-              disabled={isLoading}
-              className="mt-8 inline-flex items-center gap-2 rounded-full border border-koleksi-navy-deep px-6 py-2.5 text-sm font-bold text-koleksi-navy-deep transition hover:border-koleksi-navy-deep/60 disabled:opacity-60"
-            >
-              {isLoading && <Loader2 size={16} className="animate-spin" />}
-              {isLoading ? "Memuat..." : "Muat lebih banyak"}
-            </button>
-          )}
-        </div>
+        <ArticleList initialPage={initialPage} categories={categories} />
 
         {/* Right widgets */}
         <aside className="flex flex-col gap-12">
@@ -209,29 +61,36 @@ export default function ArtikelPage() {
             </Link>
           </div>
 
-          <div>
-            <h3 className="text-xl leading-6 font-bold text-koleksi-navy-dark dark:text-ink-dark">
-              Terpopuler
-            </h3>
-            <ul className="mt-8 divide-y divide-border-light dark:divide-border-dark">
-              {popularArticles.map((item) => (
-                <li key={item.id} className="py-3 first:pt-0">
-                  <p className="text-sm font-semibold leading-[21px] text-koleksi-navy-dark dark:text-ink-dark">
-                    {item.title}
-                  </p>
-                  <p className="mt-1 text-xs text-koleksi-navy-dark/50 dark:text-ink-dark/50">
-                    {item.date}
-                  </p>
-                </li>
-              ))}
-            </ul>
-            <a
-              href="#"
-              className="mt-3 inline-block text-sm font-medium text-koleksi-navy-dark/60 underline transition hover:text-koleksi-green dark:text-ink-dark/60"
-            >
-              Lihat Semua
-            </a>
-          </div>
+          {popularArticles.length > 0 && (
+            <div>
+              <h3 className="text-xl leading-6 font-bold text-koleksi-navy-dark dark:text-ink-dark">
+                Terpopuler
+              </h3>
+              <ul className="mt-8 divide-y divide-border-light dark:divide-border-dark">
+                {popularArticles.map((item) => (
+                  <li key={item.id} className="py-3 first:pt-0">
+                    <Link
+                      href={`/panduan-praktis/artikel/${item.slug}`}
+                      className="group block"
+                    >
+                      <p className="text-sm font-semibold leading-[21px] text-koleksi-navy-dark transition group-hover:text-koleksi-green dark:text-ink-dark">
+                        {item.title}
+                      </p>
+                      <p className="mt-1 text-xs text-koleksi-navy-dark/50 dark:text-ink-dark/50">
+                        {item.date}
+                      </p>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href="#"
+                className="mt-3 inline-block text-sm font-medium text-koleksi-navy-dark/60 underline transition hover:text-koleksi-green dark:text-ink-dark/60"
+              >
+                Lihat Semua
+              </a>
+            </div>
+          )}
         </aside>
       </div>
     </div>

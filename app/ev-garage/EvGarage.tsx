@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import SectionContainer from "@/components/ui/SectionContainer";
@@ -8,16 +8,11 @@ import SearchFilterBar from "@/components/ui/SearchFilterBar";
 import FilterDropdown from "@/components/ui/FilterDropdown";
 import Pagination from "@/components/ui/Pagination";
 import clsx from "@/lib/clsx";
-import {
-  GARAGE_PER_PAGE,
-  SORT_AZ,
-  SORT_OPTIONS,
-  SORT_ZA,
-  garageBrands,
-  garageVehicles,
-} from "./data";
+import type { GarageBrand, GaragePage, GarageSort } from "@/types";
+import { GARAGE_PER_PAGE, SORT_OPTIONS } from "./data";
 
 const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
+const SEARCH_DEBOUNCE_MS = 400;
 
 const COLUMNS = [
   { label: "Merek", width: "w-[17%]" },
@@ -28,45 +23,99 @@ const COLUMNS = [
   { label: "Jangkauan", width: "w-[17%]" },
 ];
 
-export default function EvGarage() {
-  const [brand, setBrand] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
-  const [sort, setSort] = useState(SORT_AZ);
-  const [page, setPage] = useState(1);
+interface Filters {
+  /** Slug merek terpilih; null = semua merek. */
+  brand: string | null;
+  search: string;
+  sort: GarageSort;
+}
 
-  const query = search.trim().toLowerCase();
-  const filteredVehicles = garageVehicles
-    .filter((v) => {
-      const matchesBrand = !brand || v.brand === brand;
-      const matchesQuery =
-        !query ||
-        v.brand.toLowerCase().includes(query) ||
-        v.type.toLowerCase().includes(query);
-      return matchesBrand && matchesQuery;
-    })
-    .sort((a, b) => {
-      const cmp =
-        a.brand.localeCompare(b.brand) || a.type.localeCompare(b.type);
-      return sort === SORT_ZA ? -cmp : cmp;
-    });
+/**
+ * EV Garage: grid logo merek (filter), pencarian, urutan A-Z / Z-A, dan tabel
+ * spesifikasi 18 per halaman. Halaman pertama dirender server; perubahan
+ * berikutnya diambil lewat /api/ev-garage.
+ */
+export default function EvGarage({
+  initialPage,
+  initialError,
+  brands,
+}: {
+  initialPage: GaragePage;
+  initialError: boolean;
+  brands: GarageBrand[];
+}) {
+  const [filters, setFilters] = useState<Filters>({
+    brand: null,
+    search: "",
+    sort: "asc",
+  });
+  const [data, setData] = useState(initialPage);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(initialError);
 
-  // Reset ke halaman 1 saat brand/pencarian/urutan berubah (adjust state
-  // saat render, sama seperti page lain, tanpa effect).
-  const filterKey = `${brand}|${search}|${sort}`;
-  const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
-  if (filterKey !== prevFilterKey) {
-    setPrevFilterKey(filterKey);
-    setPage(1);
+  const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
+  const tableTopRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(
+    () => () => {
+      if (searchTimer.current) clearTimeout(searchTimer.current);
+      abortRef.current?.abort();
+    },
+    [],
+  );
+
+  async function load(next: Filters, page: number) {
+    // Batalkan request sebelumnya supaya hasil lama tidak menimpa hasil terbaru
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
+    setLoading(true);
+    setError(false);
+
+    const params = new URLSearchParams({ sort: next.sort, page: String(page) });
+    if (next.brand) params.set("brand", next.brand);
+    if (next.search.trim()) params.set("search", next.search.trim());
+
+    try {
+      const res = await fetch(`/api/ev-garage?${params}`, {
+        signal: controller.signal,
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      setData(await res.json());
+    } catch (e) {
+      if ((e as Error).name === "AbortError") return;
+      setError(true);
+    } finally {
+      if (abortRef.current === controller) setLoading(false);
+    }
   }
 
-  const totalPages = Math.max(
-    1,
-    Math.ceil(filteredVehicles.length / GARAGE_PER_PAGE),
-  );
-  const pageItems = filteredVehicles.slice(
-    (page - 1) * GARAGE_PER_PAGE,
-    page * GARAGE_PER_PAGE,
-  );
+  function applyFilters(next: Filters) {
+    if (searchTimer.current) clearTimeout(searchTimer.current);
+    setFilters(next);
+    void load(next, 1);
+  }
+
+  function handleSearchChange(search: string) {
+    const next = { ...filters, search };
+    setFilters(next);
+
+    if (searchTimer.current) clearTimeout(searchTimer.current);
+    searchTimer.current = setTimeout(
+      () => void load(next, 1),
+      SEARCH_DEBOUNCE_MS,
+    );
+  }
+
+  function handlePageChange(page: number) {
+    void load(filters, page);
+    tableTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  const sortLabel =
+    SORT_OPTIONS.find((o) => o.value === filters.sort)?.label ?? "A–Z";
 
   return (
     <SectionContainer withGuides withOrnament variant="white">
@@ -77,66 +126,89 @@ export default function EvGarage() {
         Cari jenis dan spesifikasi pengisian daya kendaraan listrik Anda.
       </p>
 
-      {/* Logo brand: 6 kolom (kartu 140x60) di desktop, di-center. Klik untuk
+      {/* Logo merek: 6 kolom (kartu 140x60) di desktop, di-center. Klik untuk
           memfilter tabel per merek; klik lagi untuk melepas. */}
-      <div className="mt-14 grid grid-cols-3 gap-3 sm:gap-4 lg:grid-cols-6 xl:grid-cols-[repeat(6,140px)] xl:justify-center xl:gap-5">
-        {garageBrands.map((b, index) => {
-          const selected = brand === b.name;
-          return (
-            <motion.button
-              key={b.name}
-              type="button"
-              aria-pressed={selected}
-              aria-label={`Filter merek ${b.name}`}
-              onClick={() => setBrand(selected ? null : b.name)}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.4,
-                ease: EASE_OUT,
-                delay: index * 0.03,
-              }}
-              className={clsx(
-                "relative aspect-7/3 w-full cursor-pointer border bg-white transition",
-                selected
-                  ? "border-koleksi-navy-deep"
-                  : "border-border-light hover:border-koleksi-navy-dark/30",
-              )}
-            >
-              {/* Area logo maks. 104x32: wordmark lebar tidak menabrak tepi,
-                  logo persegi (BMW, Volvo) tetap proporsional. */}
-              <span className="absolute inset-x-4.5 inset-y-3.5">
-                <Image
-                  src={b.logo}
-                  alt={b.name}
-                  fill
-                  className="object-contain"
-                  sizes="140px"
-                />
-              </span>
-            </motion.button>
-          );
-        })}
-      </div>
+      {brands.length > 0 && (
+        <div className="mt-14 grid grid-cols-3 gap-3 sm:gap-4 lg:grid-cols-6 xl:grid-cols-[repeat(6,140px)] xl:justify-center xl:gap-5">
+          {brands.map((b, index) => {
+            const selected = filters.brand === b.slug;
+            return (
+              <motion.button
+                key={b.slug}
+                type="button"
+                aria-pressed={selected}
+                aria-label={`Filter merek ${b.name}`}
+                onClick={() =>
+                  applyFilters({ ...filters, brand: selected ? null : b.slug })
+                }
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.4,
+                  ease: EASE_OUT,
+                  delay: index * 0.03,
+                }}
+                className={clsx(
+                  "relative aspect-7/3 w-full cursor-pointer border bg-white transition",
+                  selected
+                    ? "border-koleksi-navy-deep"
+                    : "border-border-light hover:border-koleksi-navy-dark/30",
+                )}
+              >
+                {/* Area logo maks. 104x32: wordmark lebar tidak menabrak tepi,
+                    logo persegi (BMW, Volvo) tetap proporsional. */}
+                <span className="absolute inset-x-4.5 inset-y-3.5 flex items-center justify-center">
+                  {b.logo ? (
+                    <Image
+                      src={b.logo}
+                      alt={b.name}
+                      fill
+                      className="object-contain"
+                      sizes="140px"
+                    />
+                  ) : (
+                    <span className="font-display truncate text-sm leading-none font-bold tracking-[-0.02em] text-koleksi-navy uppercase sm:text-base">
+                      {b.name}
+                    </span>
+                  )}
+                </span>
+              </motion.button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Pencarian + urutan A-Z / Z-A, di-center */}
       <div className="mx-auto mt-20 max-w-195">
         <SearchFilterBar
           iconPosition="right"
-          search={search}
-          onSearchChange={setSearch}
+          search={filters.search}
+          onSearchChange={handleSearchChange}
         >
           <FilterDropdown
-            label={SORT_AZ}
-            options={SORT_OPTIONS}
-            value={sort}
-            onChange={setSort}
+            label="A–Z"
+            options={SORT_OPTIONS.map((o) => o.label)}
+            value={sortLabel}
+            onChange={(label) =>
+              applyFilters({
+                ...filters,
+                sort:
+                  SORT_OPTIONS.find((o) => o.label === label)?.value ?? "asc",
+              })
+            }
           />
         </SearchFilterBar>
       </div>
 
       {/* Tabel spesifikasi -- geser horizontal di layar kecil */}
-      <div className="mt-12 overflow-x-auto">
+      <div
+        ref={tableTopRef}
+        aria-busy={loading}
+        className={clsx(
+          "mt-12 scroll-mt-28 overflow-x-auto transition-opacity duration-300",
+          loading && "opacity-50",
+        )}
+      >
         <table className="w-full min-w-[760px] table-fixed border-collapse text-left">
           <colgroup>
             {COLUMNS.map((c) => (
@@ -157,9 +229,9 @@ export default function EvGarage() {
             </tr>
           </thead>
           <tbody>
-            {pageItems.map((v, index) => (
+            {data.items.map((v, index) => (
               <motion.tr
-                key={v.id}
+                key={`${data.page}-${v.id}`}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
@@ -171,7 +243,7 @@ export default function EvGarage() {
               >
                 <th
                   scope="row"
-                  className="py-4 pr-4 font-bold text-koleksi-navy-dark/80 dark:text-ink-dark/80"
+                  className="py-4 pr-4 font-bold text-koleksi-navy-dark/80 uppercase dark:text-ink-dark/80"
                 >
                   {v.brand}
                 </th>
@@ -196,16 +268,25 @@ export default function EvGarage() {
         </table>
       </div>
 
-      {pageItems.length === 0 && (
+      {error ? (
         <p className="mt-6 text-sm text-koleksi-navy-dark/50 dark:text-ink-dark/50">
-          Tidak ada kendaraan yang cocok dengan pencarian/filter ini.
+          Gagal memuat data EV Garage. Silakan coba lagi.
         </p>
+      ) : (
+        !loading &&
+        data.items.length === 0 && (
+          <p className="mt-6 text-sm text-koleksi-navy-dark/50 dark:text-ink-dark/50">
+            {filters.brand || filters.search.trim()
+              ? "Tidak ada kendaraan yang cocok dengan pencarian/filter ini."
+              : "Belum ada data kendaraan."}
+          </p>
+        )
       )}
 
       <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={setPage}
+        currentPage={data.page}
+        totalPages={data.totalPages}
+        onPageChange={handlePageChange}
         className="mt-20"
       />
     </SectionContainer>

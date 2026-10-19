@@ -297,3 +297,36 @@ body {
 .panduan-swiper {
   overflow: visible !important;
 }
+
+/* Slider logo operator SPKLU: gerak linear terus-menerus (marquee) */
+.spklu-marquee .swiper-wrapper {
+  transition-timing-function: linear !important;
+}
+
+/* Pin anggota di peta Dasbor (Leaflet divIcon): label putih "123 anggota"
+   di atas pin oranye. */
+.member-pin {
+  background: none;
+  border: 0;
+}
+
+.member-pin__label {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(10, 22, 40, 0.18);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  line-height: 14px;
+  color: var(--color-ink-light);
+}
+
+.member-pin svg {
+  display: block;
+  filter: drop-shadow(0 1px 2px rgba(10, 22, 40, 0.3));
+}

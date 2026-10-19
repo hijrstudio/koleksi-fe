@@ -4,6 +4,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import SectionContainer from "@/components/ui/SectionContainer";
 import { RevealGroup, RevealItem } from "@/components/ui/Reveal";
+import { getEventCategories, getEvents } from "@/services/event";
 import KalenderKegiatan from "./KalenderKegiatan";
 
 export const metadata: Metadata = {
@@ -12,7 +13,13 @@ export const metadata: Metadata = {
     "Kalender kegiatan KOLEKSI: touring, gathering, dan agenda komunitas mobil elektrik Indonesia.",
 };
 
-export default function KegiatanPage() {
+export default async function KegiatanPage() {
+  // Render awal: semua kegiatan (tanpa tab aktif), halaman 1.
+  const [initialPage, categories] = await Promise.all([
+    getEvents({ page: 1 }),
+    getEventCategories(),
+  ]);
+
   return (
     <>
       <Header />
@@ -34,7 +41,7 @@ export default function KegiatanPage() {
         </RevealGroup>
 
         <RevealGroup>
-          <KalenderKegiatan />
+          <KalenderKegiatan initialPage={initialPage} categories={categories} />
         </RevealGroup>
       </main>
       <Footer />

@@ -1,9 +1,15 @@
 import Image from "next/image";
 import SectionContainer from "@/components/ui/SectionContainer";
 import { RevealGrid, RevealItem } from "@/components/ui/Reveal";
-import { partnerLogos } from "@/data/mockData";
+import type { PartnerLogo } from "@/types";
+import { getPartners } from "@/services/partner";
 
-export default function PartnerKami() {
+export default async function PartnerKami() {
+  const partnerLogos = await getPartners();
+
+  // Belum ada partner published / API tidak bisa diakses: sembunyikan section.
+  if (partnerLogos.length === 0) return null;
+
   const firstRowCount = Math.ceil(partnerLogos.length / 2);
   const rows = [
     partnerLogos.slice(0, firstRowCount),
@@ -26,18 +32,35 @@ export default function PartnerKami() {
           >
             {row.map((partner) => (
               <RevealItem key={partner.id}>
-                <Image
-                  src={partner.logo}
-                  alt={partner.name}
-                  width={partner.width}
-                  height={partner.height}
-                  className="h-12 w-auto object-contain opacity-70 grayscale transition hover:opacity-100 hover:grayscale-0 sm:h-15"
-                />
+                {partner.url ? (
+                  <a
+                    href={partner.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={partner.name}
+                  >
+                    {renderLogo(partner)}
+                  </a>
+                ) : (
+                  renderLogo(partner)
+                )}
               </RevealItem>
             ))}
           </RevealGrid>
         ))}
       </div>
     </SectionContainer>
+  );
+}
+
+function renderLogo(partner: PartnerLogo) {
+  return (
+    <Image
+      src={partner.logo}
+      alt={partner.name}
+      width={partner.width}
+      height={partner.height}
+      className="h-12 w-auto object-contain opacity-70 grayscale transition hover:opacity-100 hover:grayscale-0 sm:h-15"
+    />
   );
 }
