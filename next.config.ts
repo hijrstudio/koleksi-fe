@@ -7,6 +7,8 @@ const backendUrl = new URL(process.env.BACKEND_API_URL ?? "http://127.0.0.1:8000
 const storageUrl = process.env.BACKEND_STORAGE_URL ? new URL(process.env.BACKEND_STORAGE_URL) : null;
 
 const nextConfig: NextConfig = {
+  // Build mandiri untuk Docker (fe/Dockerfile); tetap aman kalau di-deploy di Vercel.
+  output: "standalone",
   experimental: {
     // Form "Ubah profil" mengunggah dokumen kendaraan (total maks. 10 MB) + foto profil (maks. 2 MB)
     // lewat Server Action (lib/profile/validation.ts) + overhead multipart. Default Next: 1 MB (action) & 10 MB (proxy).
