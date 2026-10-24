@@ -36,8 +36,11 @@ const nextConfig: NextConfig = {
       // Thumbnail bawaan YouTube untuk video edukasi yang tidak upload thumbnail
       { protocol: "https", hostname: "i.ytimg.com", pathname: "/vi/**" },
     ],
-    // Next 16 memblokir optimasi gambar dari IP lokal (127.0.0.1); izinkan hanya saat development.
-    dangerouslyAllowLocalIP: process.env.NODE_ENV !== "production",
+    // Next 16 memblokir optimasi gambar dari IP lokal (127.0.0.1); izinkan saat development, dan di VPS
+    // (IMAGES_ALLOW_LOCAL_IP=true saat build) karena API_DOMAIN di container fe diarahkan ke 127.0.0.1:
+    // NAT VPS tidak bisa menjangkau IP publiknya sendiri. Aman: host tetap dibatasi remotePatterns di atas.
+    dangerouslyAllowLocalIP:
+      process.env.NODE_ENV !== "production" || process.env.IMAGES_ALLOW_LOCAL_IP === "true",
   },
 };
 

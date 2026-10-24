@@ -14,8 +14,11 @@ COPY . .
 # Dibaca next.config.ts (images.remotePatterns) & saat prerender halaman ISR, jadi wajib ada saat build.
 ARG BACKEND_API_URL
 ARG BACKEND_STORAGE_URL
+# true kalau API_DOMAIN di-resolve ke 127.0.0.1 di container (VPS NAT), lihat next.config.ts
+ARG IMAGES_ALLOW_LOCAL_IP=false
 ENV BACKEND_API_URL=$BACKEND_API_URL \
     BACKEND_STORAGE_URL=$BACKEND_STORAGE_URL \
+    IMAGES_ALLOW_LOCAL_IP=$IMAGES_ALLOW_LOCAL_IP \
     NEXT_TELEMETRY_DISABLED=1
 # Token lewat build secret supaya tidak tersimpan di layer image.
 RUN --mount=type=secret,id=backend_api_token,env=BACKEND_API_TOKEN npm run build

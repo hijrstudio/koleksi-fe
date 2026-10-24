@@ -1,7 +1,14 @@
-# Deploy ke VPS setiap push ke main. Aktif hanya kalau repository variable VPS_DEPLOY = "true".
-# Secrets: VPS_HOST, VPS_USER, VPS_SSH_KEY, VPS_PORT (opsional, default 22; VPS NAT Jagoan: 50012).
+# Build image frontend -> ghcr.io/hijrstudio/koleksi-fe (:latest & :<sha>), lalu deploy ke VPS.
+# Image dibangun di sini, bukan di VPS: VPS OpenVZ membatasi thread, build Next.js di sana bisa melumpuhkan server.
+# Build memanggil API produksi (prerender ISR), jadi backend harus sudah online.
+#
+# Secrets build: BACKEND_API_TOKEN (sama dengan deploy/.env di server)
+# Variables build: BACKEND_API_URL (default https://api.koleksi.club/api/v1), BACKEND_STORAGE_URL (opsional),
+#   IMAGES_ALLOW_LOCAL_IP (default true: di VPS API_DOMAIN di-resolve ke 127.0.0.1, lihat next.config.ts)
+# Deploy (job kedua) hanya jalan kalau repository variable VPS_DEPLOY = "true".
+# Secrets deploy: VPS_HOST, VPS_USER, VPS_SSH_KEY, VPS_PORT (opsional, default 22; VPS NAT Jagoan: 50012).
 # Script deploy ada di repo koleksi-be (be/deploy/deploy.sh).
-name: Deploy VPS
+name: Build & Deploy VPS
 
 on:
   push:
@@ -13,7 +20,37 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          build-args: |
+            BACKEND_API_URL=${{ vars.BACKEND_API_URL || 'https://api.koleksi.club/api/v1' }}
+            BACKEND_STORAGE_URL=${{ vars.BACKEND_STORAGE_URL }}
+            IMAGES_ALLOW_LOCAL_IP=${{ vars.IMAGES_ALLOW_LOCAL_IP || 'true' }}
+          secrets: |
+            backend_api_token=${{ secrets.BACKEND_API_TOKEN }}
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/koleksi-fe:latest
+            ghcr.io/${{ github.repository_owner }}/koleksi-fe:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
   deploy:
+    needs: image
     if: vars.VPS_DEPLOY == 'true'
     runs-on: ubuntu-latest
     steps:
