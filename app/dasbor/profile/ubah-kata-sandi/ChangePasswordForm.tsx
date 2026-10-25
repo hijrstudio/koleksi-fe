@@ -2,17 +2,15 @@
 
 import { type FormEvent, startTransition, useActionState, useState } from "react";
 import Link from "next/link";
-import { Check, Circle } from "lucide-react";
-import clsx from "@/lib/clsx";
 import Field from "@/components/auth/FormField";
 import PasswordInput from "@/components/auth/PasswordInput";
+import PasswordRulesChecklist from "@/components/auth/PasswordRulesChecklist";
 import { authSubmitClass } from "@/components/auth/authStyles";
 import { type ChangePasswordState, changePassword } from "@/app/actions/password";
 import {
   type ChangePasswordErrors,
   type ChangePasswordInput,
   PASSWORD_MAX,
-  PASSWORD_RULES,
   validateChangePassword,
 } from "@/lib/auth/password";
 
@@ -125,25 +123,9 @@ function Fields({
           />
         </Field>
 
-        {/* Checklist syarat — langsung berubah saat diketik */}
-        <ul id="sandi-syarat" aria-label="Syarat kata sandi" className="-mt-1 grid grid-cols-2 gap-x-4 gap-y-1.5">
-          {PASSWORD_RULES.map((rule) => {
-            const ok = rule.test(values.password);
-            return (
-              <li
-                key={rule.id}
-                className={clsx(
-                  "flex items-center gap-2 text-xs transition-colors",
-                  ok ? "text-koleksi-green" : "text-koleksi-navy-dark/50 dark:text-ink-dark/50",
-                )}
-              >
-                {ok ? <Check size={14} strokeWidth={3} aria-hidden="true" /> : <Circle size={10} aria-hidden="true" className="mx-0.5" />}
-                {rule.label}
-                <span className="sr-only">{ok ? "(terpenuhi)" : "(belum)"}</span>
-              </li>
-            );
-          })}
-        </ul>
+        <div className="-mt-1">
+          <PasswordRulesChecklist id="sandi-syarat" password={values.password} />
+        </div>
 
         <Field id="sandi-konfirmasi" label="Konfirmasi kata sandi baru" required error={errorFor("password_confirmation")}>
           <PasswordInput

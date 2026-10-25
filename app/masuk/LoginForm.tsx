@@ -19,8 +19,11 @@ const subLinkClass =
 
 type Field = keyof LoginFieldErrors;
 
-/** `next` = halaman tujuan setelah login (divalidasi ulang di Server Action). */
-export default function LoginForm({ next }: { next?: string }) {
+/**
+ * `next` = halaman tujuan setelah login (divalidasi ulang di Server Action).
+ * `notice` = pesan sukses dari halaman sebelumnya (mis. kata sandi berhasil diatur ulang).
+ */
+export default function LoginForm({ next, notice }: { next?: string; notice?: string }) {
   const [state, formAction, pending] = useActionState<LoginState, FormData>(login, {});
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
@@ -57,6 +60,12 @@ export default function LoginForm({ next }: { next?: string }) {
     <>
       <form action={formAction} onSubmit={handleSubmit} noValidate>
         {next && <input type="hidden" name="next" value={next} />}
+
+        {notice && !state.message && !state.errors && (
+          <p role="status" className="mb-5 rounded-lg bg-koleksi-green/10 px-4 py-3 text-sm text-koleksi-green">
+            {notice}
+          </p>
+        )}
 
         {state.message && (
           <p

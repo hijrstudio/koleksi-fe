@@ -12,8 +12,10 @@ export const metadata: Metadata = {
 };
 
 export default async function MasukPage({ searchParams }: PageProps<"/masuk">) {
-  const { next } = await searchParams;
+  const { next, reset } = await searchParams;
   const nextPath = typeof next === "string" ? safeRedirectPath(next) : undefined;
+  // Dari /lupa-password/atur-ulang setelah kata sandi berhasil diatur ulang
+  const notice = reset === "berhasil" ? "Kata sandi berhasil diatur ulang. Silakan masuk dengan kata sandi baru." : undefined;
 
   // Sudah login (token masih berlaku) → langsung ke tujuan.
   if (await getCurrentMember()) {
@@ -22,7 +24,7 @@ export default async function MasukPage({ searchParams }: PageProps<"/masuk">) {
 
   return (
     <AuthShell title="Masuk" backHref="/" backLabel="Kembali ke Beranda">
-      <LoginForm next={nextPath} />
+      <LoginForm next={nextPath} notice={notice} />
     </AuthShell>
   );
 }
