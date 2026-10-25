@@ -20,9 +20,29 @@ const LANGUAGES = [
   { code: "en", label: "English", Flag: GB },
 ];
 
-/** `user` diisi = sudah login: tombol "Masuk" diganti lonceng notifikasi +
- *  avatar (dropdown Dasbor/Keluar) di paling kanan. */
-export default function Header({ user }: { user?: HeaderUser }) {
+/** Sudah login: tombol "Masuk" diganti lonceng notifikasi + avatar (dropdown Dasbor/Keluar) di paling kanan.
+ *  `user` dari server (Dasbor) dipakai langsung; tanpa prop (halaman publik yang statis / ISR) status login
+ *  ditanyakan ke /api/auth/me setelah halaman tampil. */
+export default function Header({ user: serverUser }: { user?: HeaderUser }) {
+  // undefined = belum diketahui (sedang dicek), null = tamu
+  const [sessionUser, setSessionUser] = useState<HeaderUser | null | undefined>(serverUser);
+  const user = sessionUser ?? undefined;
+  const checkingSession = sessionUser === undefined;
+
+  useEffect(() => {
+    if (serverUser) return;
+
+    const controller = new AbortController();
+    fetch("/api/auth/me", { cache: "no-store", signal: controller.signal })
+      .then((res) => (res.ok ? res.json() : { user: null }))
+      .then((data: { user: HeaderUser | null }) => setSessionUser(data.user))
+      .catch((error: Error) => {
+        if (error.name !== "AbortError") setSessionUser(null);
+      });
+
+    return () => controller.abort();
+  }, [serverUser]);
+
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [langOpen, setLangOpen] = useState(false);
@@ -131,7 +151,14 @@ export default function Header({ user }: { user?: HeaderUser }) {
               {!user && (
                 <Link
                   href="/masuk"
-                  className="inline-flex rounded-full bg-[#0D1F3C] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-ink-light"
+                  // Selama status login dicek: tempatnya dipesan tapi tidak terlihat (tidak berkedip "Masuk"
+                  // untuk member yang sudah login, dan tata letak tidak bergeser)
+                  aria-hidden={checkingSession || undefined}
+                  tabIndex={checkingSession ? -1 : undefined}
+                  className={clsx(
+                    "inline-flex rounded-full bg-[#0D1F3C] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-ink-light",
+                    checkingSession && "invisible",
+                  )}
                 >
                   Masuk
                 </Link>
