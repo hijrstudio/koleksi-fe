@@ -458,6 +458,40 @@ export interface InfographicPage {
   totalPages: number;
 }
 
+/* ---------- Web Playbook ---------- */
+
+/** Response mentah GET /guides/playbooks (item). URL PDF sengaja tidak dikirim backend. */
+export interface PlaybookCardResponse {
+  id: number;
+  title: LocalizedText;
+  cover: string | null;
+  published_at: string | null;
+  updated_at: string | null;
+}
+
+export interface PlaybookListResponse {
+  data: PlaybookCardResponse[];
+  meta: { current_page: number; last_page: number; per_page: number; total: number };
+}
+
+export interface PlaybookQuery {
+  search?: string;
+  page?: number;
+}
+
+export interface PlaybookListItem {
+  /** ID backend: dipakai untuk URL /api/playbooks/{id}/file & /download. */
+  id: number;
+  title: string;
+  cover: string | null;
+}
+
+export interface PlaybookPage {
+  items: PlaybookListItem[];
+  page: number;
+  totalPages: number;
+}
+
 /* ---------- Galeri foto ---------- */
 
 export interface GalleryAlbumResponse {

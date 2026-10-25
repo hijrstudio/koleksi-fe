@@ -75,3 +75,26 @@ export async function apiFetch<T>(endpoint: string, options: ApiFetchOptions = {
 
   return res.json() as Promise<T>;
 }
+
+/**
+ * Seperti apiFetch tapi mengembalikan Response mentah (body tidak dibaca) — untuk file biner (mis. PDF)
+ * yang di-stream ulang oleh Route Handler. Tidak di-cache. `bearer` menggantikan BACKEND_API_TOKEN
+ * (mis. token member). Melempar ApiError kalau status bukan 2xx.
+ */
+export async function apiFetchRaw(endpoint: string, { bearer }: { bearer?: string } = {}): Promise<Response> {
+  const token = bearer ?? process.env.BACKEND_API_TOKEN;
+  if (!token) {
+    throw new Error("BACKEND_API_TOKEN belum diset di .env.local");
+  }
+
+  const res = await fetch(buildUrl(endpoint), {
+    headers: { Accept: "application/pdf, application/json", Authorization: `Bearer ${token}` },
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new ApiError(res.status, endpoint, await res.json().catch(() => undefined));
+  }
+
+  return res;
+}
