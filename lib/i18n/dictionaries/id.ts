@@ -75,16 +75,29 @@ const id = {
     unreadDot: "Belum dibaca",
     markAllRead: "Tandai semua dibaca",
     empty: "Belum ada notifikasi.",
-    // Contoh sementara (belum dari API) — dicocokkan dengan notificationItems di data/mockData.ts lewat id
-    samples: {
-      "notif-1": {
-        title: "Pendaftaran Touring Kemerdekaan: Jakarta–Lampung sudah dibuka. Kuota terbatas!",
-        time: "2 jam lalu",
+    needsAction: "Perlu tindakan",
+    recent: "Terbaru",
+    loadError: "Gagal memuat notifikasi.",
+    alerts: {
+      changePassword: {
+        title: "Ubah kata sandi awal Anda",
+        body: "Demi keamanan akun, ganti kata sandi bawaan yang Anda terima saat data keanggotaan dipindahkan.",
       },
-      "notif-2": { title: "Budi Santoso membalas diskusi Anda di Forum.", time: "5 jam lalu" },
-      "notif-3": { title: "Lengkapi data profil Anda untuk membuka semua fitur anggota.", time: "1 hari lalu" },
-      "notif-4": { title: "Anda mendapatkan 10 XP dari mengikuti polling minggu ini.", time: "3 hari lalu" },
-      "notif-5": { title: "Keanggotaan Anda aktif hingga 01 Agu 2027.", time: "1 minggu lalu" },
+      completeProfile: {
+        title: "Lengkapi data profil Anda",
+        body: "Lengkapi data pribadi dan kendaraan untuk membuka semua fitur anggota.",
+      },
+    },
+    // Notifikasi tersimpan di backend, dikenali dari `type`; tipe lain memakai teks dari backend
+    types: {
+      "account.password_changed": {
+        title: "Kata sandi diubah",
+        body: "Kata sandi akun KOLEKSI Anda diubah pada {date}.",
+      },
+      "membership.registration_approved": {
+        title: "Pendaftaran disetujui",
+        body: "Segera aktifkan keanggotaan Anda dengan membayar iuran tahunan sebesar {amount} melalui dasbor anggota.",
+      },
     },
   },
 

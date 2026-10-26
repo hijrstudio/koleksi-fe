@@ -36,6 +36,8 @@ export const API_ENDPOINTS = {
   memberPasswordReset: "/member/password/reset",
   memberIuranPayment: "/member/payments/iuran",
   memberPayment: (merchantRef: string) => `/member/payments/${encodeURIComponent(merchantRef)}`,
+  memberNotifications: "/member/notifications",
+  memberNotificationsRead: "/member/notifications/read",
   regencies: "/regions/regencies",
   districts: (regency: string) => `/regions/regencies/${encodeURIComponent(regency)}/districts`,
   villages: (district: string) => `/regions/districts/${encodeURIComponent(district)}/villages`,

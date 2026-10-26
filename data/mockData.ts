@@ -4,7 +4,6 @@ import {
   ActivityCard,
   PartnerLogo,
   SocialPost,
-  NotificationItem,
 } from "@/types";
 
 export const panduanPraktisItems: ArticleCard[] = [
@@ -180,50 +179,5 @@ export const tiktokPosts: SocialPost[] = [
     image: "/images/tiktok-4.jpg",
     caption: "Selamat Hari Bumi",
     href: "https://tiktok.com",
-  },
-];
-
-// Mock notifikasi anggota (lonceng di Header saat login) -- ganti dengan API.
-export const notificationItems: NotificationItem[] = [
-  {
-    id: "notif-1",
-    type: "kegiatan",
-    title:
-      "Pendaftaran Touring Kemerdekaan: Jakarta–Lampung sudah dibuka. Kuota terbatas!",
-    time: "2 jam lalu",
-    href: "/kegiatan/touring-kemerdekaan-jakarta-lampung",
-    read: false,
-  },
-  {
-    id: "notif-2",
-    type: "forum",
-    title: "Budi Santoso membalas diskusi Anda di Forum.",
-    time: "5 jam lalu",
-    href: "/forum/diskusi",
-    read: false,
-  },
-  {
-    id: "notif-3",
-    type: "profil",
-    title: "Lengkapi data profil Anda untuk membuka semua fitur anggota.",
-    time: "1 hari lalu",
-    href: "/dasbor/profil",
-    read: false,
-  },
-  {
-    id: "notif-4",
-    type: "poin",
-    title: "Anda mendapatkan 10 XP dari mengikuti polling minggu ini.",
-    time: "3 hari lalu",
-    href: "/forum/polling-voting",
-    read: true,
-  },
-  {
-    id: "notif-5",
-    type: "keanggotaan",
-    title: "Keanggotaan Anda aktif hingga 01 Agu 2027.",
-    time: "1 minggu lalu",
-    href: "/dasbor",
-    read: true,
   },
 ];

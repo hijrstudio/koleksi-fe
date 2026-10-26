@@ -211,13 +211,30 @@ export interface SocialPost {
   href: string;
 }
 
-export interface NotificationItem {
+/** GET /member/notifications — notifikasi tersimpan (riwayat). Teks disusun website dari `type` + `params`. */
+export interface MemberNotification {
   id: string;
-  type: "kegiatan" | "forum" | "profil" | "poin" | "keanggotaan";
+  /** mis. "account.password_changed", "membership.registration_approved" */
+  type: string;
+  /** Teks bahasa Indonesia dari backend — dipakai kalau `type` belum dikenal website. */
   title: string;
-  time: string;
-  href: string;
+  message: string;
+  params: Partial<Record<"changed_at" | "amount" | "period_label" | "renewal_date" | "active_until" | "days_left", string | number>>;
   read: boolean;
+  created_at: string | null;
+}
+
+/** "Perlu tindakan" — dihitung dari status akun (/member/me), hilang sendiri setelah diselesaikan. */
+export type NotificationAlert =
+  | { kind: "change_password" }
+  | { kind: "complete_profile" }
+  | { kind: "billing"; billing: MemberBilling };
+
+/** GET /api/member/notifications (route Next.js) */
+export interface NotificationFeed {
+  alerts: NotificationAlert[];
+  items: MemberNotification[];
+  unreadCount: number;
 }
 
 /** Teks bilingual yang boleh kosong (field opsional di CMS). */

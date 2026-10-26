@@ -2,14 +2,11 @@ import type { LucideIcon } from "lucide-react";
 import { AlertTriangle, CalendarClock, CircleAlert } from "lucide-react";
 import clsx from "@/lib/clsx";
 import formatRupiah from "@/lib/formatRupiah";
-import { formatPlainDate } from "@/lib/formatDate";
+import { type PayableState, billingCopy } from "@/lib/billingCopy";
 import { format } from "@/lib/i18n/config";
-import type { Dictionary } from "@/lib/i18n/dictionaries/types";
 import { getDictionary, getLocale } from "@/lib/i18n/server";
-import type { BillingState, Locale, MemberBilling } from "@/types";
+import type { MemberBilling } from "@/types";
 import PayIuranButton from "./PayIuranButton";
-
-type PayableState = Exclude<BillingState, "ok">;
 
 /** Warna per tingkat urgensi: kuning (segera) → oranye (masa tenggang) → merah (tidak aktif). */
 const TONES: Record<PayableState, { icon: LucideIcon; card: string; badge: string; accent: string }> = {
@@ -39,43 +36,6 @@ const TONES: Record<PayableState, { icon: LucideIcon; card: string; badge: strin
   },
 };
 
-function copy(
-  b: MemberBilling,
-  state: PayableState,
-  m: Dictionary["payment"],
-  locale: Locale,
-): { badge: string; title: string; description: string } {
-  const days = Math.abs(b.days_left ?? 0);
-  const date = (ymd: string | null) => formatPlainDate(ymd, locale, "short") || "-";
-
-  switch (state) {
-    case "due_soon":
-      return {
-        badge: m.dueSoonBadge,
-        title: days === 0 ? m.dueToday : format(m.dueInDays, { days }),
-        description: format(m.dueSoonBody, { date: date(b.renewal_date) }),
-      };
-    case "grace":
-      return {
-        badge: m.graceBadge,
-        title: days === 0 ? m.graceLastDay : format(m.graceDaysLeft, { days }),
-        description: format(m.graceBody, { due: date(b.renewal_date), until: date(b.grace_until) }),
-      };
-    case "expired":
-      return {
-        badge: m.expiredBadge,
-        title: m.expiredTitle,
-        description: format(m.expiredBody, { date: date(b.grace_until) }),
-      };
-    case "unpaid":
-      return {
-        badge: m.unpaidBadge,
-        title: m.unpaidTitle,
-        description: m.unpaidBody,
-      };
-  }
-}
-
 /** Info iuran di bawah kartu profil. Tidak tampil kalau iuran lunas & jatuh tempo masih jauh. */
 export default async function PaymentCard({ billing }: { billing: MemberBilling }) {
   if (billing.state === "ok") return null;
@@ -84,7 +44,7 @@ export default async function PaymentCard({ billing }: { billing: MemberBilling 
   const m = (await getDictionary(locale)).payment;
   const state = billing.state;
   const tone = TONES[state];
-  const text = copy(billing, state, m, locale);
+  const text = billingCopy(billing, state, m, locale);
   const Icon = tone.icon;
 
   return (

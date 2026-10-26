@@ -73,15 +73,28 @@ const en: Dictionary = {
     unreadDot: "Unread",
     markAllRead: "Mark all as read",
     empty: "No notifications yet.",
-    samples: {
-      "notif-1": {
-        title: "Registration for the Independence Touring: Jakarta–Lampung is now open. Limited spots!",
-        time: "2 hours ago",
+    needsAction: "Action needed",
+    recent: "Recent",
+    loadError: "Failed to load notifications.",
+    alerts: {
+      changePassword: {
+        title: "Change your initial password",
+        body: "For your account's security, replace the default password you received when your membership data was migrated.",
       },
-      "notif-2": { title: "Budi Santoso replied to your discussion in the Forum.", time: "5 hours ago" },
-      "notif-3": { title: "Complete your profile to unlock all member features.", time: "1 day ago" },
-      "notif-4": { title: "You earned 10 XP for joining this week's poll.", time: "3 days ago" },
-      "notif-5": { title: "Your membership is active until 01 Aug 2027.", time: "1 week ago" },
+      completeProfile: {
+        title: "Complete your profile",
+        body: "Complete your personal and vehicle details to unlock all member features.",
+      },
+    },
+    types: {
+      "account.password_changed": {
+        title: "Password changed",
+        body: "Your KOLEKSI account password was changed on {date}.",
+      },
+      "membership.registration_approved": {
+        title: "Registration approved",
+        body: "Activate your membership now by paying the annual fee of {amount} from the member dashboard.",
+      },
     },
   },
 
