@@ -22,7 +22,7 @@ function toNewsCard(news: NewsResponse, locale: Locale): NewsCard {
     badge: isNewsBadge(news.category.value),
     title: news.title[locale] || news.title.id,
     date: formatDate(news.published_at, locale),
-    href: `/panduan-praktis/berita/${news.slug}`,
+    href: `/berita/${news.slug}`,
   };
 }
 

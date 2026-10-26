@@ -4,7 +4,7 @@ import { getNews } from "@/services/news";
 import BeritaList from "./BeritaList";
 
 /**
- * /panduan-praktis/berita?tags=news-release|berita-ev|liputan
+ * /berita?tags=news-release|berita-ev|liputan
  * Filter kategori dari ?tags= diterapkan di server, jadi render pertama sudah sesuai filter.
  */
 export default async function BeritaPage({

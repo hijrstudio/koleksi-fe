@@ -8,7 +8,6 @@ export default function Sidebar() {
 
   const navItems = [
     { label: sidebar.articles, href: "/panduan-praktis/artikel" },
-    { label: sidebar.news, href: "/panduan-praktis/berita" },
     { label: sidebar.videos, href: "/panduan-praktis/video-edukasi" },
     { label: sidebar.infographics, href: "/panduan-praktis/infografis" },
     { label: sidebar.gallery, href: "/panduan-praktis/galeri-foto" },

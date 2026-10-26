@@ -26,7 +26,7 @@ export default async function BeritaSection() {
             key={item.id}
             className="rounded-xl border border-border-light transition hover:border-koleksi-green dark:border-border-dark"
           >
-            <Link href={item.href ?? "/panduan-praktis/berita"} className="block h-full p-5">
+            <Link href={item.href ?? "/berita"} className="block h-full p-5">
               <NewsTag tag={item.tag} badge={item.badge} />
               <h3 className="mt-5 line-clamp-2 text-xl font-bold leading-6 text-koleksi-navy-dark">
                 {item.title}
@@ -39,7 +39,7 @@ export default async function BeritaSection() {
         ))}
       </RevealGrid>
 
-      <ViewAllLink href="/panduan-praktis/berita" />
+      <ViewAllLink href="/berita" />
     </SectionContainer>
   );
 }

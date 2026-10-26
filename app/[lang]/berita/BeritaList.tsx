@@ -92,6 +92,19 @@ export default function BeritaList({
     void load(next, 1);
   }
 
+  /**
+   * Kategori dari dropdown → ?tags= di URL ikut diganti (tanpa navigasi ke server), supaya menu aktif di sidebar
+   * ikut berubah dan link bisa dibagikan. Next.js menyinkronkan history.replaceState dengan useSearchParams.
+   */
+  function syncTagsParam(category: NewsCategoryValue | null) {
+    const url = new URL(window.location.href);
+    const slug = NEWS_CATEGORIES.find((c) => c.value === category)?.slug;
+    if (slug) url.searchParams.set("tags", slug);
+    else url.searchParams.delete("tags");
+    // state harus null: Next.js melewatkan sinkronisasi kalau state berisi data internalnya (__NA)
+    window.history.replaceState(null, "", url);
+  }
+
   function handleSearchChange(search: string) {
     const next = { ...filters, search };
     setFilters(next);
@@ -137,12 +150,11 @@ export default function BeritaList({
           label={t.list.categoryTag}
           options={[t.common.all, ...categoryOptions.map((c) => c.label)]}
           value={categoryLabel}
-          onChange={(label) =>
-            applyFilters({
-              ...filters,
-              category: categoryOptions.find((c) => c.label === label)?.value ?? null,
-            })
-          }
+          onChange={(label) => {
+            const category = categoryOptions.find((c) => c.label === label)?.value ?? null;
+            applyFilters({ ...filters, category });
+            syncTagsParam(category);
+          }}
         />
       </SearchFilterBar>
 
@@ -177,7 +189,7 @@ export default function BeritaList({
             className="py-5 first:pt-0"
           >
             <Link
-              href={`/panduan-praktis/berita/${item.slug}`}
+              href={`/berita/${item.slug}`}
               className="group flex gap-4"
             >
               <div className="relative aspect-270/183 w-[130px] shrink-0 overflow-hidden rounded-xl bg-koleksi-navy-dark/10 sm:w-[200px] lg:w-[270px]">

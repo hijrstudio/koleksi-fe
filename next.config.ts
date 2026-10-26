@@ -15,6 +15,14 @@ const nextConfig: NextConfig = {
     serverActions: { bodySizeLimit: "13mb" },
     proxyClientMaxBodySize: "13mb",
   },
+  // Berita dipisah dari Panduan Praktis: URL lama (sudah tersebar / terindeks) dialihkan permanen.
+  // Query (?tags=) ikut terbawa otomatis.
+  async redirects() {
+    return ["", "/en"].flatMap((prefix) => [
+      { source: `${prefix}/panduan-praktis/berita`, destination: `${prefix}/berita`, permanent: true },
+      { source: `${prefix}/panduan-praktis/berita/:slug`, destination: `${prefix}/berita/:slug`, permanent: true },
+    ]);
+  },
   images: {
     remotePatterns: [
       {

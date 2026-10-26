@@ -28,9 +28,9 @@ export function getNavItems(t: Dictionary): NavItem[] {
       label: nav.news,
       href: "/berita",
       children: [
-        { label: nav.newsRelease, href: "/panduan-praktis/berita?tags=news-release" },
-        { label: nav.evNews, href: "/panduan-praktis/berita?tags=berita-ev" },
-        { label: nav.coverage, href: "/panduan-praktis/berita?tags=liputan" },
+        { label: nav.newsRelease, href: "/berita?tags=news-release" },
+        { label: nav.evNews, href: "/berita?tags=berita-ev" },
+        { label: nav.coverage, href: "/berita?tags=liputan" },
       ],
     },
     { label: nav.products, href: "/produk" },

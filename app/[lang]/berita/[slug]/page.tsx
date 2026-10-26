@@ -34,7 +34,7 @@ export default async function BeritaDetailPage({
   return (
     <div>
       <Link
-        href="/panduan-praktis/berita"
+        href="/berita"
         aria-label={t.common.back}
         className="flex h-10 w-10 items-center justify-center rounded-full text-koleksi-navy-dark transition hover:bg-koleksi-navy-deep/5 dark:text-ink-dark"
       >
@@ -89,7 +89,7 @@ export default async function BeritaDetailPage({
                 {berita.related.map((item) => (
                   <Link
                     key={item.id}
-                    href={`/panduan-praktis/berita/${item.slug}`}
+                    href={`/berita/${item.slug}`}
                     className="group flex gap-4 py-5 first:pt-0"
                   >
                     <div className="relative aspect-270/183 w-[160px] shrink-0 overflow-hidden rounded-xl bg-koleksi-navy-dark/10 sm:w-[200px] lg:w-[270px]">
