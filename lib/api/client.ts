@@ -33,6 +33,32 @@ export class ApiError extends Error {
 
 const DEFAULT_REVALIDATE = 60;
 
+/**
+ * GET dicoba ulang kalau koneksi putus (mis. ECONNRESET saat TLS handshake ketika build memanggil API paralel)
+ * atau gateway sibuk. Hanya GET: POST/PUT (login, pembayaran) tidak boleh terkirim dua kali.
+ */
+const RETRY_DELAYS_MS = [300, 1000];
+const RETRY_STATUSES = new Set([502, 503, 504]);
+
+/** fetch + retry untuk request GET (lihat RETRY_DELAYS_MS). */
+async function fetchWithRetry(url: string, init: RequestInit): Promise<Response> {
+  const retryable = (init.method ?? "GET").toUpperCase() === "GET";
+
+  for (let attempt = 0; ; attempt++) {
+    const last = !retryable || attempt >= RETRY_DELAYS_MS.length;
+
+    try {
+      const res = await fetch(url, init);
+      if (last || !RETRY_STATUSES.has(res.status)) return res;
+    } catch (error) {
+      // Dibatalkan pemanggil (AbortController) → jangan diulang
+      if (last || (error as Error).name === "AbortError" || init.signal?.aborted) throw error;
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, RETRY_DELAYS_MS[attempt]));
+  }
+}
+
 function buildUrl(endpoint: string, query?: ApiFetchOptions["query"]): string {
   const baseUrl = process.env.BACKEND_API_URL;
   if (!baseUrl) {
@@ -57,7 +83,7 @@ export async function apiFetch<T>(endpoint: string, options: ApiFetchOptions = {
     throw new Error("BACKEND_API_TOKEN belum diset di .env.local");
   }
 
-  const res = await fetch(buildUrl(endpoint, query), {
+  const res = await fetchWithRetry(buildUrl(endpoint, query), {
     ...init,
     headers: {
       Accept: "application/json",
@@ -87,7 +113,7 @@ export async function apiFetchRaw(endpoint: string, { bearer }: { bearer?: strin
     throw new Error("BACKEND_API_TOKEN belum diset di .env.local");
   }
 
-  const res = await fetch(buildUrl(endpoint), {
+  const res = await fetchWithRetry(buildUrl(endpoint), {
     headers: { Accept: "application/pdf, application/json", Authorization: `Bearer ${token}` },
     cache: "no-store",
   });
