@@ -8,6 +8,7 @@ import CTABanner from "@/components/home/CTABanner";
 import KegiatanTerbaru from "@/components/home/KegiatanTerbaru";
 import PlaybookSection from "@/components/home/PlaybookSection";
 import PartnerKami from "@/components/home/PartnerKami";
+import SponsorSection from "@/components/home/SponsorSection";
 import SocialGrid from "@/components/home/SocialGrid";
 import { RevealGroup } from "@/components/ui/Reveal";
 import { instagramPosts, tiktokPosts } from "@/data/mockData";
@@ -38,6 +39,9 @@ export default function Home() {
         </RevealGroup>
         <RevealGroup>
           <PartnerKami />
+        </RevealGroup>
+        <RevealGroup>
+          <SponsorSection />
         </RevealGroup>
         <RevealGroup>
           <SocialGrid

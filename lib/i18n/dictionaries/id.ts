@@ -143,6 +143,7 @@ const id = {
     latestEvents: "Kegiatan Terbaru",
     playbook: "Playbook",
     partners: "Partner Kami",
+    sponsors: "Sponsor Kami",
   },
 
   guide: {

@@ -8,6 +8,7 @@ export const API_ENDPOINTS = {
   eventCategories: "/events/categories",
   eventDetail: (slug: string) => `/events/${encodeURIComponent(slug)}`,
   partners: "/partners",
+  sponsors: "/sponsors",
   about: "/about",
   articles: "/guides/articles",
   articleCategories: "/guides/articles/categories",

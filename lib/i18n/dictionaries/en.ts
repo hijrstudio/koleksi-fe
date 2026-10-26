@@ -140,6 +140,7 @@ const en: Dictionary = {
     latestEvents: "Latest Events",
     playbook: "Playbook",
     partners: "Our Partners",
+    sponsors: "Our Sponsors",
   },
 
   guide: {

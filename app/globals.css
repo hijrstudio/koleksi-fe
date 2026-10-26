@@ -299,7 +299,9 @@ body {
 }
 
 /* Slider logo operator SPKLU: gerak linear terus-menerus (marquee) */
-.spklu-marquee .swiper-wrapper {
+/* Slider logo berjalan linear (SPKLU, Sponsor di Home -- components/ui/LogoMarquee.tsx) */
+.spklu-marquee .swiper-wrapper,
+.logo-marquee .swiper-wrapper {
   transition-timing-function: linear !important;
 }
 
