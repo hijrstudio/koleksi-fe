@@ -4,10 +4,11 @@
  */
 export type NewsCategoryValue = "news_release" | "ev_news" | "coverage";
 
-export const NEWS_CATEGORIES: { value: NewsCategoryValue; slug: string; label: string }[] = [
-  { value: "news_release", slug: "news-release", label: "News Release" },
-  { value: "coverage", slug: "liputan", label: "Liputan" },
-  { value: "ev_news", slug: "berita-ev", label: "Berita EV" },
+/** `labelKey` = kunci label di dictionary (t.nav.*). */
+export const NEWS_CATEGORIES: { value: NewsCategoryValue; slug: string; labelKey: "newsRelease" | "coverage" | "evNews" }[] = [
+  { value: "news_release", slug: "news-release", labelKey: "newsRelease" },
+  { value: "coverage", slug: "liputan", labelKey: "coverage" },
+  { value: "ev_news", slug: "berita-ev", labelKey: "evNews" },
 ];
 
 /** "berita-ev" -> "ev_news"; slug tidak dikenal -> null (semua kategori). */

@@ -3,9 +3,10 @@ import SectionContainer from "@/components/ui/SectionContainer";
 import { RevealGrid, RevealItem } from "@/components/ui/Reveal";
 import type { PartnerLogo } from "@/types";
 import { getPartners } from "@/services/partner";
+import { getDictionary } from "@/lib/i18n/server";
 
 export default async function PartnerKami() {
-  const partnerLogos = await getPartners();
+  const [partnerLogos, t] = await Promise.all([getPartners(), getDictionary()]);
 
   // Belum ada partner published / API tidak bisa diakses: sembunyikan section.
   if (partnerLogos.length === 0) return null;
@@ -20,7 +21,7 @@ export default async function PartnerKami() {
     <SectionContainer withGuides withOrnament topDivider variant="white">
       <RevealItem>
         <h2 className="font-display text-center text-2xl font-bold text-koleksi-navy dark:text-ink-dark leading-10 md:text-[32px]">
-          Partner Kami
+          {t.home.partners}
         </h2>
       </RevealItem>
 

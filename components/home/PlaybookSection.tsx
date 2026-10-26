@@ -1,32 +1,52 @@
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/i18n/Link";
 import SectionContainer from "@/components/ui/SectionContainer";
 import SectionHeader from "@/components/ui/SectionHeader";
 import ViewAllLink from "@/components/ui/ViewAllLink";
 import { RevealGrid, RevealItem } from "@/components/ui/Reveal";
-import { playbookItems } from "@/data/mockData";
+import { getDictionary, getLocale } from "@/lib/i18n/server";
+import { getPlaybooks } from "@/services/guidePlaybook";
 
-export default function PlaybookSection() {
+const HOME_LIMIT = 4;
+
+/** 4 Web Playbook terbaru dari CMS. Klik "Lihat" → halaman Web Playbook (PDF dibuka di popup di sana). */
+export default async function PlaybookSection() {
+  const locale = await getLocale();
+  const [items, t] = await Promise.all([
+    getPlaybooks({ page: 1 }, locale)
+      .then((page) => page.items.slice(0, HOME_LIMIT))
+      .catch((error) => {
+        console.error("[PlaybookSection]", error);
+        return [];
+      }),
+    getDictionary(locale),
+  ]);
+
+  // Belum ada playbook published / API tidak bisa diakses: sembunyikan section.
+  if (items.length === 0) return null;
+
   return (
     <SectionContainer withGuides topDivider variant="white">
       <RevealItem>
-        <SectionHeader title="Playbook" />
+        <SectionHeader title={t.home.playbook} />
       </RevealItem>
 
       <RevealGrid className="grid grid-cols-2 gap-8 sm:grid-cols-4">
-        {playbookItems.map((item) => (
+        {items.map((item) => (
           <RevealItem
             key={item.id}
             className="group relative overflow-hidden rounded-2xl"
           >
-            <div className="relative aspect-270/320 w-full">
-              <Image
-                src={item.image}
-                alt={item.title}
-                fill
-                className="object-cover transition duration-500 group-hover:scale-105"
-                sizes="(min-width: 640px) 22vw, 45vw"
-              />
+            <div className="relative aspect-270/320 w-full bg-koleksi-navy-deep/10">
+              {item.cover && (
+                <Image
+                  src={item.cover}
+                  alt=""
+                  fill
+                  className="object-cover transition duration-500 group-hover:scale-105"
+                  sizes="(min-width: 640px) 22vw, 45vw"
+                />
+              )}
               <div className="absolute inset-0 bg-black/20" />
             </div>
             <div className="absolute inset-x-0 top-0 z-10 p-4">
@@ -36,10 +56,11 @@ export default function PlaybookSection() {
             </div>
             <div className="absolute inset-x-0 bottom-0 z-10 flex justify-end p-4">
               <Link
-                href={item.href}
+                href="/panduan-praktis/web-playbook"
+                aria-label={`${t.common.view} ${item.title}`}
                 className="rounded-full bg-koleksi-amber px-5 py-2 text-base font-bold leading-6 text-koleksi-navy-deep"
               >
-                Lihat
+                {t.common.view}
               </Link>
             </div>
           </RevealItem>

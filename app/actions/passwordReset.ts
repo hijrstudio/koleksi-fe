@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { ApiError } from "@/lib/api/client";
 import { clientIp } from "@/lib/auth/clientIp";
 import { type ResetPasswordErrors, type ResetPasswordInput, validateResetPassword } from "@/lib/auth/password";
+import { localizePath } from "@/lib/i18n/config";
+import { requestI18n } from "@/lib/i18n/request";
 import { requestPasswordReset, resetPassword } from "@/services/memberPasswordReset";
 
 export interface ForgotPasswordState {
@@ -19,20 +21,23 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 /** Langkah 1: kirim link atur ulang ke e-mail. */
 export async function requestReset(_prev: ForgotPasswordState, formData: FormData): Promise<ForgotPasswordState> {
   const email = String(formData.get("email") ?? "").trim();
+  const { t } = await requestI18n(formData.get("lang"));
   if (!EMAIL_PATTERN.test(email)) {
-    return { email, error: "Masukkan alamat e-mail yang valid." };
+    return { email, error: t.auth.invalidEmail };
   }
 
   try {
-    return { email, message: await requestPasswordReset(email, await clientIp()) };
+    // Pesan sukses dari dictionary (sama persis untuk e-mail terdaftar maupun tidak)
+    await requestPasswordReset(email, await clientIp());
+    return { email, message: t.auth.forgot.sent };
   } catch (error) {
     if (error instanceof ApiError && (error.status === 422 || error.status === 429)) {
       const errors = (error.body as { errors?: Record<string, string[]> } | undefined)?.errors;
-      return { email, error: errors?.email?.[0] ?? "Terlalu sering. Coba lagi beberapa saat lagi." };
+      return { email, error: errors?.email?.[0] ?? t.auth.tooOften };
     }
 
     console.error("[requestReset]", error instanceof ApiError ? error.status : error);
-    return { email, error: "Gagal mengirim link. Silakan coba lagi beberapa saat lagi." };
+    return { email, error: t.auth.forgot.sendFailed };
   }
 }
 
@@ -58,7 +63,8 @@ export async function submitReset(_prev: ResetPasswordState, formData: FormData)
 
   if (!email || !token) return { linkInvalid: true };
 
-  const errors = validateResetPassword(input);
+  const { locale, t } = await requestI18n(formData.get("lang"));
+  const errors = validateResetPassword(input, t.validation);
   if (Object.keys(errors).length > 0) return { errors };
 
   try {
@@ -70,14 +76,14 @@ export async function submitReset(_prev: ResetPasswordState, formData: FormData)
 
       return {
         errors: { password: raw.password?.[0], password_confirmation: raw.password_confirmation?.[0] },
-        message: error.status === 429 ? "Terlalu banyak percobaan. Coba lagi beberapa saat lagi." : undefined,
+        message: error.status === 429 ? t.auth.tooManyAttempts : undefined,
       };
     }
 
     console.error("[submitReset]", error instanceof ApiError ? error.status : error);
-    return { message: "Gagal menyimpan kata sandi. Silakan coba lagi beberapa saat lagi." };
+    return { message: t.auth.reset.saveFailed };
   }
 
   // redirect() di luar try: ia bekerja dengan melempar error khusus.
-  redirect("/masuk?reset=berhasil");
+  redirect(localizePath("/masuk?reset=berhasil", locale));
 }

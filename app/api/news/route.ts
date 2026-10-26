@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { requestLocale } from "@/lib/i18n/request";
 import { NEWS_CATEGORIES } from "@/lib/newsCategories";
 import { getNews } from "@/services/news";
 
@@ -14,13 +15,15 @@ export async function GET(request: NextRequest) {
   const category = NEWS_CATEGORIES.find((c) => c.value === params.get("category"))?.value ?? null;
   const page = Number(params.get("page"));
 
+  const locale = await requestLocale(params.get("lang"));
+
   try {
     const result = await getNews({
       search: (params.get("search") ?? "").slice(0, 100),
       category,
       sort: params.get("sort") === "oldest" ? "oldest" : "latest",
       page: Number.isInteger(page) && page > 0 ? page : 1,
-    });
+    }, locale);
 
     return NextResponse.json(result);
   } catch (error) {

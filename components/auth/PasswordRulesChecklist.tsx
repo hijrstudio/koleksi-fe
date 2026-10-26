@@ -1,11 +1,24 @@
+"use client";
+
 import { Check, Circle } from "lucide-react";
 import clsx from "@/lib/clsx";
-import { PASSWORD_RULES } from "@/lib/auth/password";
+import { useI18n } from "@/components/i18n/I18nProvider";
+import { PASSWORD_RULES, passwordRuleText } from "@/lib/auth/password";
 
-/** Checklist syarat kata sandi baru — langsung berubah saat diketik. Dipakai ganti & atur ulang kata sandi. */
-export default function PasswordRulesChecklist({ id, password }: { id: string; password: string }) {
+/** Checklist syarat kata sandi baru — langsung berubah saat diketik. Dipakai daftar, ganti & atur ulang kata sandi. */
+export default function PasswordRulesChecklist({
+  id,
+  password,
+  className,
+}: {
+  id: string;
+  password: string;
+  className?: string;
+}) {
+  const { t } = useI18n();
+
   return (
-    <ul id={id} aria-label="Syarat kata sandi" className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+    <ul id={id} aria-label={t.auth.passwordRules} className={clsx("grid grid-cols-2 gap-x-4 gap-y-1.5", className)}>
       {PASSWORD_RULES.map((rule) => {
         const ok = rule.test(password);
         return (
@@ -17,8 +30,8 @@ export default function PasswordRulesChecklist({ id, password }: { id: string; p
             )}
           >
             {ok ? <Check size={14} strokeWidth={3} aria-hidden="true" /> : <Circle size={10} aria-hidden="true" className="mx-0.5" />}
-            {rule.label}
-            <span className="sr-only">{ok ? "(terpenuhi)" : "(belum)"}</span>
+            {passwordRuleText(t.validation, rule.id, "label")}
+            <span className="sr-only">{ok ? t.auth.ruleMet : t.auth.ruleUnmet}</span>
           </li>
         );
       })}

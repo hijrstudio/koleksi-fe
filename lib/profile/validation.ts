@@ -4,6 +4,9 @@
  * (keunikan No. HP/VIN/plat, kecocokan wilayah & merek/tipe, dokumen minimal 1).
  */
 
+import { format } from "@/lib/i18n/config";
+import type { Dictionary } from "@/lib/i18n/dictionaries/types";
+
 export const VIN_LENGTH = 17;
 export const MAX_DOCUMENTS = 5;
 /** Total ukuran dokumen baru per sekali simpan. Batas body Server Action di next.config.ts (13mb) = dokumen + foto. */
@@ -14,20 +17,15 @@ export const MAX_PHOTO_MB = 2;
 export const MIN_PHOTO_PX = 200;
 export const PHOTO_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;
 
-export const GENDER_OPTIONS = [
-  { value: "L", label: "Laki-laki" },
-  { value: "P", label: "Perempuan" },
-] as const;
+/** Pilihan form; label tampilan dari dictionary (t.form.genders / yesNo / plateStatuses). */
+export const GENDER_VALUES = ["L", "P"] as const;
+export const YES_NO_VALUES = ["ya", "tidak"] as const;
+export const PLATE_STATUS_VALUES = ["permanen", "sementara"] as const;
 
-export const YES_NO_OPTIONS = [
-  { value: "ya", label: "Ya" },
-  { value: "tidak", label: "Tidak" },
-] as const;
-
-export const PLATE_STATUS_OPTIONS = [
-  { value: "permanen", label: "Permanen" },
-  { value: "sementara", label: "Sementara" },
-] as const;
+/** Opsi {value, label} untuk SelectInput / RadioGroup. */
+export function optionsOf<V extends string>(values: readonly V[], labels: Record<V, string>): { value: V; label: string }[] {
+  return values.map((value) => ({ value, label: labels[value] }));
+}
 
 /** Semua nilai form berupa string (sama dengan nama field di API backend). */
 export interface ProfileFormValues {
@@ -100,48 +98,48 @@ interface DocumentCheck {
   photo?: { size: number; type: string } | null;
 }
 
-export function validateProfile(f: ProfileFormValues, docs: DocumentCheck): ProfileErrors {
+export function validateProfile(f: ProfileFormValues, docs: DocumentCheck, m: Dictionary["validation"]): ProfileErrors {
   const e: ProfileErrors = {};
   const today = new Date().toISOString().slice(0, 10);
 
-  if (f.nama_lengkap.trim().length < 2) e.nama_lengkap = "Nama lengkap wajib diisi (min. 2 karakter).";
-  else if (f.nama_lengkap.length > 255) e.nama_lengkap = "Nama lengkap terlalu panjang.";
-  if (f.nama_panggilan.length > 60) e.nama_panggilan = "Nama panggilan maksimal 60 karakter.";
+  if (f.nama_lengkap.trim().length < 2) e.nama_lengkap = m.fullNameRequired;
+  else if (f.nama_lengkap.length > 255) e.nama_lengkap = m.fullNameTooLong;
+  if (f.nama_panggilan.length > 60) e.nama_panggilan = m.nicknameMax;
 
   if (f.tgl_lahir) {
     const ymd = toApiDate(f.tgl_lahir);
-    if (!ymd) e.tgl_lahir = "Format tanggal lahir DD / MM / YYYY.";
-    else if (ymd >= today || ymd <= "1900-01-01") e.tgl_lahir = "Tanggal lahir tidak valid.";
+    if (!ymd) e.tgl_lahir = m.birthDateFormat;
+    else if (ymd >= today || ymd <= "1900-01-01") e.tgl_lahir = m.birthDateInvalid;
   }
 
-  if (!f.no_hp.trim()) e.no_hp = "No. HP wajib diisi.";
-  else if (!PHONE_PATTERN.test(f.no_hp.replace(/[\s-]/g, ""))) e.no_hp = "Format No. HP tidak valid (contoh: 081234567890).";
+  if (!f.no_hp.trim()) e.no_hp = m.phoneRequired;
+  else if (!PHONE_PATTERN.test(f.no_hp.replace(/[\s-]/g, ""))) e.no_hp = m.phoneInvalid;
 
   if (docs.photo) {
-    if (!(PHOTO_TYPES as readonly string[]).includes(docs.photo.type)) e.photo = "Foto profil harus berupa JPG, PNG, atau WEBP.";
-    else if (docs.photo.size > MAX_PHOTO_MB * 1024 * 1024) e.photo = `Ukuran foto profil maksimal ${MAX_PHOTO_MB} MB.`;
+    if (!(PHOTO_TYPES as readonly string[]).includes(docs.photo.type)) e.photo = m.photoType;
+    else if (docs.photo.size > MAX_PHOTO_MB * 1024 * 1024) e.photo = format(m.photoSize, { max: MAX_PHOTO_MB });
   }
 
-  if (f.alamat.length > 500) e.alamat = "Alamat maksimal 500 karakter.";
-  if (f.district_code && !f.city_code) e.city_code = "Pilih kota terlebih dahulu.";
-  if (f.village_code && !f.district_code) e.district_code = "Pilih kecamatan terlebih dahulu.";
+  if (f.alamat.length > 500) e.alamat = m.addressMax;
+  if (f.district_code && !f.city_code) e.city_code = m.cityFirst;
+  if (f.village_code && !f.district_code) e.district_code = m.districtFirst;
 
   if (f.has_vehicle === "ya") {
-    if (f.vin.length !== VIN_LENGTH) e.vin = `No. rangka harus ${VIN_LENGTH} karakter.`;
+    if (f.vin.length !== VIN_LENGTH) e.vin = format(m.vinLength, { length: VIN_LENGTH });
     if (!/^[A-Z]{1,2}$/.test(f.plat_kode) || !/^\d{1,4}$/.test(f.plat_nomor)) {
-      e.plat = "Lengkapi kode wilayah (1–2 huruf) dan nomor plat (1–4 angka).";
+      e.plat = m.plateIncomplete;
     } else if (f.plat_seri && !/^[A-Z]{1,3}$/.test(f.plat_seri)) {
-      e.plat = "Huruf belakang plat 1–3 huruf.";
+      e.plat = m.plateSeries;
     }
 
     const maxYear = new Date().getFullYear() + 1;
     if (f.tahun && !(Number(f.tahun) >= MIN_VEHICLE_YEAR && Number(f.tahun) <= maxYear)) {
-      e.tahun = `Tahun antara ${MIN_VEHICLE_YEAR} dan ${maxYear}.`;
+      e.tahun = format(m.yearRange, { min: MIN_VEHICLE_YEAR, max: maxYear });
     }
 
-    if (docs.count === 0) e.documents = "Unggah minimal satu dokumen bukti (STNK, SPK, atau Invoice).";
-    else if (docs.newCount > MAX_DOCUMENTS) e.documents = `Maksimal ${MAX_DOCUMENTS} dokumen sekali unggah.`;
-    else if (docs.newBytes > MAX_DOCUMENTS_MB * 1024 * 1024) e.documents = `Total dokumen baru maksimal ${MAX_DOCUMENTS_MB} MB.`;
+    if (docs.count === 0) e.documents = m.documentsRequired;
+    else if (docs.newCount > MAX_DOCUMENTS) e.documents = format(m.documentsCount, { max: MAX_DOCUMENTS });
+    else if (docs.newBytes > MAX_DOCUMENTS_MB * 1024 * 1024) e.documents = format(m.documentsSize, { max: MAX_DOCUMENTS_MB });
   }
 
   return e;

@@ -1,11 +1,21 @@
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/i18n/Link";
 import { ChevronRight } from "lucide-react";
 import SectionContainer from "@/components/ui/SectionContainer";
 import { RevealGrid, RevealItem } from "@/components/ui/Reveal";
-import { communityStats } from "@/data/mockData";
+import { getDictionary } from "@/lib/i18n/server";
 
-export default function WelcomeStats() {
+export default async function WelcomeStats() {
+  const t = await getDictionary();
+  const { welcome } = t.home;
+  // icon = nama file /images/icon-*.svg (tidak ikut diterjemahkan)
+  const communityStats = [
+    { icon: "anggota", value: ">1000", label: welcome.stats.members },
+    { icon: "kota", value: "26", label: welcome.stats.cities },
+    { icon: "kegiatan", value: "123", label: welcome.stats.events },
+    { icon: "brand", value: "20", label: welcome.stats.brands },
+  ];
+
   return (
     <SectionContainer withGuides withOrnament centerGuide>
       <div className=" grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
@@ -13,16 +23,16 @@ export default function WelcomeStats() {
         <div>
           <RevealItem>
             <p className="font-display uppercase text-2xl leading-8 font-bold text-koleksi-navy">
-              Selamat Datang di
+              {welcome.eyebrow}
             </p>
             <h2 className="max-w-2xl mt-4.5 font-display uppercase text-3xl font-bold leading-14 text-koleksi-navy dark:text-white sm:text-5xl">
-              Komunitas Mobil Elektrik Indonesia (KOLEKSI)
+              {welcome.title}
             </h2>
           </RevealItem>
 
           <RevealGrid className="mt-10 grid grid-cols-4 gap-4">
             {communityStats.map((stat, i) => {
-              const iconUrl = `/images/icon-${stat.label.toLowerCase()}.svg`;
+              const iconUrl = `/images/icon-${stat.icon}.svg`;
               return (
                 <RevealItem key={stat.label} className="relative">
                   {i > 0 && (
@@ -63,7 +73,7 @@ export default function WelcomeStats() {
               href="/komunitas"
               className="inline-flex items-center gap-4 rounded-full border border-border-light py-2.5 pl-6 pr-3 text-[20px] leading-8 font-bold text-koleksi-navy-deep transition hover:border-koleksi-navy-deep dark:border-border-dark"
             >
-              Lihat Komunitas
+              {welcome.viewCommunity}
               <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-koleksi-navy-deep text-white">
                 <ChevronRight size={24} />
               </span>
@@ -72,7 +82,7 @@ export default function WelcomeStats() {
               href="/daftar"
               className="inline-flex items-center rounded-full bg-koleksi-green px-10 py-2.5 text-[20px] leading-8 font-bold text-koleksi-navy-deep transition hover:bg-koleksi-green-dark"
             >
-              Daftar
+              {t.common.register}
             </Link>
           </RevealItem>
         </div>
@@ -82,17 +92,17 @@ export default function WelcomeStats() {
           <div className="relative aspect-560/314 w-full overflow-hidden rounded-2xl">
             <Image
               src="/images/koleksi-goes-iims.png"
-              alt="KOLEKSI Goes to IIMS 2026"
+              alt={welcome.featuredAlt}
               fill
               className="object-cover"
               sizes="(min-width: 1024px) 45vw, 100vw"
             />
           </div>
           <p className="mt-4 text-card-title font-bold">
-            KOLEKSI GOES TO IIMS 2026 – TALKSHOW
+            {welcome.featuredTitle}
           </p>
           <p className="mt-2 text-card-caption">
-            Tonton di{" "}
+            {welcome.watchOn}{" "}
             <a
               href="https://youtube.com"
               target="_blank"

@@ -1,13 +1,15 @@
-import Link from "next/link";
+import Link from "@/components/i18n/Link";
 import SectionContainer from "@/components/ui/SectionContainer";
 import SectionHeader from "@/components/ui/SectionHeader";
 import ViewAllLink from "@/components/ui/ViewAllLink";
 import NewsTag from "@/components/ui/NewsTag";
 import { RevealGrid, RevealItem } from "@/components/ui/Reveal";
 import { getLatestNews } from "@/services/news";
+import { getDictionary, getLocale } from "@/lib/i18n/server";
 
 export default async function BeritaSection() {
-  const items = await getLatestNews();
+  const locale = await getLocale();
+  const [items, t] = await Promise.all([getLatestNews(locale), getDictionary(locale)]);
 
   // Belum ada berita published / API tidak bisa diakses: sembunyikan section.
   if (items.length === 0) return null;
@@ -15,7 +17,7 @@ export default async function BeritaSection() {
   return (
     <SectionContainer withGuides variant="white">
       <RevealItem>
-        <SectionHeader title="Berita" />
+        <SectionHeader title={t.home.news} />
       </RevealItem>
 
       <RevealGrid className="grid grid-cols-1 gap-6 sm:grid-cols-3">

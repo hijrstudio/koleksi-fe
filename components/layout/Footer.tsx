@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/i18n/Link";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { RiInstagramFill, RiLinkedinFill, RiYoutubeFill } from "react-icons/ri";
 import TikTokIcon from "@/components/ui/TikTokIcon";
@@ -12,6 +15,8 @@ const socialLinks = [
 ];
 
 export default function Footer() {
+  const { t } = useI18n();
+
   return (
     <footer className="bg-[#072B15] text-white/70">
       <div className="mx-auto max-w-[1400px] px-6 grid grid-cols-1 gap-10 py-14 sm:grid-cols-3">
@@ -23,7 +28,7 @@ export default function Footer() {
             width={233}
             height={100}
           />
-          <p className="mt-6 text-xs text-white/40">Member of</p>
+          <p className="mt-6 text-xs text-white/40">{t.footer.memberOf}</p>
           <Image
             src="/images/logo-imi.png"
             alt="IMI"
@@ -36,7 +41,7 @@ export default function Footer() {
         {/* Secretariat */}
         <div>
           <h3 className="mb-4 text-base font-semibold text-white">
-            Sekretariat KOLEKSI
+            {t.footer.secretariat}
           </h3>
           <ul className="space-y-3 text-sm">
             <li className="flex gap-2">
@@ -44,10 +49,7 @@ export default function Footer() {
                 size={18}
                 className="mt-0.5 shrink-0 text-koleksi-green"
               />
-              <span>
-                Jalan Cipinang Jaya No. 89, RT.007 RW.03 Kel. Cipinang Muara,
-                Kec. Jatinegara, Jakarta Timur
-              </span>
+              <span>{t.footer.address}</span>
             </li>
             <li className="flex items-center gap-2">
               <Mail size={18} className="shrink-0 text-koleksi-green" />
@@ -65,7 +67,7 @@ export default function Footer() {
         {/* Social */}
         <div>
           <h3 className="mb-4 text-base font-semibold text-white">
-            Ikuti Kami di
+            {t.footer.followUs}
           </h3>
           <div className="flex gap-3">
             {socialLinks.map(({ icon: Icon, href, label }) => (
@@ -90,17 +92,17 @@ export default function Footer() {
             href="/syarat-ketentuan"
             className="text-white underline hover:text-white/70"
           >
-            Syarat &amp; Ketentuan
+            {t.footer.terms}
           </Link>
           <Link
             href="/kebijakan-privasi"
             className="text-white underline hover:text-white/70"
           >
-            Kebijakan Privasi
+            {t.footer.privacy}
           </Link>
         </div>
         <p className="mt-3">
-          &copy; {new Date().getFullYear()} KOLEKSI CLUB. All Rights Reserved.
+          &copy; {new Date().getFullYear()} {t.footer.copyright}
         </p>
       </div>
     </footer>

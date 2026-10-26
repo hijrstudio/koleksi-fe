@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { ApiError } from "@/lib/api/client";
 import { getSessionToken } from "@/lib/auth/session";
+import { expiredPath } from "@/lib/auth/validation";
+import { requestI18n } from "@/lib/i18n/request";
 import {
   PROFILE_FIELDS,
   type ProfileErrors,
@@ -22,8 +24,6 @@ export interface ProfileState {
   profile?: MemberEditProfile;
   savedAt?: number;
 }
-
-const EXPIRED = "/api/auth/expired?next=%2Fdasbor%2Fprofile";
 
 function readValues(formData: FormData): ProfileFormValues {
   const values = Object.fromEntries(
@@ -95,8 +95,11 @@ export async function updateProfile(prev: ProfileState, formData: FormData): Pro
   // Saat gagal, profil & savedAt sebelumnya dipertahankan supaya form tidak di-remount (isian tidak hilang).
   const keep = { profile: prev.profile, savedAt: prev.savedAt };
 
+  const { locale, t } = await requestI18n(formData.get("lang"));
+  const expired = expiredPath("/dasbor/profile", locale);
+
   const token = await getSessionToken();
-  if (!token) redirect(EXPIRED);
+  if (!token) redirect(expired);
 
   const values = readValues(formData);
   const documents = formData
@@ -115,26 +118,26 @@ export async function updateProfile(prev: ProfileState, formData: FormData): Pro
     newCount: documents.length,
     newBytes: documents.reduce((sum, f) => sum + f.size, 0),
     photo,
-  });
+  }, t.validation);
   if (Object.keys(errors).length > 0) {
-    return { ...keep, errors, message: "Periksa kembali isian yang ditandai." };
+    return { ...keep, errors, message: t.auth.checkFields };
   }
 
   let profile: MemberEditProfile;
   try {
     profile = await updateMemberProfile(token, toBackendBody(values, documents, removeIds, { file: photo, remove: removePhoto }));
   } catch (error) {
-    if (error instanceof ApiError && error.status === 401) redirect(EXPIRED);
+    if (error instanceof ApiError && error.status === 401) redirect(expired);
     if (error instanceof ApiError && error.status === 422) {
-      return { ...keep, errors: backendErrors(error.body), message: "Periksa kembali isian yang ditandai." };
+      return { ...keep, errors: backendErrors(error.body), message: t.auth.checkFields };
     }
 
     console.error("[updateProfile]", error);
-    return { ...keep, message: "Gagal menyimpan profil. Silakan coba lagi beberapa saat lagi." };
+    return { ...keep, message: t.profile.failed };
   }
 
   // Nama, foto, lokasi & banner "lengkapi profil" di Dasbor (dan avatar di Header) ikut berubah
-  revalidatePath("/dasbor");
+  revalidatePath("/[lang]/dasbor", "page");
 
   return { profile, savedAt: Date.now() };
 }

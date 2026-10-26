@@ -2,11 +2,12 @@
 
 import { useCallback, useRef, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/i18n/Link";
 import { AnimatePresence, motion } from "framer-motion";
 import { LayoutDashboard, LogOut } from "lucide-react";
 import { logout } from "@/app/actions/auth";
 import useDismiss from "./useDismiss";
+import { useI18n } from "@/components/i18n/I18nProvider";
 
 export interface HeaderUser {
   name: string;
@@ -20,6 +21,7 @@ const itemClass =
  *  dropdown Dasbor & Keluar. */
 export default function UserMenu({ user }: { user: HeaderUser }) {
   const [open, setOpen] = useState(false);
+  const { t } = useI18n();
   const ref = useRef<HTMLDivElement>(null);
   const close = useCallback(() => setOpen(false), []);
   useDismiss(ref, open, close);
@@ -33,7 +35,7 @@ export default function UserMenu({ user }: { user: HeaderUser }) {
     >
       <button
         type="button"
-        aria-label={`Menu akun ${user.name}`}
+        aria-label={`${t.header.accountMenu} ${user.name}`}
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
@@ -61,7 +63,7 @@ export default function UserMenu({ user }: { user: HeaderUser }) {
           >
             <div
               role="menu"
-              aria-label="Menu akun"
+              aria-label={t.header.accountMenu}
               className="min-w-50 rounded-xl border border-border-light bg-surface-light p-2 shadow-lg dark:border-border-dark dark:bg-surface-dark"
             >
               <p className="truncate px-3 pt-1 pb-2 text-sm text-koleksi-navy-dark/50 dark:text-ink-dark/50">
@@ -76,13 +78,13 @@ export default function UserMenu({ user }: { user: HeaderUser }) {
                 className={itemClass}
               >
                 <LayoutDashboard size={16} aria-hidden="true" />
-                Dasbor
+                {t.common.dashboard}
               </Link>
               {/* Server Action: cabut token di backend, hapus cookie sesi, lalu ke /masuk. */}
               <form action={logout}>
                 <button role="menuitem" type="submit" className={itemClass}>
                   <LogOut size={16} aria-hidden="true" />
-                  Keluar
+                  {t.common.logout}
                 </button>
               </form>
             </div>

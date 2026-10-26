@@ -2,6 +2,7 @@
 
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import clsx from "@/lib/clsx";
+import { useI18n } from "@/components/i18n/I18nProvider";
 
 interface SectionHeaderProps {
   title: string;
@@ -20,6 +21,8 @@ export default function SectionHeader({
   prevDisabled = false,
   nextDisabled = false,
 }: SectionHeaderProps) {
+  const { t } = useI18n();
+
   return (
     <div className="mb-9 flex items-center justify-between">
       <h2 className="font-display text-2xl leading-8 font-bold tracking-[-3%] text-koleksi-navy md:text-[32px] md:leading-10 dark:text-ink-dark">
@@ -31,7 +34,7 @@ export default function SectionHeader({
             type="button"
             onClick={onPrev}
             disabled={prevDisabled}
-            aria-label="Sebelumnya"
+            aria-label={t.common.previous}
             className={clsx(
               "flex h-9 w-9 items-center justify-center transition",
               prevDisabled
@@ -45,7 +48,7 @@ export default function SectionHeader({
             type="button"
             onClick={onNext}
             disabled={nextDisabled}
-            aria-label="Berikutnya"
+            aria-label={t.common.next}
             className={clsx(
               "flex h-9 w-9 items-center justify-center transition",
               nextDisabled

@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import { ApiError, apiFetch } from "@/lib/api/client";
 import { API_ENDPOINTS } from "@/lib/api/endpoints";
 import { getSessionToken } from "@/lib/auth/session";
+import { expiredPath } from "@/lib/auth/validation";
+import { getLocale } from "@/lib/i18n/server";
 import type { MemberLoginResponse, MemberProfile } from "@/types";
 
 /** Header untuk request atas nama member: token member menggantikan BACKEND_API_TOKEN. */
@@ -60,7 +62,7 @@ export const getCurrentMember = cache(async (): Promise<MemberProfile | null> =>
 export async function requireMember(path: string): Promise<MemberProfile> {
   const member = await getCurrentMember();
   if (!member) {
-    redirect(`/api/auth/expired?next=${encodeURIComponent(path)}`);
+    redirect(expiredPath(path, await getLocale()));
   }
 
   return member;

@@ -12,20 +12,7 @@ import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 import clsx from "@/lib/clsx";
 import { authInputClass } from "@/components/auth/authStyles";
 import useDismiss from "@/components/layout/useDismiss";
-
-const MONTHS = [
-  "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-  "Juli", "Agustus", "September", "Oktober", "November", "Desember",
-];
-const WEEKDAYS = [
-  { short: "Min", full: "Minggu" },
-  { short: "Sen", full: "Senin" },
-  { short: "Sel", full: "Selasa" },
-  { short: "Rab", full: "Rabu" },
-  { short: "Kam", full: "Kamis" },
-  { short: "Jum", full: "Jumat" },
-  { short: "Sab", full: "Sabtu" },
-];
+import { useI18n } from "@/components/i18n/I18nProvider";
 
 interface Ymd {
   y: number;
@@ -81,6 +68,10 @@ export default function DatePickerInput({
   disabled,
   ...rest
 }: DatePickerInputProps) {
+  const { t } = useI18n();
+  const MONTHS = t.calendar.months;
+  // Mulai Minggu
+  const WEEKDAYS = t.calendar.weekdays.map((full, i) => ({ full, short: t.calendar.weekdaysShort[i] }));
   const [open, setOpen] = useState(false);
   const [view, setView] = useState<{ y: number; m: number }>({ y: 1990, m: 0 });
   const [maxYmd, setMaxYmd] = useState<Ymd | null>(null);
@@ -168,7 +159,7 @@ export default function DatePickerInput({
         type="button"
         disabled={disabled}
         onClick={() => (open ? setOpen(false) : openPicker())}
-        aria-label={open ? "Tutup kalender" : "Pilih dari kalender"}
+        aria-label={open ? t.calendar.closeCalendar : t.calendar.openCalendar}
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-controls={id ? `${id}-calendar` : undefined}
@@ -182,7 +173,7 @@ export default function DatePickerInput({
           <motion.div
             id={id ? `${id}-calendar` : undefined}
             role="dialog"
-            aria-label="Pilih tanggal"
+            aria-label={t.calendar.chooseDate}
             initial={{ opacity: 0, y: -6, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -6, scale: 0.98 }}
@@ -190,13 +181,13 @@ export default function DatePickerInput({
             className="absolute top-full left-0 z-40 mt-2 w-full max-w-80 origin-top-left rounded-xl border border-border-light bg-surface-light p-3 shadow-lg dark:border-border-dark dark:bg-surface-dark"
           >
             <div className="flex items-center justify-between gap-1">
-              <button type="button" aria-label="Bulan sebelumnya" disabled={!canPrev} onClick={() => shiftMonth(-1)} className={navButtonClass}>
+              <button type="button" aria-label={t.calendar.previousMonth} disabled={!canPrev} onClick={() => shiftMonth(-1)} className={navButtonClass}>
                 <ChevronLeft size={16} aria-hidden="true" />
               </button>
 
               <div className="flex items-center">
                 <select
-                  aria-label="Bulan"
+                  aria-label={t.calendar.month}
                   value={view.m}
                   onChange={(e) => setView((v) => ({ ...v, m: Number(e.target.value) }))}
                   className={headerSelectClass}
@@ -213,7 +204,7 @@ export default function DatePickerInput({
                   ))}
                 </select>
                 <select
-                  aria-label="Tahun"
+                  aria-label={t.calendar.year}
                   value={view.y}
                   onChange={(e) => {
                     const y = Number(e.target.value);
@@ -230,7 +221,7 @@ export default function DatePickerInput({
                 </select>
               </div>
 
-              <button type="button" aria-label="Bulan berikutnya" disabled={!canNext} onClick={() => shiftMonth(1)} className={navButtonClass}>
+              <button type="button" aria-label={t.calendar.nextMonth} disabled={!canNext} onClick={() => shiftMonth(1)} className={navButtonClass}>
                 <ChevronRight size={16} aria-hidden="true" />
               </button>
             </div>
@@ -280,7 +271,7 @@ export default function DatePickerInput({
                   }}
                   className="rounded-md px-2 py-1 text-xs font-bold text-koleksi-navy-dark/60 underline underline-offset-2 transition hover:text-koleksi-green dark:text-ink-dark/60"
                 >
-                  Kosongkan
+                  {t.calendar.clear}
                 </button>
               </div>
             )}

@@ -4,7 +4,8 @@
  * backend tetap memvalidasi ulang (keunikan e-mail/No. HP/VIN/plat, kata sandi bocor, wilayah, merek/tipe).
  */
 
-import { PASSWORD_MAX, PASSWORD_RULES } from "@/lib/auth/password";
+import { passwordStrengthError } from "@/lib/auth/password";
+import type { Dictionary } from "@/lib/i18n/dictionaries/types";
 import {
   PROFILE_FIELDS,
   type ProfileErrorKey,
@@ -67,30 +68,33 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export function validateRegister(
   v: RegisterFormValues,
   docs: { count: number; bytes: number },
+  m: Dictionary["validation"],
 ): RegisterErrors {
-  const e: RegisterErrors = validateProfile(v, {
-    count: docs.count,
-    newCount: docs.count,
-    newBytes: docs.bytes,
-  });
+  const e: RegisterErrors = validateProfile(
+    v,
+    {
+      count: docs.count,
+      newCount: docs.count,
+      newBytes: docs.bytes,
+    },
+    m,
+  );
 
   const email = v.email.trim();
-  if (!email) e.email = "Alamat e-mail wajib diisi.";
-  else if (email.length > 255 || !EMAIL_PATTERN.test(email)) e.email = "Format e-mail tidak valid.";
+  if (!email) e.email = m.emailRequired;
+  else if (email.length > 255 || !EMAIL_PATTERN.test(email)) e.email = m.emailInvalid;
 
   if (!v.password) {
-    e.password = "Kata sandi wajib diisi.";
-  } else if (new TextEncoder().encode(v.password).length > PASSWORD_MAX) {
-    e.password = `Kata sandi maksimal ${PASSWORD_MAX} karakter.`;
+    e.password = m.passwordRequired;
   } else {
-    const failed = PASSWORD_RULES.find((rule) => !rule.test(v.password));
-    if (failed) e.password = failed.error;
+    const passwordError = passwordStrengthError(v.password, m);
+    if (passwordError) e.password = passwordError;
   }
 
-  if (!v.password_confirmation) e.password_confirmation = "Ulangi kata sandi.";
-  else if (v.password_confirmation !== v.password) e.password_confirmation = "Konfirmasi kata sandi tidak sama.";
+  if (!v.password_confirmation) e.password_confirmation = m.repeatPassword;
+  else if (v.password_confirmation !== v.password) e.password_confirmation = m.passwordMismatch;
 
-  if (v.heard_from.length > 60) e.heard_from = "Pilihan tidak valid.";
+  if (v.heard_from.length > 60) e.heard_from = m.invalidChoice;
 
   return e;
 }

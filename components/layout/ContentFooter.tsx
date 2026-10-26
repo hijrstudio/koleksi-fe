@@ -1,4 +1,7 @@
-import Link from "next/link";
+"use client";
+
+import Link from "@/components/i18n/Link";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import { RiInstagramFill, RiLinkedinFill, RiYoutubeFill } from "react-icons/ri";
 import TikTokIcon from "@/components/ui/TikTokIcon";
 
@@ -10,10 +13,12 @@ const socialLinks = [
 ];
 
 export default function ContentFooter() {
+  const { t } = useI18n();
+
   return (
     <footer className="mt-16 lg:mt-30">
       <h3 className="text-xl leading-6 font-bold text-koleksi-navy-dark dark:text-ink-dark">
-        Ikuti Kami
+        {t.footer.followUsShort}
       </h3>
       <div className="mt-5 flex gap-5">
         {socialLinks.map(({ icon: Icon, href, label }) => (
@@ -32,14 +37,14 @@ export default function ContentFooter() {
 
       <div className="mt-16 flex gap-4 text-xs font-bold text-koleksi-navy-dark dark:text-ink-dark">
         <Link href="/syarat-ketentuan" className="underline">
-          Syarat & Ketentuan
+          {t.footer.terms}
         </Link>
         <Link href="/kebijakan-privasi" className="underline">
-          Kebijakan Privasi
+          {t.footer.privacy}
         </Link>
       </div>
       <p className="mt-2 text-xs text-koleksi-navy-dark/50 dark:text-ink-dark/50">
-        &copy; {new Date().getFullYear()} KOLEKSI CLUB. All Rights Reserved.
+        &copy; {new Date().getFullYear()} {t.footer.copyright}
       </p>
     </footer>
   );

@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { requestLocale } from "@/lib/i18n/request";
 import { getEvents } from "@/services/event";
 import type { EventPhase } from "@/types";
 
@@ -17,13 +18,15 @@ export async function GET(request: NextRequest) {
   const category = Number(params.get("category"));
   const page = Number(params.get("page"));
 
+  const locale = await requestLocale(params.get("lang"));
+
   try {
     const result = await getEvents({
       phase,
       search: (params.get("search") ?? "").slice(0, 100),
       category: Number.isInteger(category) && category > 0 ? category : null,
       page: Number.isInteger(page) && page > 0 ? page : 1,
-    });
+    }, locale);
 
     return NextResponse.json(result);
   } catch (error) {

@@ -1,5 +1,5 @@
 import { ButtonHTMLAttributes, ReactNode } from "react";
-import Link from "next/link";
+import Link from "@/components/i18n/Link";
 import clsx from "@/lib/clsx";
 
 type Variant = "primary" | "outline" | "dark";

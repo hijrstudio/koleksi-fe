@@ -1,13 +1,15 @@
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/i18n/Link";
 import SectionContainer from "@/components/ui/SectionContainer";
 import SectionHeader from "@/components/ui/SectionHeader";
 import ViewAllLink from "@/components/ui/ViewAllLink";
 import { RevealGrid, RevealItem } from "@/components/ui/Reveal";
 import { getLatestEvents } from "@/services/event";
+import { getDictionary, getLocale } from "@/lib/i18n/server";
 
 export default async function KegiatanTerbaru() {
-  const items = await getLatestEvents();
+  const locale = await getLocale();
+  const [items, t] = await Promise.all([getLatestEvents(locale), getDictionary(locale)]);
 
   // Belum ada kegiatan published / API tidak bisa diakses: sembunyikan section.
   if (items.length === 0) return null;
@@ -15,7 +17,7 @@ export default async function KegiatanTerbaru() {
   return (
     <SectionContainer withGuides withOrnament variant="white">
       <RevealItem>
-        <SectionHeader title="Kegiatan Terbaru" />
+        <SectionHeader title={t.home.latestEvents} />
       </RevealItem>
 
       <RevealGrid className="grid grid-cols-1 gap-6 sm:grid-cols-2">

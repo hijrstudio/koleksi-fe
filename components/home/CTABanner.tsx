@@ -1,8 +1,11 @@
 import Image from "next/image";
 import { LinkButton } from "@/components/ui/Button";
 import { RevealGrid, RevealItem } from "@/components/ui/Reveal";
+import { getDictionary } from "@/lib/i18n/server";
 
-export default function CTABanner() {
+export default async function CTABanner() {
+  const t = await getDictionary();
+
   return (
     <section className="bg-[linear-gradient(180deg,#F1F5F9_50%,#3B82F6_75%,#1A3A6B_100%)]">
       <RevealGrid
@@ -12,7 +15,7 @@ export default function CTABanner() {
         {/* Left: white card */}
         <RevealItem className="flex flex-col justify-between rounded-2xl bg-surface-light p-8 shadow-sm gap-16">
           <p className="max-w-[80%] text-[32px] leading-10 font-display font-bold text-koleksi-navy">
-            Belanja Online Kebutuhan Kendaraan Listrik Terlengkap
+            {t.home.cta.shopTitle}
           </p>
           <div className="mt-8 flex items-center justify-between">
             <div className="relative h-[70px] w-32.5">
@@ -25,7 +28,7 @@ export default function CTABanner() {
               />
             </div>
             <LinkButton href="/produk" variant="outline">
-              Lihat Produk
+              {t.home.cta.viewProducts}
             </LinkButton>
           </div>
         </RevealItem>
@@ -33,11 +36,11 @@ export default function CTABanner() {
         {/* Right: green card, CTA button pinned to the right */}
         <RevealItem className="flex flex-col justify-between rounded-2xl bg-koleksi-green p-8 text-white">
           <p className="max-w-[80%] text-[32px] leading-10 font-display font-bold">
-            Jadilah Bagian dari Masa Depan Kendaraan Listrik yang Berkelanjutan
+            {t.home.cta.joinTitle}
           </p>
           <div className="mt-8 flex justify-end">
             <LinkButton href="/daftar" variant="dark">
-              Daftar
+              {t.common.register}
             </LinkButton>
           </div>
         </RevealItem>

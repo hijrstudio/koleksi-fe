@@ -2,6 +2,7 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import clsx from "@/lib/clsx";
+import { useI18n } from "@/components/i18n/I18nProvider";
 
 interface PaginationProps {
   currentPage: number;
@@ -31,20 +32,21 @@ export default function Pagination({
   onPageChange,
   className,
 }: PaginationProps) {
+  const { t } = useI18n();
   if (totalPages <= 1) return null;
 
   const items = getPageItems(currentPage, totalPages);
 
   return (
     <nav
-      aria-label="Navigasi halaman"
+      aria-label={t.pagination.nav}
       className={clsx("flex items-center justify-start gap-2", className)}
     >
       <button
         type="button"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        aria-label="Halaman sebelumnya"
+        aria-label={t.pagination.previous}
         className="flex h-10 w-10 items-center justify-center rounded-full border border-koleksi-navy-deep text-koleksi-navy-deep transition hover:bg-koleksi-navy-deep/5 disabled:opacity-30 disabled:hover:bg-transparent"
       >
         <ChevronLeft size={18} />
@@ -80,7 +82,7 @@ export default function Pagination({
         type="button"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        aria-label="Halaman berikutnya"
+        aria-label={t.pagination.next}
         className="flex h-10 w-10 items-center justify-center rounded-full border border-koleksi-navy-deep text-koleksi-navy-deep transition hover:bg-koleksi-navy-deep/5 disabled:opacity-30 disabled:hover:bg-transparent"
       >
         <ChevronRight size={18} />

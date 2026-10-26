@@ -7,12 +7,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import type { HeroSlide } from "@/types";
+import { useI18n } from "@/components/i18n/I18nProvider";
 
 import "swiper/css";
 import "swiper/css/pagination";
 
 export default function HeroSliderClient({ slides }: { slides: HeroSlide[] }) {
   const swiperRef = useRef<SwiperType | null>(null);
+  const { t } = useI18n();
 
   return (
     <section className="relative bg-koleksi-navy-dark">
@@ -57,7 +59,7 @@ export default function HeroSliderClient({ slides }: { slides: HeroSlide[] }) {
           across the full hero height, flush near the viewport edges. */}
       <button
         type="button"
-        aria-label="Slide sebelumnya"
+        aria-label={t.home.hero.previous}
         onClick={() => swiperRef.current?.slidePrev()}
         className="absolute inset-y-0 left-2 z-10 flex items-center px-2 text-white/80 transition hover:text-white sm:left-4"
       >
@@ -65,7 +67,7 @@ export default function HeroSliderClient({ slides }: { slides: HeroSlide[] }) {
       </button>
       <button
         type="button"
-        aria-label="Slide berikutnya"
+        aria-label={t.home.hero.next}
         onClick={() => swiperRef.current?.slideNext()}
         className="absolute inset-y-0 right-2 z-10 flex items-center px-2 text-white/80 transition hover:text-white sm:right-4"
       >

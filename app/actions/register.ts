@@ -12,6 +12,8 @@ import {
   validateRegister,
 } from "@/lib/register/validation";
 import { getRegisteredEmail, setRegisteredEmail } from "@/lib/register/session";
+import { localizePath } from "@/lib/i18n/config";
+import { requestI18n } from "@/lib/i18n/request";
 import { registerMember, resendRegistrationVerification } from "@/services/memberRegistration";
 
 export interface RegisterState {
@@ -99,12 +101,17 @@ export async function register(_prev: RegisterState, formData: FormData): Promis
     .getAll("documents")
     .filter((f): f is File => f instanceof File && f.size > 0);
 
-  const errors = validateRegister(values, {
-    count: documents.length,
-    bytes: documents.reduce((sum, f) => sum + f.size, 0),
-  });
+  const { locale, t } = await requestI18n(formData.get("lang"));
+  const errors = validateRegister(
+    values,
+    {
+      count: documents.length,
+      bytes: documents.reduce((sum, f) => sum + f.size, 0),
+    },
+    t.validation,
+  );
   if (Object.keys(errors).length > 0) {
-    return { errors, message: "Periksa kembali isian yang ditandai." };
+    return { errors, message: t.auth.checkFields };
   }
 
   let email: string;
@@ -112,38 +119,41 @@ export async function register(_prev: RegisterState, formData: FormData): Promis
     ({ email } = await registerMember(toBackendBody(values, documents), await clientIp()));
   } catch (error) {
     if (error instanceof ApiError && error.status === 422) {
-      return { errors: backendErrors(error.body), message: "Periksa kembali isian yang ditandai." };
+      return { errors: backendErrors(error.body), message: t.auth.checkFields };
     }
     if (error instanceof ApiError && error.status === 429) {
-      return { message: "Terlalu banyak percobaan pendaftaran. Silakan coba lagi nanti." };
+      return { message: t.auth.register.tooMany };
     }
 
     console.error("[register]", error instanceof ApiError ? error.status : error);
-    return { message: "Gagal mengirim pendaftaran. Silakan coba lagi beberapa saat lagi." };
+    return { message: t.auth.register.failed };
   }
 
   await setRegisteredEmail(email);
 
   // redirect() di luar try: ia bekerja dengan melempar error khusus.
-  redirect("/daftar/terima-kasih");
+  redirect(localizePath("/daftar/terima-kasih", locale));
 }
 
 /** Kirim ulang link verifikasi: e-mail dari form (halaman link kedaluwarsa) atau dari cookie pendaftaran. */
 export async function resendVerification(_prev: ResendState, formData: FormData): Promise<ResendState> {
   const email = String(formData.get("email") ?? "").trim() || (await getRegisteredEmail()) || "";
+  const { t } = await requestI18n(formData.get("lang"));
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return { error: "Masukkan alamat e-mail yang valid." };
+    return { error: t.auth.invalidEmail };
   }
 
   try {
-    return { message: await resendRegistrationVerification(email, await clientIp()) };
+    // Pesan sukses dari dictionary (sama untuk e-mail terdaftar maupun tidak)
+    await resendRegistrationVerification(email, await clientIp());
+    return { message: t.auth.verify.resent };
   } catch (error) {
     if (error instanceof ApiError && (error.status === 422 || error.status === 429)) {
       const errors = (error.body as { errors?: Record<string, string[]> } | undefined)?.errors;
-      return { error: errors?.email?.[0] ?? "Terlalu sering. Coba lagi beberapa saat lagi." };
+      return { error: errors?.email?.[0] ?? t.auth.tooOften };
     }
 
     console.error("[resendVerification]", error instanceof ApiError ? error.status : error);
-    return { error: "Gagal mengirim ulang. Silakan coba lagi beberapa saat lagi." };
+    return { error: t.auth.verify.resendFailed };
   }
 }

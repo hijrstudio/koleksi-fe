@@ -4,28 +4,41 @@
  * (Have I Been Pwned) dan yang sama dengan kata sandi lama; dua cek itu hanya bisa di server.
  */
 
+import { format } from "@/lib/i18n/config";
+import type { Dictionary } from "@/lib/i18n/dictionaries/types";
+
 export const PASSWORD_MIN = 8;
 /** bcrypt hanya memakai 72 byte pertama. */
 export const PASSWORD_MAX = 72;
 
+/** Label & pesan error tiap aturan ada di dictionary: t.validation.passwordRules[id]. */
 export const PASSWORD_RULES = [
-  {
-    id: "length",
-    label: `Minimal ${PASSWORD_MIN} karakter`,
-    error: `Kata sandi minimal ${PASSWORD_MIN} karakter.`,
-    test: (p: string) => p.length >= PASSWORD_MIN,
-  },
-  { id: "lower", label: "Huruf kecil (a–z)", error: "Kata sandi harus mengandung huruf kecil.", test: (p: string) => /[a-z]/.test(p) },
-  { id: "upper", label: "Huruf besar (A–Z)", error: "Kata sandi harus mengandung huruf besar.", test: (p: string) => /[A-Z]/.test(p) },
-  { id: "number", label: "Angka (0–9)", error: "Kata sandi harus mengandung angka.", test: (p: string) => /\d/.test(p) },
+  { id: "length", test: (p: string) => p.length >= PASSWORD_MIN },
+  { id: "lower", test: (p: string) => /[a-z]/.test(p) },
+  { id: "upper", test: (p: string) => /[A-Z]/.test(p) },
+  { id: "number", test: (p: string) => /\d/.test(p) },
 ] as const;
 
-/** Error kata sandi baru (panjang + PASSWORD_RULES) — sama untuk ganti & atur ulang kata sandi. */
-function newPasswordError(password: string): string | undefined {
-  if (!password) return "Kata sandi baru wajib diisi.";
-  if (new TextEncoder().encode(password).length > PASSWORD_MAX) return `Kata sandi maksimal ${PASSWORD_MAX} karakter.`;
+export type PasswordRuleId = (typeof PASSWORD_RULES)[number]["id"];
 
-  return PASSWORD_RULES.find((rule) => !rule.test(password))?.error;
+/** Teks aturan kata sandi (label checklist / pesan error) sesuai bahasa. */
+export function passwordRuleText(m: Dictionary["validation"], id: PasswordRuleId, kind: "label" | "error"): string {
+  return format(m.passwordRules[id][kind], { min: PASSWORD_MIN });
+}
+
+/** Error panjang + PASSWORD_RULES (tanpa cek wajib diisi) — dipakai juga oleh form Daftar. */
+export function passwordStrengthError(password: string, m: Dictionary["validation"]): string | undefined {
+  if (new TextEncoder().encode(password).length > PASSWORD_MAX) return format(m.passwordMax, { max: PASSWORD_MAX });
+
+  const failed = PASSWORD_RULES.find((rule) => !rule.test(password));
+  return failed && passwordRuleText(m, failed.id, "error");
+}
+
+/** Error kata sandi baru — sama untuk ganti & atur ulang kata sandi. */
+function newPasswordError(password: string, m: Dictionary["validation"]): string | undefined {
+  if (!password) return m.newPasswordRequired;
+
+  return passwordStrengthError(password, m);
 }
 
 export interface ResetPasswordInput {
@@ -36,14 +49,14 @@ export interface ResetPasswordInput {
 export type ResetPasswordErrors = Partial<Record<keyof ResetPasswordInput, string>>;
 
 /** Atur ulang kata sandi dari link e-mail (lupa kata sandi). */
-export function validateResetPassword(v: ResetPasswordInput): ResetPasswordErrors {
+export function validateResetPassword(v: ResetPasswordInput, m: Dictionary["validation"]): ResetPasswordErrors {
   const e: ResetPasswordErrors = {};
 
-  const passwordError = newPasswordError(v.password);
+  const passwordError = newPasswordError(v.password, m);
   if (passwordError) e.password = passwordError;
 
-  if (!v.password_confirmation) e.password_confirmation = "Ulangi kata sandi baru.";
-  else if (v.password_confirmation !== v.password) e.password_confirmation = "Konfirmasi kata sandi tidak sama.";
+  if (!v.password_confirmation) e.password_confirmation = m.repeatNewPassword;
+  else if (v.password_confirmation !== v.password) e.password_confirmation = m.passwordMismatch;
 
   return e;
 }
@@ -56,17 +69,17 @@ export interface ChangePasswordInput {
 
 export type ChangePasswordErrors = Partial<Record<keyof ChangePasswordInput, string>>;
 
-export function validateChangePassword(v: ChangePasswordInput): ChangePasswordErrors {
+export function validateChangePassword(v: ChangePasswordInput, m: Dictionary["validation"]): ChangePasswordErrors {
   const e: ChangePasswordErrors = {};
 
-  if (!v.current_password) e.current_password = "Kata sandi saat ini wajib diisi.";
+  if (!v.current_password) e.current_password = m.currentPasswordRequired;
 
-  const passwordError = newPasswordError(v.password);
+  const passwordError = newPasswordError(v.password, m);
   if (passwordError) e.password = passwordError;
-  else if (v.password === v.current_password) e.password = "Kata sandi baru harus berbeda dari kata sandi saat ini.";
+  else if (v.password === v.current_password) e.password = m.passwordSameAsCurrent;
 
-  if (!v.password_confirmation) e.password_confirmation = "Ulangi kata sandi baru.";
-  else if (v.password_confirmation !== v.password) e.password_confirmation = "Konfirmasi kata sandi tidak sama.";
+  if (!v.password_confirmation) e.password_confirmation = m.repeatNewPassword;
+  else if (v.password_confirmation !== v.password) e.password_confirmation = m.passwordMismatch;
 
   return e;
 }

@@ -2,11 +2,15 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Link from "@/components/i18n/Link";
 import { ChevronDown, Menu, Search, X } from "lucide-react";
-import { navItems } from "@/data/mockData";
 import { useTheme } from "@/components/providers/ThemeProvider";
+import { useI18n } from "@/components/i18n/I18nProvider";
 import clsx from "@/lib/clsx";
+import { localizePath, splitLocale } from "@/lib/i18n/config";
+import { getNavItems } from "@/lib/navigation";
+import type { Locale } from "@/types";
 import { TbMoonFilled, TbSunHighFilled } from "react-icons/tb";
 import { ID, GB } from "country-flag-icons/react/3x2";
 import { logout } from "@/app/actions/auth";
@@ -15,9 +19,9 @@ import NotificationBell from "./NotificationBell";
 
 export type { HeaderUser };
 
-const LANGUAGES = [
-  { code: "id", label: "Indonesia", Flag: ID },
-  { code: "en", label: "English", Flag: GB },
+const LANGUAGES: { code: Locale; Flag: typeof ID }[] = [
+  { code: "id", Flag: ID },
+  { code: "en", Flag: GB },
 ];
 
 /** Sudah login: tombol "Masuk" diganti lonceng notifikasi + avatar (dropdown Dasbor/Keluar) di paling kanan.
@@ -46,8 +50,20 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [langOpen, setLangOpen] = useState(false);
-  const [lang, setLang] = useState(LANGUAGES[0]);
   const { theme, toggleTheme } = useTheme();
+  const { locale, t } = useI18n();
+  const router = useRouter();
+  const lang = LANGUAGES.find((l) => l.code === locale) ?? LANGUAGES[0];
+  const navItems = getNavItems(t);
+
+  /** Halaman yang sama dalam bahasa lain: /kegiatan?x=1 ↔ /en/kegiatan?x=1 (query & anchor ikut). */
+  function switchLanguage(next: Locale) {
+    setLangOpen(false);
+    if (next === locale) return;
+
+    const { pathname, search, hash } = window.location;
+    router.push(localizePath(splitLocale(pathname).path, next) + search + hash);
+  }
 
   // openDropdown sengaja tidak di-reset di sini supaya accordion tidak
   // "melipat" di tengah animasi fade-out; direset saat menu dibuka lagi.
@@ -94,7 +110,7 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
           <Link href="/" className="flex shrink-0 items-center">
             <Image
               src="/images/logo-koleksi.svg"
-              alt="Koleksi"
+              alt={t.header.logoAlt}
               width={140}
               height={60}
               className="h-12 w-auto lg:h-15"
@@ -160,13 +176,13 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
                     checkingSession && "invisible",
                   )}
                 >
-                  Masuk
+                  {t.common.login}
                 </Link>
               )}
 
               <button
                 type="button"
-                aria-label="Cari"
+                aria-label={t.common.search}
                 className="flex h-9 w-9 items-center justify-center rounded-full text-white transition hover:bg-white/10"
               >
                 <Search size={18} />
@@ -174,7 +190,7 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
 
               <button
                 type="button"
-                aria-label="Ganti tema terang/gelap"
+                aria-label={t.header.toggleTheme}
                 onClick={toggleTheme}
                 className="flex h-10 w-10 items-center justify-center rounded-full text-white transition bg-black/20"
               >
@@ -188,7 +204,8 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
               <div className="relative">
                 <button
                   type="button"
-                  aria-label="Pilih bahasa"
+                  aria-label={t.header.chooseLanguage}
+                  aria-expanded={langOpen}
                   onClick={() => setLangOpen((v) => !v)}
                   className="flex h-9 items-center gap-1 rounded-full px-2 text-sm text-white transition hover:bg-white/10"
                 >
@@ -200,14 +217,17 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
                     {LANGUAGES.map((l) => (
                       <button
                         key={l.code}
-                        onClick={() => {
-                          setLang(l);
-                          setLangOpen(false);
-                        }}
-                        className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-ink-light hover:bg-muted-light dark:text-ink-dark dark:hover:bg-muted-dark"
+                        type="button"
+                        lang={l.code}
+                        aria-current={l.code === locale ? "true" : undefined}
+                        onClick={() => switchLanguage(l.code)}
+                        className={clsx(
+                          "flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-ink-light hover:bg-muted-light dark:text-ink-dark dark:hover:bg-muted-dark",
+                          l.code === locale && "font-bold",
+                        )}
                       >
                         <l.Flag className="h-4 w-6 rounded-sm object-cover" />
-                        {l.label}
+                        {t.header.languages[l.code]}
                       </button>
                     ))}
                   </div>
@@ -227,7 +247,7 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
             {/* Hamburger — mobile only */}
             <button
               type="button"
-              aria-label="Buka menu"
+              aria-label={t.header.openMenu}
               aria-expanded={mobileOpen}
               aria-controls="mobile-menu"
               onClick={openMobileMenu}
@@ -245,7 +265,7 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
         id="mobile-menu"
         role="dialog"
         aria-modal="true"
-        aria-label="Menu navigasi"
+        aria-label={t.header.navMenu}
         inert={!mobileOpen}
         className={clsx(
           "fixed inset-0 z-[60] overflow-y-auto bg-[#072B15] transition-[opacity,visibility] duration-300 ease-out motion-reduce:transition-none lg:hidden",
@@ -262,7 +282,7 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
         >
           <button
             type="button"
-            aria-label="Tutup menu"
+            aria-label={t.header.closeMenu}
             onClick={closeMobileMenu}
             className="flex h-8 w-8 items-center justify-center text-white"
           >
@@ -350,7 +370,7 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
                   className="size-9 rounded-full object-cover"
                 />
               )}
-              {user ? "Dasbor" : "Masuk"}
+              {user ? t.common.dashboard : t.common.login}
             </Link>
 
             {user && (
@@ -359,7 +379,7 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
                   type="submit"
                   className="flex h-15 w-full items-center justify-center rounded-full border-2 border-white/20 text-lg font-bold text-white transition hover:border-white/40"
                 >
-                  Keluar
+                  {t.common.logout}
                 </button>
               </form>
             )}
@@ -368,8 +388,8 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
               <Search size={22} className="shrink-0" />
               <input
                 type="search"
-                placeholder="Cari"
-                aria-label="Cari"
+                placeholder={t.common.search}
+                aria-label={t.common.search}
                 className="min-w-0 flex-1 bg-transparent text-lg text-white outline-none placeholder:text-white/40"
               />
             </label>
@@ -379,7 +399,7 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
           <div className="mt-auto flex items-center justify-between pt-10">
             <button
               type="button"
-              aria-label="Ganti tema terang/gelap"
+              aria-label={t.header.toggleTheme}
               onClick={toggleTheme}
               className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20 text-white transition hover:bg-white/30"
             >
@@ -393,7 +413,7 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
             <div className="relative">
               <button
                 type="button"
-                aria-label="Pilih bahasa"
+                aria-label={t.header.chooseLanguage}
                 aria-expanded={langOpen}
                 onClick={() => setLangOpen((v) => !v)}
                 className="block"
@@ -409,14 +429,19 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
                     <button
                       key={l.code}
                       type="button"
+                      lang={l.code}
+                      aria-current={l.code === locale ? "true" : undefined}
                       onClick={() => {
-                        setLang(l);
-                        setLangOpen(false);
+                        closeMobileMenu();
+                        switchLanguage(l.code);
                       }}
-                      className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-ink-light hover:bg-muted-light dark:text-ink-dark dark:hover:bg-muted-dark"
+                      className={clsx(
+                        "flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-ink-light hover:bg-muted-light dark:text-ink-dark dark:hover:bg-muted-dark",
+                        l.code === locale && "font-bold",
+                      )}
                     >
                       <l.Flag className="h-4 w-6 rounded-sm object-cover" />
-                      {l.label}
+                      {t.header.languages[l.code]}
                     </button>
                   ))}
                 </div>

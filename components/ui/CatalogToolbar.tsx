@@ -4,12 +4,15 @@ import { ReactNode } from "react";
 import { Search } from "lucide-react";
 import clsx from "@/lib/clsx";
 import FilterButton from "@/components/ui/FilterButton";
+import { useI18n } from "@/components/i18n/I18nProvider";
 
 interface CatalogToolbarProps<T extends string> {
   /** Tab kategori/status -- maksimal satu aktif; null = tidak ada yang aktif. */
   tabs: readonly T[];
   activeTab: T | null;
   onTabChange: (tab: T) => void;
+  /** Teks tampilan tab (mis. dari dictionary); default = nilai tab itu sendiri. */
+  tabLabel?: (tab: T) => string;
   search: string;
   onSearchChange: (value: string) => void;
   /** Dropdown di kanan (Filter / Sort). */
@@ -33,11 +36,14 @@ export default function CatalogToolbar<T extends string>({
   tabs,
   activeTab,
   onTabChange,
+  tabLabel = (tab) => tab,
   search,
   onSearchChange,
   dropdown,
   className,
 }: CatalogToolbarProps<T>) {
+  const { t } = useI18n();
+
   return (
     <div
       className={clsx(
@@ -61,7 +67,7 @@ export default function CatalogToolbar<T extends string>({
                   : "bg-koleksi-navy-deep/10 text-koleksi-navy-deep hover:bg-koleksi-navy-deep/15 dark:bg-white/10 dark:text-ink-dark dark:hover:bg-white/15",
               )}
             >
-              {tab}
+              {tabLabel(tab)}
             </button>
           );
         })}
@@ -78,8 +84,8 @@ export default function CatalogToolbar<T extends string>({
             type="text"
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Cari"
-            aria-label="Cari"
+            placeholder={t.common.search}
+            aria-label={t.common.search}
             className="w-28 rounded-full border border-border-light bg-transparent py-2.5 pr-5 pl-13 text-base leading-6 font-bold text-koleksi-navy-dark transition-[width,border-color] duration-300 placeholder:font-bold placeholder:text-koleksi-navy-dark hover:border-koleksi-navy-deep focus:w-44 focus:border-koleksi-navy-deep focus:outline-none dark:border-border-dark dark:text-ink-dark dark:placeholder:text-ink-dark"
           />
         </div>

@@ -1,16 +1,12 @@
 "use client";
 
 import { ReactNode, useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import Link from "@/components/i18n/Link";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import clsx from "@/lib/clsx";
-
-const sectionOptions = [
-  { label: "Panduan Praktis", value: "/panduan-praktis" },
-  { label: "Forum", value: "/forum" },
-];
+import { useBarePathname, useI18n, useLocalizePath } from "@/components/i18n/I18nProvider";
 
 export interface SidebarNavItem {
   label: string;
@@ -32,8 +28,14 @@ export default function SectionSidebar({
   items: SidebarNavItem[];
   children?: ReactNode;
 }) {
-  const pathname = usePathname();
+  const pathname = useBarePathname();
   const router = useRouter();
+  const localize = useLocalizePath();
+  const { t } = useI18n();
+  const sectionOptions = [
+    { label: t.nav.practicalGuide, value: "/panduan-praktis" },
+    { label: t.nav.forum, value: "/forum" },
+  ];
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
@@ -103,7 +105,7 @@ export default function SectionSidebar({
                     type="button"
                     onClick={() => {
                       setOpen(false);
-                      if (!isActive) router.push(opt.value);
+                      if (!isActive) router.push(localize(opt.value));
                     }}
                     className={clsx(
                       "block w-full px-4 py-2.5 text-left text-sm transition cursor-pointer",

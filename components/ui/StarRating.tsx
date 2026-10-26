@@ -1,4 +1,7 @@
+"use client";
+
 import { Star } from "lucide-react";
+import { format, useI18n } from "@/components/i18n/I18nProvider";
 
 const STARS = [0, 1, 2, 3, 4];
 
@@ -17,6 +20,7 @@ export default function StarRating({
   /** jarak antar bintang (px) */
   gap?: number;
 }) {
+  const { t } = useI18n();
   const clamped = Math.min(5, Math.max(0, value));
   const filledWidth =
     Math.floor(clamped) * (size + gap) + (clamped % 1) * size;
@@ -24,7 +28,7 @@ export default function StarRating({
   return (
     <span
       role="img"
-      aria-label={`Rating ${clamped} dari 5`}
+      aria-label={format(t.forum.ratingValue, { value: clamped })}
       className="relative inline-flex text-koleksi-amber"
       style={{ gap }}
     >

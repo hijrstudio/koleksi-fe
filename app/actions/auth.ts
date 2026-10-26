@@ -4,7 +4,9 @@ import { redirect } from "next/navigation";
 import { ApiError } from "@/lib/api/client";
 import { clientIp } from "@/lib/auth/clientIp";
 import { clearSessionToken, getSessionToken, setSessionToken } from "@/lib/auth/session";
-import { type LoginFieldErrors, safeRedirectPath, validateLogin } from "@/lib/auth/validation";
+import { type LoginFieldErrors, localizedRedirectPath, validateLogin } from "@/lib/auth/validation";
+import { localizePath } from "@/lib/i18n/config";
+import { requestI18n, requestLocale } from "@/lib/i18n/request";
 import { loginMember, logoutMember } from "@/services/memberAuth";
 
 export interface LoginState {
@@ -30,8 +32,9 @@ function backendErrors(body: unknown): LoginFieldErrors {
 export async function login(_prev: LoginState, formData: FormData): Promise<LoginState> {
   const identifier = String(formData.get("identifier") ?? "");
   const password = String(formData.get("password") ?? "");
+  const { locale, t } = await requestI18n(formData.get("lang"));
 
-  const errors = validateLogin({ identifier, password });
+  const errors = validateLogin({ identifier, password }, t.validation);
   if (errors.identifier || errors.password) {
     return { errors };
   }
@@ -45,11 +48,11 @@ export async function login(_prev: LoginState, formData: FormData): Promise<Logi
     }
 
     console.error("[login]", error);
-    return { message: "Tidak dapat terhubung ke server. Silakan coba lagi beberapa saat lagi." };
+    return { message: t.auth.serverError };
   }
 
   // redirect() di luar try: ia bekerja dengan melempar error khusus.
-  redirect(safeRedirectPath(formData.get("next")));
+  redirect(localizedRedirectPath(formData.get("next"), locale));
 }
 
 export async function logout(): Promise<void> {
@@ -59,5 +62,5 @@ export async function logout(): Promise<void> {
   }
 
   await clearSessionToken();
-  redirect("/masuk");
+  redirect(localizePath("/masuk", await requestLocale()));
 }

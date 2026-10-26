@@ -1,5 +1,8 @@
+"use client";
+
 import { Bookmark, Share2 } from "lucide-react";
 import clsx from "@/lib/clsx";
+import { useI18n } from "@/components/i18n/I18nProvider";
 
 /**
  * Tombol Simpan + Bagikan di halaman detail (artikel, berita, diskusi).
@@ -16,6 +19,7 @@ export default function ContentActions({
   className?: string;
   variant?: "green" | "navy";
 }) {
+  const { t } = useI18n();
   const isNavy = variant === "navy";
 
   return (
@@ -30,7 +34,7 @@ export default function ContentActions({
         )}
       >
         <Bookmark size={16} />
-        Simpan
+        {t.common.save}
       </button>
       <button
         type="button"
@@ -42,7 +46,7 @@ export default function ContentActions({
         )}
       >
         <Share2 size={16} />
-        Bagikan
+        {t.common.share}
       </button>
     </div>
   );

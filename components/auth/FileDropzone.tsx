@@ -3,6 +3,7 @@
 import { DragEvent, useId, useState } from "react";
 import { FileText, X } from "lucide-react";
 import clsx from "@/lib/clsx";
+import { format, useI18n } from "@/components/i18n/I18nProvider";
 
 interface FileDropzoneProps {
   files: File[];
@@ -29,6 +30,7 @@ export default function FileDropzone({
   invalid,
   describedBy,
 }: FileDropzoneProps) {
+  const { t } = useI18n();
   const inputId = useId();
   const [dragging, setDragging] = useState(false);
   const [rejected, setRejected] = useState<string[]>([]);
@@ -70,12 +72,12 @@ export default function FileDropzone({
         )}
       >
         <p className="text-xs text-koleksi-navy-dark/70 dark:text-ink-dark/70">
-          Drag dokumen atau{" "}
+          {t.form.dropDocuments}{" "}
           <label
             htmlFor={inputId}
             className="cursor-pointer font-bold text-koleksi-navy-dark underline underline-offset-2 transition hover:text-koleksi-green dark:text-ink-dark"
           >
-            Unggah
+            {t.form.upload}
           </label>
         </p>
         <input
@@ -94,7 +96,7 @@ export default function FileDropzone({
 
       {rejected.length > 0 && (
         <p className="mt-2 text-xs text-red-600 dark:text-red-400">
-          Melebihi {maxSizeMb} MB: {rejected.join(", ")}
+          {format(t.form.tooLarge, { max: maxSizeMb })} {rejected.join(", ")}
         </p>
       )}
 
@@ -112,7 +114,7 @@ export default function FileDropzone({
               </span>
               <button
                 type="button"
-                aria-label={`Hapus ${file.name}`}
+                aria-label={format(t.form.remove, { name: file.name })}
                 onClick={() => onChange(files.filter((f) => f !== file))}
                 className="shrink-0 rounded-full p-1 text-koleksi-navy-dark/50 transition hover:text-red-600 dark:text-ink-dark/50"
               >

@@ -6,6 +6,8 @@ import { ApiError } from "@/lib/api/client";
 import { clientIp } from "@/lib/auth/clientIp";
 import { type ChangePasswordErrors, validateChangePassword } from "@/lib/auth/password";
 import { getSessionToken } from "@/lib/auth/session";
+import { expiredPath } from "@/lib/auth/validation";
+import { requestI18n } from "@/lib/i18n/request";
 import { updateMemberPassword } from "@/services/memberPassword";
 
 export interface ChangePasswordState {
@@ -17,7 +19,7 @@ export interface ChangePasswordState {
   revokedSessions?: number;
 }
 
-const EXPIRED = "/api/auth/expired?next=%2Fdasbor%2Fprofile%2Fubah-kata-sandi";
+const PAGE = "/dasbor/profile/ubah-kata-sandi";
 
 function backendErrors(body: unknown): ChangePasswordErrors {
   const raw = (body as { errors?: Record<string, string[]> } | undefined)?.errors ?? {};
@@ -34,8 +36,11 @@ function backendErrors(body: unknown): ChangePasswordErrors {
  * Sesi yang sedang dipakai tetap aktif; sesi di perangkat lain dicabut oleh backend.
  */
 export async function changePassword(prev: ChangePasswordState, formData: FormData): Promise<ChangePasswordState> {
+  const { locale, t } = await requestI18n(formData.get("lang"));
+  const expired = expiredPath(PAGE, locale);
+
   const token = await getSessionToken();
-  if (!token) redirect(EXPIRED);
+  if (!token) redirect(expired);
 
   // Kata sandi tidak di-trim: spasi adalah karakter yang sah.
   const input = {
@@ -44,7 +49,7 @@ export async function changePassword(prev: ChangePasswordState, formData: FormDa
     password_confirmation: String(formData.get("password_confirmation") ?? ""),
   };
 
-  const errors = validateChangePassword(input);
+  const errors = validateChangePassword(input, t.validation);
   if (Object.keys(errors).length > 0) {
     return { savedAt: prev.savedAt, errors };
   }
@@ -52,16 +57,16 @@ export async function changePassword(prev: ChangePasswordState, formData: FormDa
   try {
     const result = await updateMemberPassword(token, input, await clientIp());
     // Banner "ubah kata sandi awal" di Dasbor hilang
-    revalidatePath("/dasbor");
+    revalidatePath("/[lang]/dasbor", "page");
 
     return { success: true, savedAt: Date.now(), revokedSessions: result.revoked_sessions };
   } catch (error) {
-    if (error instanceof ApiError && error.status === 401) redirect(EXPIRED);
+    if (error instanceof ApiError && error.status === 401) redirect(expired);
     if (error instanceof ApiError && (error.status === 422 || error.status === 429)) {
       return { savedAt: prev.savedAt, errors: backendErrors(error.body) };
     }
 
     console.error("[changePassword]", error instanceof ApiError ? error.status : error);
-    return { savedAt: prev.savedAt, message: "Gagal mengubah kata sandi. Silakan coba lagi beberapa saat lagi." };
+    return { savedAt: prev.savedAt, message: t.auth.changePassword.failed };
   }
 }

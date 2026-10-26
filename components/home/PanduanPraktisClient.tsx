@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/i18n/Link";
 import { Play } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
@@ -13,11 +13,13 @@ import YoutubeModal, { type YoutubeModalVideo } from "@/components/ui/YoutubeMod
 import { RevealGrid, RevealItem } from "@/components/ui/Reveal";
 import clsx from "@/lib/clsx";
 import type { ArticleCard } from "@/types";
+import { useI18n } from "@/components/i18n/I18nProvider";
 
 import "swiper/css";
 
 export default function PanduanPraktisClient({ items }: { items: ArticleCard[] }) {
   const swiperRef = useRef<SwiperType | null>(null);
+  const { t } = useI18n();
   const bleedRef = useRef<HTMLDivElement | null>(null);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
@@ -41,7 +43,7 @@ export default function PanduanPraktisClient({ items }: { items: ArticleCard[] }
     <SectionContainer withGuides topDivider topDividerCenter variant="white">
       <RevealItem>
         <SectionHeader
-          title="Panduan Praktis"
+          title={t.home.practicalGuide}
           showArrows
           prevDisabled={isBeginning}
           nextDisabled={isEnd}
@@ -106,7 +108,7 @@ export default function PanduanPraktisClient({ items }: { items: ArticleCard[] }
                     </h3>
                     {item.author && (
                       <p className="mt-2 text-[14px] leading-3.5 text-koleksi-navy-dark/60">
-                        Oleh: {item.author}
+                        {t.common.by}: {item.author}
                       </p>
                     )}
                   </div>

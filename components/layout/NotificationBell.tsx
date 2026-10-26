@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import Link from "next/link";
+import Link from "@/components/i18n/Link";
 import { AnimatePresence, motion } from "framer-motion";
 import { TbBellFilled } from "react-icons/tb";
 import {
@@ -16,6 +16,7 @@ import clsx from "@/lib/clsx";
 import { notificationItems } from "@/data/mockData";
 import type { NotificationItem } from "@/types";
 import useDismiss from "./useDismiss";
+import { format, useI18n } from "@/components/i18n/I18nProvider";
 
 const TYPE_ICON: Record<NotificationItem["type"], LucideIcon> = {
   kegiatan: CalendarDays,
@@ -29,6 +30,8 @@ const TYPE_ICON: Record<NotificationItem["type"], LucideIcon> = {
 export default function NotificationBell() {
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState(notificationItems);
+  const { t } = useI18n();
+  const samples: Record<string, { title: string; time: string } | undefined> = t.notifications.samples;
   const ref = useRef<HTMLDivElement>(null);
   const close = useCallback(() => setOpen(false), []);
   useDismiss(ref, open, close);
@@ -46,7 +49,7 @@ export default function NotificationBell() {
       <button
         type="button"
         aria-label={
-          unread > 0 ? `Notifikasi, ${unread} belum dibaca` : "Notifikasi"
+          unread > 0 ? format(t.notifications.unread, { count: unread }) : t.notifications.title
         }
         aria-expanded={open}
         aria-haspopup="dialog"
@@ -65,7 +68,7 @@ export default function NotificationBell() {
         {open && (
           <motion.div
             role="dialog"
-            aria-label="Notifikasi"
+            aria-label={t.notifications.title}
             initial={{ opacity: 0, y: -6, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -6, scale: 0.98 }}
@@ -74,7 +77,7 @@ export default function NotificationBell() {
           >
             <div className="flex items-center justify-between gap-4 border-b border-border-light px-4 py-3 dark:border-border-dark">
               <p className="text-base font-bold text-koleksi-navy-dark dark:text-ink-dark">
-                Notifikasi
+                {t.notifications.title}
               </p>
               {unread > 0 && (
                 <button
@@ -82,14 +85,14 @@ export default function NotificationBell() {
                   onClick={() => markRead()}
                   className="text-xs font-bold text-koleksi-navy-dark/60 underline underline-offset-2 transition hover:text-koleksi-green dark:text-ink-dark/60"
                 >
-                  Tandai semua dibaca
+                  {t.notifications.markAllRead}
                 </button>
               )}
             </div>
 
             {items.length === 0 ? (
               <p className="px-4 py-8 text-center text-sm text-koleksi-navy-dark/50 dark:text-ink-dark/50">
-                Belum ada notifikasi.
+                {t.notifications.empty}
               </p>
             ) : (
               <ul className="max-h-96 overflow-y-auto py-1">
@@ -118,15 +121,15 @@ export default function NotificationBell() {
                               !n.read && "font-semibold",
                             )}
                           >
-                            {n.title}
+                            {samples[n.id]?.title ?? n.title}
                           </span>
                           <span className="mt-1 block text-xs text-koleksi-navy-dark/50 dark:text-ink-dark/50">
-                            {n.time}
+                            {samples[n.id]?.time ?? n.time}
                           </span>
                         </span>
                         {!n.read && (
                           <span
-                            aria-label="Belum dibaca"
+                            aria-label={t.notifications.unreadDot}
                             className="mt-1.5 size-2 shrink-0 rounded-full bg-koleksi-green"
                           />
                         )}

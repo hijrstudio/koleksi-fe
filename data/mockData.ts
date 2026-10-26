@@ -1,63 +1,11 @@
 import {
   ArticleCard,
-  NavItem,
   NewsCard,
   ActivityCard,
-  PlaybookCard,
   PartnerLogo,
   SocialPost,
-  StatItem,
   NotificationItem,
 } from "@/types";
-
-export const navItems: NavItem[] = [
-  { label: "Tentang Kami", href: "/tentang-kami" },
-  {
-    label: "Komunitas",
-    href: "/komunitas",
-    children: [
-      { label: "Panduan Praktis", href: "/panduan-praktis" },
-      { label: "Forum", href: "/forum" },
-    ],
-  },
-  {
-    label: "Kegiatan",
-    href: "/kegiatan",
-    children: [
-      { label: "Kegiatan", href: "/kegiatan" },
-      { label: "Galeri", href: "/panduan-praktis/galeri-foto" },
-      { label: "Video", href: "/panduan-praktis/video-edukasi" },
-    ],
-  },
-  {
-    label: "Berita",
-    href: "/berita",
-    children: [
-      {
-        label: "News Release",
-        href: "/panduan-praktis/berita?tags=news-release",
-      },
-      { label: "Berita EV", href: "/panduan-praktis/berita?tags=berita-ev" },
-      { label: "Liputan", href: "/panduan-praktis/berita?tags=liputan" },
-    ],
-  },
-  { label: "Produk", href: "/produk" },
-  {
-    label: "EV Garage",
-    href: "/ev-garage",
-    children: [
-      { label: "EV Garage", href: "/ev-garage" },
-      { label: "SPKLU", href: "/spklu" },
-    ],
-  },
-];
-
-export const communityStats: StatItem[] = [
-  { icon: "users", value: ">1000", label: "Anggota" },
-  { icon: "map-pin", value: "26", label: "Kota" },
-  { icon: "calendar", value: "123", label: "Kegiatan" },
-  { icon: "car", value: "20", label: "Brand" },
-];
 
 export const panduanPraktisItems: ArticleCard[] = [
   {
@@ -133,33 +81,6 @@ export const kegiatanTerbaru: ActivityCard[] = [
     title: "Komunitas & Media Gathering",
     date: "1 September 2026",
     image: "/images/kegiatan-4.png",
-  },
-];
-
-export const playbookItems: PlaybookCard[] = [
-  {
-    id: "playbook-1",
-    title: "Panduan Memilih EV yang Tepat",
-    image: "/images/playbook.png",
-    href: "/playbook/panduan-memilih-ev",
-  },
-  {
-    id: "playbook-2",
-    title: "Charging 101: Cara Charging di Rumah & Publik",
-    image: "/images/playbook.png",
-    href: "/playbook/charging-101",
-  },
-  {
-    id: "playbook-3",
-    title: "Biaya & Insentif: Hitung Biaya Kepemilikan EV",
-    image: "/images/playbook.png",
-    href: "/playbook/biaya-insentif",
-  },
-  {
-    id: "playbook-4",
-    title: "Perawatan EV",
-    image: "/images/playbook.png",
-    href: "/playbook/perawatan-ev",
   },
 ];
 

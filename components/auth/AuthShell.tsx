@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import Link from "next/link";
+import Link from "@/components/i18n/Link";
 import clsx from "@/lib/clsx";
 import { RevealGroup, RevealItem } from "@/components/ui/Reveal";
 import LegalFooter from "@/components/layout/LegalFooter";

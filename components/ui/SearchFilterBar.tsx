@@ -1,6 +1,9 @@
+"use client";
+
 import type { ReactNode } from "react";
 import { Search } from "lucide-react";
 import clsx from "@/lib/clsx";
+import { useI18n } from "@/components/i18n/I18nProvider";
 
 interface SearchFilterBarProps {
   search: string;
@@ -24,12 +27,14 @@ interface SearchFilterBarProps {
 export default function SearchFilterBar({
   search,
   onSearchChange,
-  placeholder = "Cari",
+  placeholder,
   iconPosition = "left",
   fullWidth = false,
   children,
   className,
 }: SearchFilterBarProps) {
+  const { t } = useI18n();
+  placeholder ??= t.common.search;
   const hasFilters = Boolean(children);
   // Tinggi 46px (py-3) -- sama dengan tombol FilterDropdown; di desain input
   // dengan ikon di kanan selalu setinggi itu, dengan atau tanpa filter.
