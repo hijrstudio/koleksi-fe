@@ -17,6 +17,24 @@ const nextConfig: NextConfig = {
   },
   // Berita dipisah dari Panduan Praktis: URL lama (sudah tersebar / terindeks) dialihkan permanen.
   // Query (?tags=) ikut terbawa otomatis.
+  /**
+   * Indonesia (default) tanpa prefix: /kegiatan dilayani diam-diam oleh app/[lang]/kegiatan (lang = "id").
+   * Sengaja di sini, BUKAN NextResponse.rewrite di proxy.ts: di VPS server Next berjalan dengan HOSTNAME=127.0.0.1,
+   * dan Next menormalkan host proxy ke "localhost" → rewrite dari proxy dianggap ke server luar (500, TLS ke port
+   * HTTP sendiri). Rewrite config selalu internal. afterFiles: file publik (gambar, favicon) & /api dicek dulu.
+   */
+  async rewrites() {
+    const notPrefixed = "(?!(?:en|id|api|_next)(?:/|$))[^/.]+";
+    return {
+      beforeFiles: [],
+      afterFiles: [
+        { source: "/", destination: "/id" },
+        { source: `/:first(${notPrefixed})`, destination: "/id/:first" },
+        { source: `/:first(${notPrefixed})/:rest+`, destination: "/id/:first/:rest+" },
+      ],
+      fallback: [],
+    };
+  },
   async redirects() {
     return ["", "/en"].flatMap((prefix) => [
       { source: `${prefix}/panduan-praktis/berita`, destination: `${prefix}/berita`, permanent: true },

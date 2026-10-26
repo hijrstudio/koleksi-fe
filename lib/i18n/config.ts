@@ -4,7 +4,8 @@ import type { Locale } from "@/types";
  * Website dua bahasa. Indonesia = default TANPA prefix (koleksi.club/kegiatan), English di bawah /en
  * (koleksi.club/en/kegiatan). Slug tetap bahasa Indonesia di kedua bahasa.
  *
- * Halaman ada di app/[lang]/…; proxy.ts menulis ulang URL tanpa prefix ke /id/… (tidak terlihat di browser).
+ * Halaman ada di app/[lang]/…; rewrites() di next.config.ts menulis ulang URL tanpa prefix ke /id/… (tidak
+ * terlihat di browser), proxy.ts mengarahkan /id/… ke versi tanpa prefix.
  * File ini dipakai server & client.
  */
 export const LOCALES = ["id", "en"] as const satisfies readonly Locale[];

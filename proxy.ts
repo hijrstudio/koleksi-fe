@@ -5,9 +5,9 @@ import { DEFAULT_LOCALE, localizePath, splitLocale } from "@/lib/i18n/config";
 const SESSION_COOKIE = "koleksi_session";
 
 /**
- * 1. Bahasa: halaman ada di app/[lang]/…. Indonesia (default) tanpa prefix → URL ditulis ulang diam-diam ke
- *    /id/… (browser tetap melihat /kegiatan). English memakai /en/… apa adanya. /id/… diarahkan ke versi
- *    tanpa prefix supaya satu halaman tidak punya dua URL.
+ * 1. Bahasa: halaman ada di app/[lang]/…. Indonesia (default) tanpa prefix dilayani lewat rewrites() di
+ *    next.config.ts (browser tetap melihat /kegiatan); English memakai /en/… apa adanya. /id/… diarahkan ke
+ *    versi tanpa prefix supaya satu halaman tidak punya dua URL.
  * 2. Dasbor: pengecekan optimistis — hanya ada/tidaknya cookie sesi, tanpa memanggil backend (proxy jalan di
  *    setiap request, termasuk prefetch). Validasi token yang sebenarnya dilakukan halaman lewat
  *    getCurrentMember() — yang tidak valid diarahkan ke /api/auth/expired.
@@ -25,10 +25,6 @@ export function proxy(request: NextRequest) {
     const url = new URL(localizePath("/masuk", locale), request.url);
     url.searchParams.set("next", path + search);
     return NextResponse.redirect(url);
-  }
-
-  if (locale === DEFAULT_LOCALE) {
-    return NextResponse.rewrite(new URL(`/${DEFAULT_LOCALE}${pathname}${search}`, request.url));
   }
 
   return NextResponse.next();
