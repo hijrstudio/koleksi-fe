@@ -35,7 +35,7 @@ export function getNavItems(t: Dictionary): NavItem[] {
     },
     { label: nav.products, href: "/produk" },
     {
-      label: nav.evGarage,
+      label: nav.evEcosystem,
       href: "/ev-garage",
       children: [
         { label: nav.evGarage, href: "/ev-garage" },

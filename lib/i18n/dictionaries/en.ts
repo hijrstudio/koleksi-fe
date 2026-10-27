@@ -53,6 +53,7 @@ const en: Dictionary = {
     evNews: "EV News",
     coverage: "Coverage",
     products: "Products",
+    evEcosystem: "Ecosystem EV",
     evGarage: "EV Garage",
     spklu: "Charging Stations",
   },

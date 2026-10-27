@@ -55,7 +55,8 @@ const id = {
     evNews: "Berita EV",
     coverage: "Liputan",
     products: "Produk",
-    evGarage: "EV Garage",
+    evEcosystem: "Ekosistem EV", // menu induk; sub-menu "Garasi EV" & "SPKLU"
+    evGarage: "Garasi EV",
     spklu: "SPKLU",
   },
 
