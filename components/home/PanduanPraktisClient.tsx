@@ -10,9 +10,10 @@ import SectionContainer from "@/components/ui/SectionContainer";
 import SectionHeader from "@/components/ui/SectionHeader";
 import ViewAllLink from "@/components/ui/ViewAllLink";
 import YoutubeModal, { type YoutubeModalVideo } from "@/components/ui/YoutubeModal";
+import PdfViewerModal from "@/app/[lang]/panduan-praktis/web-playbook/PdfViewerModal";
 import { RevealGrid, RevealItem } from "@/components/ui/Reveal";
 import clsx from "@/lib/clsx";
-import type { ArticleCard } from "@/types";
+import type { ArticleCard, PlaybookListItem } from "@/types";
 import { useI18n } from "@/components/i18n/I18nProvider";
 
 import "swiper/css";
@@ -26,6 +27,24 @@ export default function PanduanPraktisClient({ items }: { items: ArticleCard[] }
   const [bleedWidth, setBleedWidth] = useState<number | undefined>(undefined);
   const [activeVideo, setActiveVideo] = useState<YoutubeModalVideo | null>(null);
   const closeVideo = useCallback(() => setActiveVideo(null), []);
+  const [activePlaybook, setActivePlaybook] = useState<PlaybookListItem | null>(null);
+  const closePlaybook = useCallback(() => setActivePlaybook(null), []);
+  // Homepage statis (tanpa sesi di server): status login dicek saat playbook pertama kali dibuka.
+  // Hanya menentukan tombol Unduh tampil atau tidak; izin unduh tetap dicek di server.
+  const [canDownload, setCanDownload] = useState(false);
+  const sessionChecked = useRef(false);
+
+  function openPlaybook(playbook: PlaybookListItem) {
+    setActivePlaybook(playbook);
+    if (sessionChecked.current) return;
+    sessionChecked.current = true;
+    fetch("/api/auth/me", { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : { user: null }))
+      .then((data: { user: unknown }) => setCanDownload(data.user != null))
+      .catch(() => {
+        sessionChecked.current = false; // coba lagi saat dibuka berikutnya
+      });
+  }
 
   useEffect(() => {
     function updateBleedWidth() {
@@ -98,7 +117,9 @@ export default function PanduanPraktisClient({ items }: { items: ArticleCard[] }
                         "inline-flex w-fit items-center rounded-full px-3.5 py-2 text-[12px] leading-3 font-semibold text-white",
                         item.tagColor === "artikel"
                           ? "bg-badge-artikel"
-                          : "bg-badge-video",
+                          : item.tagColor === "playbook"
+                            ? "bg-koleksi-green"
+                            : "bg-badge-video",
                       )}
                     >
                       {item.tag}
@@ -120,7 +141,15 @@ export default function PanduanPraktisClient({ items }: { items: ArticleCard[] }
               return (
                 <SwiperSlide key={item.id} className="w-auto!">
                   <RevealItem className="w-[min(88vw,560px)] sm:w-140">
-                    {item.youtubeId ? (
+                    {item.playbook ? (
+                      <button
+                        type="button"
+                        onClick={() => openPlaybook(item.playbook!)}
+                        className={clsx(cardClass, "cursor-pointer")}
+                      >
+                        {card}
+                      </button>
+                    ) : item.youtubeId ? (
                       <button
                         type="button"
                         onClick={() =>
@@ -151,6 +180,7 @@ export default function PanduanPraktisClient({ items }: { items: ArticleCard[] }
       <ViewAllLink href="/panduan-praktis" />
 
       <YoutubeModal video={activeVideo} onClose={closeVideo} />
+      <PdfViewerModal playbook={activePlaybook} canDownload={canDownload} onClose={closePlaybook} />
     </SectionContainer>
   );
 }

@@ -42,7 +42,7 @@ export interface StatItem {
 export interface ArticleCard {
   id: string;
   tag: string;
-  tagColor: "artikel" | "video";
+  tagColor: "artikel" | "video" | "playbook";
   title: string;
   author: string | null;
   image: string | null;
@@ -51,12 +51,14 @@ export interface ArticleCard {
   href?: string;
   /** Video: dibuka di popup YouTube. */
   youtubeId?: string;
+  /** Web Playbook: dibuka di popup PDF. */
+  playbook?: PlaybookListItem;
 }
 
-/** Response mentah GET /guides/latest (artikel & video dalam satu bentuk). */
+/** Response mentah GET /guides/latest: playbook, video & artikel terbaru dalam satu bentuk. */
 export interface LatestGuideResponse {
   id: number;
-  type: "article" | "video";
+  type: "playbook" | "video" | "article";
   title: LocalizedText;
   author: string | null;
   image: string | null;
