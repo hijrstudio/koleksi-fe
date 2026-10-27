@@ -1,6 +1,6 @@
 import { ApiError, apiFetch } from "@/lib/api/client";
 import { API_ENDPOINTS } from "@/lib/api/endpoints";
-import formatDate from "@/lib/formatDate";
+import formatDate, { formatPlainDate } from "@/lib/formatDate";
 import { isNewsBadge } from "@/lib/newsCategories";
 import type {
   ApiCollection,
@@ -15,14 +15,24 @@ import type {
   NewsResponse,
 } from "@/types";
 
+/** Berita EV memakai tanggal berita di media sumber; lainnya tanggal publish di KOLEKSI. */
+function newsDate(news: NewsResponse, locale: Locale, month: "short" | "long"): string {
+  return news.source?.published_on
+    ? formatPlainDate(news.source.published_on, locale, month)
+    : formatDate(news.published_at, locale, month);
+}
+
 function toNewsCard(news: NewsResponse, locale: Locale): NewsCard {
+  const external = news.category.external && !!news.source?.url;
+
   return {
     id: `berita-${news.id}`,
     tag: news.category.label[locale] || news.category.label.id,
     badge: isNewsBadge(news.category.value),
     title: news.title[locale] || news.title.id,
-    date: formatDate(news.published_at, locale),
-    href: `/berita/${news.slug}`,
+    date: newsDate(news, locale, "short"),
+    href: external ? news.source!.url : `/berita/${news.slug}`,
+    external,
   };
 }
 
@@ -35,7 +45,9 @@ function toListItem(news: NewsResponse, locale: Locale): NewsListItem {
     title: news.title[locale] || news.title.id,
     author: news.author ?? null,
     image: news.image,
-    date: formatDate(news.published_at, locale, "long"),
+    date: newsDate(news, locale, "long"),
+    summary: news.summary ? news.summary[locale] || news.summary.id : null,
+    externalUrl: news.category.external ? (news.source?.url ?? null) : null,
   };
 }
 

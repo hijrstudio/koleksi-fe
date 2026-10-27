@@ -20,6 +20,7 @@ const en: Dictionary = {
     previous: "Previous",
     next: "Next",
     by: "By",
+    opensInNewTab: "(opens in a new tab)",
     all: "All",
     loading: "Loading...",
     backToHome: "Back to Home",

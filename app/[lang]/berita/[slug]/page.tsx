@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Image from "next/image";
 import Link from "@/components/i18n/Link";
 import { ArrowLeft } from "lucide-react";
@@ -30,6 +30,8 @@ export default async function BeritaDetailPage({
   const [berita, t] = await Promise.all([getNewsDetail(slug, locale), getDictionary(locale)]);
 
   if (!berita) notFound();
+  // Berita EV hanya tautan ke media lain (mis. link lama yang dibagikan): langsung ke berita aslinya
+  if (berita.externalUrl) redirect(berita.externalUrl);
 
   return (
     <div>

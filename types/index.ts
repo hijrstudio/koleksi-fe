@@ -73,6 +73,8 @@ export interface NewsCard {
   title: string;
   date: string;
   href?: string;
+  /** Berita EV: `href` = link berita di media lain, dibuka di tab baru. */
+  external?: boolean;
 }
 
 /** Response mentah GET /news/latest. */
@@ -81,10 +83,16 @@ export interface NewsResponse {
   category: {
     value: "news_release" | "ev_news" | "coverage";
     label: LocalizedText;
+    /** true = Berita EV: tautan ke berita di media lain (lihat `source`). */
+    external: boolean;
   };
   title: LocalizedText;
-  /** Hanya ada di list & detail berita (bukan /news/latest). */
+  /** Ringkasan — hanya Berita EV (lainnya null). */
+  summary: LocalizedText | null;
+  /** List & detail berita; Berita EV: penulis di media sumber, atau nama media. */
   author?: string | null;
+  /** Hanya Berita EV (lainnya null). `url` sudah divalidasi http/https di CMS. */
+  source: { url: string; name: string; author: string | null; published_on: string | null } | null;
   slug: string;
   image: string | null;
   published_at: string | null;
@@ -568,6 +576,9 @@ export interface NewsListItem {
   author: string | null;
   image: string | null;
   date: string;
+  /** Berita EV: ringkasan & link berita di media lain (kartu dibuka di tab baru). */
+  summary: string | null;
+  externalUrl: string | null;
 }
 
 export interface NewsPage {

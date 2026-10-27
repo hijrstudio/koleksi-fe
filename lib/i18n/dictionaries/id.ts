@@ -22,6 +22,7 @@ const id = {
     previous: "Sebelumnya",
     next: "Berikutnya",
     by: "Oleh",
+    opensInNewTab: "(membuka tab baru)",
     all: "Semua",
     loading: "Memuat...",
     backToHome: "Kembali ke Beranda",

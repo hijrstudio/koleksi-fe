@@ -11,7 +11,7 @@ import NewsTag from "@/components/ui/NewsTag";
 import clsx from "@/lib/clsx";
 import { useI18n } from "@/components/i18n/I18nProvider";
 import { NEWS_CATEGORIES, type NewsCategoryValue } from "@/lib/newsCategories";
-import type { NewsPage } from "@/types";
+import type { NewsListItem, NewsPage } from "@/types";
 
 const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const BERITA_PER_PAGE = 5;
@@ -188,10 +188,7 @@ export default function BeritaList({
             }}
             className="py-5 first:pt-0"
           >
-            <Link
-              href={`/berita/${item.slug}`}
-              className="group flex gap-4"
-            >
+            <NewsLink item={item} newTabLabel={t.common.opensInNewTab}>
               <div className="relative aspect-270/183 w-[130px] shrink-0 overflow-hidden rounded-xl bg-koleksi-navy-dark/10 sm:w-[200px] lg:w-[270px]">
                 {item.image && (
                   <Image
@@ -213,8 +210,13 @@ export default function BeritaList({
                     {t.common.by}: {item.author}
                   </p>
                 )}
+                {item.summary && (
+                  <p className="mt-3 line-clamp-3 text-[14px] leading-[21px] text-koleksi-navy-dark/80 dark:text-ink-dark/70">
+                    {item.summary}
+                  </p>
+                )}
               </div>
-            </Link>
+            </NewsLink>
           </motion.article>
         ))}
       </div>
@@ -228,5 +230,29 @@ export default function BeritaList({
         />
       )}
     </div>
+  );
+}
+
+/** Kartu berita: Berita EV dibuka di tab baru ke berita aslinya, lainnya ke halaman detail. */
+function NewsLink({
+  item,
+  newTabLabel,
+  children,
+}: {
+  item: NewsListItem;
+  newTabLabel: string;
+  children: React.ReactNode;
+}) {
+  const className = "group flex gap-4";
+
+  return item.externalUrl ? (
+    <a href={item.externalUrl} target="_blank" rel="noopener noreferrer" className={className}>
+      {children}
+      <span className="sr-only">{newTabLabel}</span>
+    </a>
+  ) : (
+    <Link href={`/berita/${item.slug}`} className={className}>
+      {children}
+    </Link>
   );
 }
