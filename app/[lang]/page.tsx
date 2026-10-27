@@ -34,9 +34,9 @@ export default function Home() {
         <RevealGroup>
           <KegiatanTerbaru />
         </RevealGroup>
-        <RevealGroup>
+        {/* <RevealGroup>
           <PlaybookSection />
-        </RevealGroup>
+        </RevealGroup> */}
         <RevealGroup>
           <PartnerKami />
         </RevealGroup>
