@@ -142,6 +142,11 @@ const id = {
     },
     practicalGuide: "Panduan Praktis",
     news: "Berita",
+    newsSlots: {
+      news_release: "News Release",
+      latest: "Berita Terkini",
+      archive: "Kumpulan Berita",
+    },
     cta: {
       shopTitle: "Belanja Online Kebutuhan Kendaraan Listrik Terlengkap",
       viewProducts: "Lihat Produk",

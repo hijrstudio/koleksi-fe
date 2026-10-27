@@ -10,7 +10,8 @@ import type { NewsCard } from "@/types";
 
 export default async function BeritaSection() {
   const locale = await getLocale();
-  const [items, t] = await Promise.all([getLatestNews(locale), getDictionary(locale)]);
+  const t = await getDictionary(locale);
+  const items = await getLatestNews(locale, t.home.newsSlots);
 
   // Belum ada berita published / API tidak bisa diakses: sembunyikan section.
   if (items.length === 0) return null;

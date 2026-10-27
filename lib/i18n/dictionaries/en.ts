@@ -139,6 +139,11 @@ const en: Dictionary = {
     },
     practicalGuide: "Practical Guide",
     news: "News",
+    newsSlots: {
+      news_release: "News Release",
+      latest: "Latest News",
+      archive: "News Archive",
+    },
     cta: {
       shopTitle: "Shop Online for Everything Your Electric Vehicle Needs",
       viewProducts: "View Products",

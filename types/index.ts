@@ -79,7 +79,15 @@ export interface NewsCard {
   external?: boolean;
 }
 
-/** Response mentah GET /news/latest. */
+/** Slot kartu berita di homepage (GET /news/latest), urutan tetap dari backend. */
+export type LatestNewsSlot = "news_release" | "latest" | "archive";
+
+/** Response mentah GET /news/latest: NewsResponse + slot. */
+export interface LatestNewsResponse extends NewsResponse {
+  slot: LatestNewsSlot;
+}
+
+/** Response kartu berita (list, detail, homepage). */
 export interface NewsResponse {
   id: number;
   category: {

@@ -4,6 +4,8 @@ import formatDate, { formatPlainDate } from "@/lib/formatDate";
 import { isNewsBadge } from "@/lib/newsCategories";
 import type {
   ApiCollection,
+  LatestNewsResponse,
+  LatestNewsSlot,
   Locale,
   NewsCard,
   NewsDetail,
@@ -54,17 +56,25 @@ function toListItem(news: NewsResponse, locale: Locale): NewsListItem {
 }
 
 /**
- * 3 berita published terbaru untuk homepage.
- * Kalau API gagal, kembalikan [] supaya halaman tetap render.
+ * Berita homepage: News Release terbaru, Berita EV terbaru ("Berita Terkini") & Berita EV terlama
+ * ("Kumpulan Berita"); maks. 3, urutan dari backend. Tag kartu = label slot; Berita Terkini & Kumpulan Berita
+ * badge kuning seperti Berita EV. Kalau API gagal, kembalikan [] supaya halaman tetap render.
  */
-export async function getLatestNews(locale: Locale = "id"): Promise<NewsCard[]> {
+export async function getLatestNews(
+  locale: Locale,
+  slotLabels: Record<LatestNewsSlot, string>,
+): Promise<NewsCard[]> {
   try {
-    const { data } = await apiFetch<ApiCollection<NewsResponse>>(API_ENDPOINTS.latestNews, {
+    const { data } = await apiFetch<ApiCollection<LatestNewsResponse>>(API_ENDPOINTS.latestNews, {
       revalidate: 60,
       tags: ["news"],
     });
 
-    return data.map((news) => toNewsCard(news, locale));
+    return data.map((news) => ({
+      ...toNewsCard(news, locale),
+      tag: slotLabels[news.slot],
+      badge: news.slot !== "news_release",
+    }));
   } catch (error) {
     console.error("[getLatestNews]", error);
     return [];
