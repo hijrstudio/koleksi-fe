@@ -22,6 +22,8 @@ export const API_ENDPOINTS = {
   infographicCategories: "/guides/infographics/categories",
   playbooks: "/guides/playbooks",
   playbookFile: (id: number) => `/guides/playbooks/${id}/file`,
+  regulations: "/guides/regulations",
+  regulationFile: (id: number) => `/guides/regulations/${id}/file`,
   memberPlaybookDownload: (id: number) => `/member/playbooks/${id}/download`,
   galleryAlbums: "/gallery/albums",
   news: "/news",

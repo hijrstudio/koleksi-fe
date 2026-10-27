@@ -490,6 +490,38 @@ export interface EventVideoPage {
   totalPages: number;
 }
 
+/* ---------- Dokumen regulasi ---------- */
+
+/** Judul satu bahasa (nama resmi dokumen). PDF: /api/regulations/{id}/file. */
+export interface RegulationResponse {
+  id: number;
+  title: string;
+  published_at: string | null;
+}
+
+export interface RegulationListResponse {
+  data: RegulationResponse[];
+  meta: { current_page: number; last_page: number; per_page: number; total: number };
+}
+
+export interface RegulationQuery {
+  search?: string;
+  page?: number;
+}
+
+export interface RegulationListItem {
+  id: number;
+  title: string;
+  /** Link PDF (proxy Next.js), dibuka di tab baru. */
+  url: string;
+}
+
+export interface RegulationPage {
+  items: RegulationListItem[];
+  page: number;
+  totalPages: number;
+}
+
 /* ---------- Infografis ---------- */
 
 export interface InfographicCardResponse {

@@ -2,7 +2,7 @@ import "server-only";
 
 import { ApiError } from "@/lib/api/client";
 
-/** ID playbook dari segmen URL; null kalau bukan bilangan bulat positif. */
+/** ID playbook / dokumen dari segmen URL; null kalau bukan bilangan bulat positif. */
 export function playbookId(raw: string): number | null {
   const id = Number(raw);
   return Number.isInteger(id) && id > 0 ? id : null;
@@ -15,7 +15,7 @@ export function playbookId(raw: string): number | null {
 export function pdfStreamResponse(upstream: Response, disposition: "inline" | "attachment"): Response {
   // Nama file asli dari backend (slug judul), tipe disposisi ditentukan di sini
   const upstreamDisposition = upstream.headers.get("content-disposition") ?? "";
-  const filename = /filename="?([^";]+)"?/i.exec(upstreamDisposition)?.[1] ?? "playbook.pdf";
+  const filename = /filename="?([^";]+)"?/i.exec(upstreamDisposition)?.[1] ?? "dokumen.pdf";
 
   const headers = new Headers({
     "Content-Type": "application/pdf",
@@ -31,10 +31,10 @@ export function pdfStreamResponse(upstream: Response, disposition: "inline" | "a
 }
 
 /** Status error backend → response JSON singkat untuk browser. */
-export function pdfErrorResponse(error: unknown, where: string): Response {
+export function pdfErrorResponse(error: unknown, where: string, notFound = "Playbook tidak ditemukan."): Response {
   if (error instanceof ApiError && (error.status === 401 || error.status === 404)) {
     return Response.json(
-      { message: error.status === 401 ? "Silakan masuk untuk mengunduh." : "Playbook tidak ditemukan." },
+      { message: error.status === 401 ? "Silakan masuk untuk mengunduh." : notFound },
       { status: error.status },
     );
   }

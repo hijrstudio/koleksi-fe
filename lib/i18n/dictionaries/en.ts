@@ -211,7 +211,9 @@ const en: Dictionary = {
     },
     regulations: {
       title: "Regulatory Documents",
-      empty: "No documents match this search.",
+      error: "Failed to load documents. Please try again.",
+      empty: "No regulatory documents yet.",
+      noResults: "No documents match this search.",
     },
     glossary: {
       title: "EV Glossary",

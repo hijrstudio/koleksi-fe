@@ -214,7 +214,9 @@ const id = {
     },
     regulations: {
       title: "Dokumen Regulasi",
-      empty: "Tidak ada dokumen yang cocok dengan pencarian ini.",
+      error: "Gagal memuat dokumen. Silakan coba lagi.",
+      empty: "Belum ada dokumen regulasi.",
+      noResults: "Tidak ada dokumen yang cocok dengan pencarian ini.",
     },
     glossary: {
       title: "Glosarium EV",
