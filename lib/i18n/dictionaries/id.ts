@@ -127,7 +127,12 @@ const id = {
     welcome: {
       eyebrow: "Selamat Datang di",
       title: "Komunitas Mobil Elektrik Indonesia (KOLEKSI)",
-      stats: { members: "Anggota", cities: "Kota", events: "Kegiatan", brands: "Brand" },
+      stats: {
+        members: "Anggota",
+        cities: "Kota",
+        events: "Kegiatan",
+        brands: "Brand",
+      },
       viewCommunity: "Lihat Komunitas",
       featuredAlt: "KOLEKSI Goes to IIMS 2026",
       featuredTitle: "KOLEKSI GOES TO IIMS 2026 – TALKSHOW",
@@ -138,12 +143,13 @@ const id = {
     cta: {
       shopTitle: "Belanja Online Kebutuhan Kendaraan Listrik Terlengkap",
       viewProducts: "Lihat Produk",
-      joinTitle: "Jadilah Bagian dari Masa Depan Kendaraan Listrik yang Berkelanjutan",
+      joinTitle:
+        "Jadilah Bagian dari Masa Depan Kendaraan Listrik yang Berkelanjutan",
     },
     latestEvents: "Kegiatan Terbaru",
     playbook: "Playbook",
-    partners: "Partner Kami",
-    sponsors: "Sponsor Kami",
+    partners: "Mitra Strategis",
+    sponsors: "Sponsor",
   },
 
   guide: {
@@ -212,12 +218,14 @@ const id = {
 
   events: {
     metaTitle: "Kegiatan - KOLEKSI",
-    metaDescription: "Kalender kegiatan KOLEKSI: touring, gathering, dan agenda komunitas mobil elektrik Indonesia.",
+    metaDescription:
+      "Kalender kegiatan KOLEKSI: touring, gathering, dan agenda komunitas mobil elektrik Indonesia.",
     calendar: "Kalender Kegiatan",
     phases: { ongoing: "On Going", upcoming: "On Plan", done: "Done" },
     error: "Gagal memuat kegiatan. Silakan coba lagi.",
     empty: "Tidak ada kegiatan yang cocok dengan pencarian/filter ini.",
-    emptyPhase: "Tidak ada kegiatan {phase} yang cocok dengan pencarian/filter ini.",
+    emptyPhase:
+      "Tidak ada kegiatan {phase} yang cocok dengan pencarian/filter ini.",
     time: "Waktu",
     location: "Lokasi",
     mapTitle: "Peta lokasi: {place}",
@@ -227,11 +235,16 @@ const id = {
 
   products: {
     metaTitle: "Produk - KOLEKSI",
-    metaDescription: "Produk KOLEKSI: mobil listrik (EV), aksesoris, dan charger untuk komunitas mobil elektrik Indonesia.",
+    metaDescription:
+      "Produk KOLEKSI: mobil listrik (EV), aksesoris, dan charger untuk komunitas mobil elektrik Indonesia.",
     detailMetaTitle: "{name} - Produk KOLEKSI",
     bannerAlt: "Produk KOLEKSI",
     allProducts: "Semua Produk",
-    tabs: { all: "Semua", ev: "EV (Mobil Listrik)", accessories: "Aksesoris & Charger" },
+    tabs: {
+      all: "Semua",
+      ev: "EV (Mobil Listrik)",
+      accessories: "Aksesoris & Charger",
+    },
     empty: "Tidak ada produk yang cocok dengan pencarian ini.",
     soldOut: "Stok Habis",
     imageAlt: "{name} - gambar {number}",
@@ -267,9 +280,11 @@ const id = {
 
   spklu: {
     metaTitle: "SPKLU - KOLEKSI",
-    metaDescription: "Daftar operator / brand SPKLU berizin di Indonesia beserta aplikasi pengisian dayanya.",
+    metaDescription:
+      "Daftar operator / brand SPKLU berizin di Indonesia beserta aplikasi pengisian dayanya.",
     heading: "Daftar {count} Operator / Brand SPKLU Berizin & Aplikasi",
-    source: "Sumber: Ditjen Gatrik ESDM & PLN 5.081 mesin di 3.180 lokasi (SEP 2026)",
+    source:
+      "Sumber: Ditjen Gatrik ESDM & PLN 5.081 mesin di 3.180 lokasi (SEP 2026)",
     viewOperator: "Lihat operator {name}",
     operatorName: "Nama Operator",
     app: "Aplikasi",
@@ -329,7 +344,8 @@ const id = {
     saving: "Menyimpan...",
     cancel: "Batal",
     emailPlaceholder: "alamat@e-mail.com",
-    serverError: "Tidak dapat terhubung ke server. Silakan coba lagi beberapa saat lagi.",
+    serverError:
+      "Tidak dapat terhubung ke server. Silakan coba lagi beberapa saat lagi.",
     tooOften: "Terlalu sering. Coba lagi beberapa saat lagi.",
     tooManyAttempts: "Terlalu banyak percobaan. Coba lagi beberapa saat lagi.",
     checkFields: "Periksa kembali isian yang ditandai.",
@@ -342,20 +358,23 @@ const id = {
     ruleUnmet: "(belum)",
     login: {
       metaTitle: "Masuk - KOLEKSI",
-      metaDescription: "Masuk ke akun KOLEKSI untuk mengikuti forum, kegiatan, dan komunitas mobil elektrik Indonesia.",
+      metaDescription:
+        "Masuk ke akun KOLEKSI untuk mengikuti forum, kegiatan, dan komunitas mobil elektrik Indonesia.",
       title: "Masuk",
       identifierLabel: "Masukkan alamat e-mail atau nomor HP",
       identifierPlaceholder: "E-mail / No. HP",
       password: "Password",
       forgot: "Lupa Password?",
       notRegistered: "Saya belum terdaftar.",
-      resetSuccess: "Kata sandi berhasil diatur ulang. Silakan masuk dengan kata sandi baru.",
+      resetSuccess:
+        "Kata sandi berhasil diatur ulang. Silakan masuk dengan kata sandi baru.",
     },
     forgot: {
       metaTitle: "Lupa Kata Sandi - KOLEKSI",
       metaDescription: "Atur ulang kata sandi akun KOLEKSI Anda.",
       title: "Lupa Kata Sandi",
-      intro: "Masukkan alamat e-mail akun KOLEKSI Anda. Kami akan mengirim link untuk membuat kata sandi baru.",
+      intro:
+        "Masukkan alamat e-mail akun KOLEKSI Anda. Kami akan mengirim link untuk membuat kata sandi baru.",
       sent: "Kalau e-mail tersebut terdaftar sebagai anggota, link untuk mengatur ulang kata sandi sudah dikirim.",
       sentHint:
         "Cek kotak masuk (termasuk folder Spam / Promosi / Pembaruan). Link berlaku 60 menit dan hanya bisa dipakai sekali.",
@@ -371,29 +390,35 @@ const id = {
       newPasswordPlaceholder: "Kata sandi baru",
       confirmLabel: "Ulangi kata sandi",
       confirmPlaceholder: "Ulangi kata sandi",
-      sessionsNote: "Setelah kata sandi diatur ulang, semua sesi login di semua perangkat akan dikeluarkan.",
+      sessionsNote:
+        "Setelah kata sandi diatur ulang, semua sesi login di semua perangkat akan dikeluarkan.",
       submit: "Reset",
       invalidTitle: "Link tidak valid atau sudah kedaluwarsa.",
-      invalidBody: "Link atur ulang kata sandi hanya berlaku 60 menit dan hanya bisa dipakai sekali. Silakan minta link baru.",
+      invalidBody:
+        "Link atur ulang kata sandi hanya berlaku 60 menit dan hanya bisa dipakai sekali. Silakan minta link baru.",
       requestNew: "Minta Link Baru",
-      saveFailed: "Gagal menyimpan kata sandi. Silakan coba lagi beberapa saat lagi.",
+      saveFailed:
+        "Gagal menyimpan kata sandi. Silakan coba lagi beberapa saat lagi.",
     },
     changePassword: {
       metaTitle: "Ubah Kata Sandi - KOLEKSI",
       metaDescription: "Ubah kata sandi akun anggota KOLEKSI.",
       title: "Ubah Kata Sandi",
       success: "Kata sandi berhasil diubah.",
-      revokedSessions: "{count} sesi login di perangkat lain telah dikeluarkan.",
+      revokedSessions:
+        "{count} sesi login di perangkat lain telah dikeluarkan.",
       currentLabel: "Kata sandi saat ini",
       newLabel: "Kata sandi baru",
       confirmLabel: "Konfirmasi kata sandi baru",
       confirmPlaceholder: "Ulangi kata sandi baru",
       hint: "Hindari kata sandi yang mudah ditebak atau yang dipakai di situs lain. Setelah diubah, semua sesi login di perangkat lain akan dikeluarkan.",
-      failed: "Gagal mengubah kata sandi. Silakan coba lagi beberapa saat lagi.",
+      failed:
+        "Gagal mengubah kata sandi. Silakan coba lagi beberapa saat lagi.",
     },
     register: {
       metaTitle: "Daftar - KOLEKSI",
-      metaDescription: "Daftar menjadi anggota KOLEKSI, komunitas mobil elektrik Indonesia.",
+      metaDescription:
+        "Daftar menjadi anggota KOLEKSI, komunitas mobil elektrik Indonesia.",
       title: "Daftar",
       requiredNotice: "*Wajib diisi",
       gotIt: "Mengerti",
@@ -406,7 +431,8 @@ const id = {
       heardFrom: "Darimana Anda tahu tentang kami?",
       alreadyRegistered: "Saya sudah terdaftar.",
       tooMany: "Terlalu banyak percobaan pendaftaran. Silakan coba lagi nanti.",
-      failed: "Gagal mengirim pendaftaran. Silakan coba lagi beberapa saat lagi.",
+      failed:
+        "Gagal mengirim pendaftaran. Silakan coba lagi beberapa saat lagi.",
       // Nilai yang disimpan (members.heard_from) tetap teks Indonesia; ini hanya label tampilan.
       sources: {
         Instagram: "Instagram",
@@ -425,7 +451,8 @@ const id = {
       title: "Terima Kasih",
       heading: "Pendaftaran Anda sudah kami terima.",
       sentTo: "Kami telah mengirim link verifikasi ke",
-      checkInbox: ". Silakan cek kotak masuk (atau folder spam) dan klik link tersebut dalam 24 jam.",
+      checkInbox:
+        ". Silakan cek kotak masuk (atau folder spam) dan klik link tersebut dalam 24 jam.",
       steps: [
         "Buka e-mail dari KOLEKSI dan klik tombol Verifikasi E-mail.",
         "Pengurus KOLEKSI mereview data & dokumen pendaftaran Anda.",
@@ -438,8 +465,10 @@ const id = {
       title: "Verifikasi E-mail",
       emailLabel: "Alamat e-mail pendaftaran",
       resend: "Kirim ulang link verifikasi",
-      resent: "Kalau e-mail tersebut terdaftar dan belum diverifikasi, link verifikasi baru sudah dikirim.",
-      resendFailed: "Gagal mengirim ulang. Silakan coba lagi beberapa saat lagi.",
+      resent:
+        "Kalau e-mail tersebut terdaftar dan belum diverifikasi, link verifikasi baru sudah dikirim.",
+      resendFailed:
+        "Gagal mengirim ulang. Silakan coba lagi beberapa saat lagi.",
       results: {
         verified: {
           title: "E-mail berhasil diverifikasi.",
@@ -474,15 +503,28 @@ const id = {
     newPasswordRequired: "Kata sandi baru wajib diisi.",
     currentPasswordRequired: "Kata sandi saat ini wajib diisi.",
     passwordMax: "Kata sandi maksimal {max} karakter.",
-    passwordSameAsCurrent: "Kata sandi baru harus berbeda dari kata sandi saat ini.",
+    passwordSameAsCurrent:
+      "Kata sandi baru harus berbeda dari kata sandi saat ini.",
     repeatPassword: "Ulangi kata sandi.",
     repeatNewPassword: "Ulangi kata sandi baru.",
     passwordMismatch: "Konfirmasi kata sandi tidak sama.",
     passwordRules: {
-      length: { label: "Minimal {min} karakter", error: "Kata sandi minimal {min} karakter." },
-      lower: { label: "Huruf kecil (a–z)", error: "Kata sandi harus mengandung huruf kecil." },
-      upper: { label: "Huruf besar (A–Z)", error: "Kata sandi harus mengandung huruf besar." },
-      number: { label: "Angka (0–9)", error: "Kata sandi harus mengandung angka." },
+      length: {
+        label: "Minimal {min} karakter",
+        error: "Kata sandi minimal {min} karakter.",
+      },
+      lower: {
+        label: "Huruf kecil (a–z)",
+        error: "Kata sandi harus mengandung huruf kecil.",
+      },
+      upper: {
+        label: "Huruf besar (A–Z)",
+        error: "Kata sandi harus mengandung huruf besar.",
+      },
+      number: {
+        label: "Angka (0–9)",
+        error: "Kata sandi harus mengandung angka.",
+      },
     },
     invalidChoice: "Pilihan tidak valid.",
     fullNameRequired: "Nama lengkap wajib diisi (min. 2 karakter).",
@@ -496,17 +538,45 @@ const id = {
     cityFirst: "Pilih kota terlebih dahulu.",
     districtFirst: "Pilih kecamatan terlebih dahulu.",
     vinLength: "No. rangka harus {length} karakter.",
-    plateIncomplete: "Lengkapi kode wilayah (1–2 huruf) dan nomor plat (1–4 angka).",
+    plateIncomplete:
+      "Lengkapi kode wilayah (1–2 huruf) dan nomor plat (1–4 angka).",
     plateSeries: "Huruf belakang plat 1–3 huruf.",
     yearRange: "Tahun antara {min} dan {max}.",
-    documentsRequired: "Unggah minimal satu dokumen bukti (STNK, SPK, atau Invoice).",
+    documentsRequired:
+      "Unggah minimal satu dokumen bukti (STNK, SPK, atau Invoice).",
     documentsCount: "Maksimal {max} dokumen sekali unggah.",
     documentsSize: "Total dokumen baru maksimal {max} MB.",
   },
 
   calendar: {
-    months: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
-    monthsShort: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"],
+    months: [
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ],
+    monthsShort: [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "Mei",
+      "Jun",
+      "Jul",
+      "Agu",
+      "Sep",
+      "Okt",
+      "Nov",
+      "Des",
+    ],
     // Mulai Minggu
     weekdays: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"],
     weekdaysShort: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
@@ -566,7 +636,8 @@ const id = {
     metaDescription: "Dasbor anggota KOLEKSI.",
     title: "Dasbor",
     edit: "Ubah",
-    changePasswordNotice: "Demi keamanan akun, silakan ubah kata sandi awal Anda",
+    changePasswordNotice:
+      "Demi keamanan akun, silakan ubah kata sandi awal Anda",
     completeProfileNotice: "Silakan melengkapi data profil Anda",
     check: "Cek",
     memberData: "Data Anggota",
@@ -574,9 +645,15 @@ const id = {
     history: "Riwayat",
     historyCards: {
       semua: { title: "Semua", description: "Seluruh aktivitas Anda" },
-      tersimpan: { title: "Item Tersimpan", description: "Artikel, berita & kegiatan yang Anda simpan" },
+      tersimpan: {
+        title: "Item Tersimpan",
+        description: "Artikel, berita & kegiatan yang Anda simpan",
+      },
       forum: { title: "Forum", description: "Diskusi, balasan & polling Anda" },
-      transaksi: { title: "Transaksi", description: "Pembelian & pembayaran keanggotaan" },
+      transaksi: {
+        title: "Transaksi",
+        description: "Pembelian & pembayaran keanggotaan",
+      },
     },
     profile: {
       points: "{xp} XP · {points} Poin",
@@ -625,7 +702,8 @@ const id = {
       verified: "Terverifikasi",
       rejected: "Ditolak",
     },
-    rejectedReason: "Alasan ditolak: {reason}. Perbaiki data lalu simpan untuk diverifikasi ulang.",
+    rejectedReason:
+      "Alasan ditolak: {reason}. Perbaiki data lalu simpan untuk diverifikasi ulang.",
     savedDocuments: "Dokumen tersimpan",
     documentsToRemove: "{count} dokumen akan dihapus saat disimpan.",
     changePassword: "Ubah kata sandi",
@@ -644,17 +722,21 @@ const id = {
     dueSoonBadge: "Segera jatuh tempo",
     dueToday: "Jatuh tempo hari ini",
     dueInDays: "Jatuh tempo {days} hari lagi",
-    dueSoonBody: "Lakukan daftar ulang sebelum {date} agar keanggotaan Anda tetap aktif.",
+    dueSoonBody:
+      "Lakukan daftar ulang sebelum {date} agar keanggotaan Anda tetap aktif.",
     graceBadge: "Masa tenggang",
     graceLastDay: "Hari terakhir masa tenggang",
     graceDaysLeft: "Masa tenggang tersisa {days} hari",
-    graceBody: "Iuran sudah jatuh tempo sejak {due}. Keanggotaan akan nonaktif setelah {until}.",
+    graceBody:
+      "Iuran sudah jatuh tempo sejak {due}. Keanggotaan akan nonaktif setelah {until}.",
     expiredBadge: "Tidak aktif",
     expiredTitle: "Keanggotaan tidak aktif",
-    expiredBody: "Masa tenggang berakhir {date}. Bayar iuran untuk mengaktifkan kembali keanggotaan Anda.",
+    expiredBody:
+      "Masa tenggang berakhir {date}. Bayar iuran untuk mengaktifkan kembali keanggotaan Anda.",
     unpaidBadge: "Belum bayar",
     unpaidTitle: "Iuran belum dibayar",
-    unpaidBody: "Bayar iuran pertama Anda untuk mengaktifkan keanggotaan KOLEKSI.",
+    unpaidBody:
+      "Bayar iuran pertama Anda untuk mengaktifkan keanggotaan KOLEKSI.",
     fee: "Iuran {period}",
     total: "Total",
     renew: "Daftar Ulang",
@@ -703,7 +785,8 @@ const id = {
       report: "Lapor Pelanggaran",
     },
     title: "Forum KOLEKSI",
-    intro: "Ruang diskusi untuk berbagi ide, pengetahuan dan pengalaman seputar kendaraan listrik.",
+    intro:
+      "Ruang diskusi untuk berbagi ide, pengetahuan dan pengalaman seputar kendaraan listrik.",
     discussions: "Diskusi",
     categoryTag: "Kategori / Tag",
     noDiscussions: "Tidak ada diskusi yang cocok dengan pencarian/filter ini.",

@@ -124,7 +124,12 @@ const en: Dictionary = {
     welcome: {
       eyebrow: "Welcome to",
       title: "Indonesian Electric Car Community (KOLEKSI)",
-      stats: { members: "Members", cities: "Cities", events: "Events", brands: "Brands" },
+      stats: {
+        members: "Members",
+        cities: "Cities",
+        events: "Events",
+        brands: "Brands",
+      },
       viewCommunity: "Explore the Community",
       featuredAlt: "KOLEKSI Goes to IIMS 2026",
       featuredTitle: "KOLEKSI GOES TO IIMS 2026 – TALKSHOW",
@@ -139,8 +144,8 @@ const en: Dictionary = {
     },
     latestEvents: "Latest Events",
     playbook: "Playbook",
-    partners: "Our Partners",
-    sponsors: "Our Sponsors",
+    partners: "Strategic Partners",
+    sponsors: "Sponsors",
   },
 
   guide: {
@@ -193,7 +198,8 @@ const en: Dictionary = {
       empty: "No playbooks match this search.",
       loginLink: "Log in",
       loginToDownload: "as a member to download this playbook.",
-      documentError: "Failed to load the document. Please close it and try again.",
+      documentError:
+        "Failed to load the document. Please close it and try again.",
       documentLoading: "Loading document...",
       pageOf: "Page {page} of {total}",
     },
@@ -209,7 +215,8 @@ const en: Dictionary = {
 
   events: {
     metaTitle: "Events - KOLEKSI",
-    metaDescription: "KOLEKSI event calendar: touring, gatherings, and Indonesian electric car community activities.",
+    metaDescription:
+      "KOLEKSI event calendar: touring, gatherings, and Indonesian electric car community activities.",
     calendar: "Event Calendar",
     phases: { ongoing: "Ongoing", upcoming: "Upcoming", done: "Done" },
     error: "Failed to load events. Please try again.",
@@ -224,11 +231,16 @@ const en: Dictionary = {
 
   products: {
     metaTitle: "Products - KOLEKSI",
-    metaDescription: "KOLEKSI products: electric vehicles (EVs), accessories, and chargers for the Indonesian electric car community.",
+    metaDescription:
+      "KOLEKSI products: electric vehicles (EVs), accessories, and chargers for the Indonesian electric car community.",
     detailMetaTitle: "{name} - KOLEKSI Products",
     bannerAlt: "KOLEKSI Products",
     allProducts: "All Products",
-    tabs: { all: "All", ev: "EV (Electric Cars)", accessories: "Accessories & Chargers" },
+    tabs: {
+      all: "All",
+      ev: "EV (Electric Cars)",
+      accessories: "Accessories & Chargers",
+    },
     empty: "No products match this search.",
     soldOut: "Out of Stock",
     imageAlt: "{name} - image {number}",
@@ -244,9 +256,11 @@ const en: Dictionary = {
 
   evGarage: {
     metaTitle: "EV Garage - KOLEKSI",
-    metaDescription: "Look up electric vehicle charging types and specs: battery, AC, DC, and range by brand.",
+    metaDescription:
+      "Look up electric vehicle charging types and specs: battery, AC, DC, and range by brand.",
     title: "EV Garage",
-    intro: "Look up the charging types and specifications of your electric vehicle.",
+    intro:
+      "Look up the charging types and specifications of your electric vehicle.",
     columns: {
       brand: "Brand",
       type: "Model / Type",
@@ -263,9 +277,12 @@ const en: Dictionary = {
 
   spklu: {
     metaTitle: "Charging Stations - KOLEKSI",
-    metaDescription: "List of licensed public EV charging station (SPKLU) operators/brands in Indonesia and their charging apps.",
-    heading: "{count} Licensed Charging Station (SPKLU) Operators / Brands & Apps",
-    source: "Source: Directorate General of Electricity (ESDM) & PLN — 5,081 machines at 3,180 locations (SEP 2026)",
+    metaDescription:
+      "List of licensed public EV charging station (SPKLU) operators/brands in Indonesia and their charging apps.",
+    heading:
+      "{count} Licensed Charging Station (SPKLU) Operators / Brands & Apps",
+    source:
+      "Source: Directorate General of Electricity (ESDM) & PLN — 5,081 machines at 3,180 locations (SEP 2026)",
     viewOperator: "View operator {name}",
     operatorName: "Operator Name",
     app: "App",
@@ -325,7 +342,8 @@ const en: Dictionary = {
     saving: "Saving...",
     cancel: "Cancel",
     emailPlaceholder: "address@e-mail.com",
-    serverError: "Unable to connect to the server. Please try again in a moment.",
+    serverError:
+      "Unable to connect to the server. Please try again in a moment.",
     tooOften: "Too many requests. Please try again in a moment.",
     tooManyAttempts: "Too many attempts. Please try again in a moment.",
     checkFields: "Please review the highlighted fields.",
@@ -338,20 +356,23 @@ const en: Dictionary = {
     ruleUnmet: "(not met)",
     login: {
       metaTitle: "Log In - KOLEKSI",
-      metaDescription: "Log in to your KOLEKSI account to join the forum, events, and the Indonesian electric car community.",
+      metaDescription:
+        "Log in to your KOLEKSI account to join the forum, events, and the Indonesian electric car community.",
       title: "Log In",
       identifierLabel: "Enter your e-mail address or phone number",
       identifierPlaceholder: "E-mail / Phone number",
       password: "Password",
       forgot: "Forgot Password?",
       notRegistered: "I'm not registered yet.",
-      resetSuccess: "Your password has been reset. Please log in with your new password.",
+      resetSuccess:
+        "Your password has been reset. Please log in with your new password.",
     },
     forgot: {
       metaTitle: "Forgot Password - KOLEKSI",
       metaDescription: "Reset your KOLEKSI account password.",
       title: "Forgot Password",
-      intro: "Enter the e-mail address of your KOLEKSI account. We'll send you a link to create a new password.",
+      intro:
+        "Enter the e-mail address of your KOLEKSI account. We'll send you a link to create a new password.",
       sent: "If that e-mail is registered as a member, a password reset link has been sent.",
       sentHint:
         "Check your inbox (including the Spam / Promotions / Updates folders). The link is valid for 60 minutes and can only be used once.",
@@ -367,10 +388,12 @@ const en: Dictionary = {
       newPasswordPlaceholder: "New password",
       confirmLabel: "Repeat password",
       confirmPlaceholder: "Repeat password",
-      sessionsNote: "After your password is reset, all login sessions on every device will be signed out.",
+      sessionsNote:
+        "After your password is reset, all login sessions on every device will be signed out.",
       submit: "Reset",
       invalidTitle: "This link is invalid or has expired.",
-      invalidBody: "Password reset links are valid for 60 minutes and can only be used once. Please request a new link.",
+      invalidBody:
+        "Password reset links are valid for 60 minutes and can only be used once. Please request a new link.",
       requestNew: "Request a New Link",
       saveFailed: "Failed to save your password. Please try again in a moment.",
     },
@@ -379,7 +402,8 @@ const en: Dictionary = {
       metaDescription: "Change your KOLEKSI member account password.",
       title: "Change Password",
       success: "Your password has been changed.",
-      revokedSessions: "{count} login session(s) on other devices have been signed out.",
+      revokedSessions:
+        "{count} login session(s) on other devices have been signed out.",
       currentLabel: "Current password",
       newLabel: "New password",
       confirmLabel: "Confirm new password",
@@ -389,7 +413,8 @@ const en: Dictionary = {
     },
     register: {
       metaTitle: "Register - KOLEKSI",
-      metaDescription: "Become a member of KOLEKSI, the Indonesian electric car community.",
+      metaDescription:
+        "Become a member of KOLEKSI, the Indonesian electric car community.",
       title: "Register",
       requiredNotice: "*Required",
       gotIt: "Got it",
@@ -402,7 +427,8 @@ const en: Dictionary = {
       heardFrom: "How did you hear about us?",
       alreadyRegistered: "I'm already registered.",
       tooMany: "Too many registration attempts. Please try again later.",
-      failed: "Failed to submit your registration. Please try again in a moment.",
+      failed:
+        "Failed to submit your registration. Please try again in a moment.",
       sources: {
         Instagram: "Instagram",
         TikTok: "TikTok",
@@ -420,7 +446,8 @@ const en: Dictionary = {
       title: "Thank You",
       heading: "We've received your registration.",
       sentTo: "We've sent a verification link to",
-      checkInbox: ". Please check your inbox (or spam folder) and click the link within 24 hours.",
+      checkInbox:
+        ". Please check your inbox (or spam folder) and click the link within 24 hours.",
       steps: [
         "Open the e-mail from KOLEKSI and click the Verify E-mail button.",
         "The KOLEKSI committee reviews your registration details & documents.",
@@ -433,7 +460,8 @@ const en: Dictionary = {
       title: "E-mail Verification",
       emailLabel: "Registration e-mail address",
       resend: "Resend verification link",
-      resent: "If that e-mail is registered and not yet verified, a new verification link has been sent.",
+      resent:
+        "If that e-mail is registered and not yet verified, a new verification link has been sent.",
       resendFailed: "Failed to resend. Please try again in a moment.",
       results: {
         verified: {
@@ -469,15 +497,28 @@ const en: Dictionary = {
     newPasswordRequired: "New password is required.",
     currentPasswordRequired: "Current password is required.",
     passwordMax: "Password can be at most {max} characters.",
-    passwordSameAsCurrent: "Your new password must be different from your current password.",
+    passwordSameAsCurrent:
+      "Your new password must be different from your current password.",
     repeatPassword: "Repeat your password.",
     repeatNewPassword: "Repeat your new password.",
     passwordMismatch: "Password confirmation does not match.",
     passwordRules: {
-      length: { label: "At least {min} characters", error: "Password must be at least {min} characters." },
-      lower: { label: "Lowercase letter (a–z)", error: "Password must contain a lowercase letter." },
-      upper: { label: "Uppercase letter (A–Z)", error: "Password must contain an uppercase letter." },
-      number: { label: "Number (0–9)", error: "Password must contain a number." },
+      length: {
+        label: "At least {min} characters",
+        error: "Password must be at least {min} characters.",
+      },
+      lower: {
+        label: "Lowercase letter (a–z)",
+        error: "Password must contain a lowercase letter.",
+      },
+      upper: {
+        label: "Uppercase letter (A–Z)",
+        error: "Password must contain an uppercase letter.",
+      },
+      number: {
+        label: "Number (0–9)",
+        error: "Password must contain a number.",
+      },
     },
     invalidChoice: "Invalid choice.",
     fullNameRequired: "Full name is required (min. 2 characters).",
@@ -491,18 +532,54 @@ const en: Dictionary = {
     cityFirst: "Select a city first.",
     districtFirst: "Select a district first.",
     vinLength: "Chassis number must be {length} characters.",
-    plateIncomplete: "Complete the region code (1–2 letters) and plate number (1–4 digits).",
+    plateIncomplete:
+      "Complete the region code (1–2 letters) and plate number (1–4 digits).",
     plateSeries: "Plate suffix must be 1–3 letters.",
     yearRange: "Year must be between {min} and {max}.",
-    documentsRequired: "Upload at least one supporting document (STNK, SPK, or Invoice).",
+    documentsRequired:
+      "Upload at least one supporting document (STNK, SPK, or Invoice).",
     documentsCount: "Up to {max} documents per upload.",
     documentsSize: "New documents can total at most {max} MB.",
   },
 
   calendar: {
-    months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-    monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-    weekdays: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    months: [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ],
+    monthsShort: [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ],
+    weekdays: [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ],
     weekdaysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     openCalendar: "Choose from calendar",
     closeCalendar: "Close calendar",
@@ -560,7 +637,8 @@ const en: Dictionary = {
     metaDescription: "KOLEKSI member dashboard.",
     title: "Dashboard",
     edit: "Edit",
-    changePasswordNotice: "For your account's security, please change your initial password",
+    changePasswordNotice:
+      "For your account's security, please change your initial password",
     completeProfileNotice: "Please complete your profile information",
     check: "Check",
     memberData: "Member Data",
@@ -568,9 +646,18 @@ const en: Dictionary = {
     history: "History",
     historyCards: {
       semua: { title: "All", description: "All of your activity" },
-      tersimpan: { title: "Saved Items", description: "Articles, news & events you've saved" },
-      forum: { title: "Forum", description: "Your discussions, replies & polls" },
-      transaksi: { title: "Transactions", description: "Purchases & membership payments" },
+      tersimpan: {
+        title: "Saved Items",
+        description: "Articles, news & events you've saved",
+      },
+      forum: {
+        title: "Forum",
+        description: "Your discussions, replies & polls",
+      },
+      transaksi: {
+        title: "Transactions",
+        description: "Purchases & membership payments",
+      },
     },
     profile: {
       points: "{xp} XP · {points} Points",
@@ -619,7 +706,8 @@ const en: Dictionary = {
       verified: "Verified",
       rejected: "Rejected",
     },
-    rejectedReason: "Reason for rejection: {reason}. Correct your details and save to have them verified again.",
+    rejectedReason:
+      "Reason for rejection: {reason}. Correct your details and save to have them verified again.",
     savedDocuments: "Saved documents",
     documentsToRemove: "{count} document(s) will be removed when you save.",
     changePassword: "Change password",
@@ -642,10 +730,12 @@ const en: Dictionary = {
     graceBadge: "Grace period",
     graceLastDay: "Last day of the grace period",
     graceDaysLeft: "{days} days left in the grace period",
-    graceBody: "Your fee has been due since {due}. Your membership will become inactive after {until}.",
+    graceBody:
+      "Your fee has been due since {due}. Your membership will become inactive after {until}.",
     expiredBadge: "Inactive",
     expiredTitle: "Membership inactive",
-    expiredBody: "The grace period ended on {date}. Pay your fee to reactivate your membership.",
+    expiredBody:
+      "The grace period ended on {date}. Pay your fee to reactivate your membership.",
     unpaidBadge: "Unpaid",
     unpaidTitle: "Fee not yet paid",
     unpaidBody: "Pay your first fee to activate your KOLEKSI membership.",
@@ -697,7 +787,8 @@ const en: Dictionary = {
       report: "Report a Violation",
     },
     title: "KOLEKSI Forum",
-    intro: "A place to share ideas, knowledge, and experiences about electric vehicles.",
+    intro:
+      "A place to share ideas, knowledge, and experiences about electric vehicles.",
     discussions: "Discussions",
     categoryTag: "Category / Tag",
     noDiscussions: "No discussions match this search/filter.",

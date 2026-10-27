@@ -10,9 +10,9 @@ export default async function WelcomeStats() {
   const { welcome } = t.home;
   // icon = nama file /images/icon-*.svg (tidak ikut diterjemahkan)
   const communityStats = [
-    { icon: "anggota", value: ">1000", label: welcome.stats.members },
+    { icon: "anggota", value: ">400", label: welcome.stats.members },
     { icon: "kota", value: "26", label: welcome.stats.cities },
-    { icon: "kegiatan", value: "123", label: welcome.stats.events },
+    { icon: "kegiatan", value: "75", label: welcome.stats.events },
     { icon: "brand", value: "20", label: welcome.stats.brands },
   ];
 
@@ -70,7 +70,7 @@ export default async function WelcomeStats() {
 
           <RevealItem className="mt-14 flex flex-wrap items-center gap-5">
             <Link
-              href="/komunitas"
+              href="/panduan-praktis"
               className="inline-flex items-center gap-4 rounded-full border border-border-light py-2.5 pl-6 pr-3 text-[20px] leading-8 font-bold text-koleksi-navy-deep transition hover:border-koleksi-navy-deep dark:border-border-dark"
             >
               {welcome.viewCommunity}
@@ -104,7 +104,7 @@ export default async function WelcomeStats() {
           <p className="mt-2 text-card-caption">
             {welcome.watchOn}{" "}
             <a
-              href="https://youtube.com"
+              href="https://www.youtube.com/@komunitasmobilelektrikindo193"
               target="_blank"
               rel="noopener noreferrer"
               className="font-bold underline"
