@@ -43,7 +43,9 @@ function toListItem(news: NewsResponse, locale: Locale): NewsListItem {
     tag: news.category.label[locale] || news.category.label.id,
     badge: isNewsBadge(news.category.value),
     title: news.title[locale] || news.title.id,
-    author: news.author ?? null,
+    // Berita EV: hanya penulis di media sumber (nama media tampil sendiri di `sourceName`)
+    author: news.category.external ? (news.source?.author ?? null) : (news.author ?? null),
+    sourceName: news.category.external ? (news.source?.name ?? null) : null,
     image: news.image,
     date: newsDate(news, locale, "long"),
     summary: news.summary ? news.summary[locale] || news.summary.id : null,

@@ -576,8 +576,9 @@ export interface NewsListItem {
   author: string | null;
   image: string | null;
   date: string;
-  /** Berita EV: ringkasan & link berita di media lain (kartu dibuka di tab baru). */
+  /** Berita EV: ringkasan, nama media & link berita di media lain (kartu dibuka di tab baru). */
   summary: string | null;
+  sourceName: string | null;
   externalUrl: string | null;
 }
 

@@ -8,6 +8,7 @@ import SearchFilterBar from "@/components/ui/SearchFilterBar";
 import FilterDropdown from "@/components/ui/FilterDropdown";
 import Pagination from "@/components/ui/Pagination";
 import NewsTag from "@/components/ui/NewsTag";
+import Dot from "@/components/ui/Dot";
 import clsx from "@/lib/clsx";
 import { useI18n } from "@/components/i18n/I18nProvider";
 import { NEWS_CATEGORIES, type NewsCategoryValue } from "@/lib/newsCategories";
@@ -205,6 +206,18 @@ export default function BeritaList({
                 <h3 className="mt-2 text-[20px] font-bold leading-6 text-koleksi-navy-dark transition group-hover:text-koleksi-green dark:text-ink-dark">
                   {item.title}
                 </h3>
+                {/* Berita EV: tanggal berita · nama media */}
+                {item.externalUrl && (
+                  <p className="mt-2 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[14px] leading-[14px] text-koleksi-navy-dark/60 dark:text-ink-dark/50">
+                    <span>{item.date}</span>
+                    {item.sourceName && (
+                      <>
+                        <Dot />
+                        <span className="font-semibold text-koleksi-navy-dark/80 dark:text-ink-dark/70">{item.sourceName}</span>
+                      </>
+                    )}
+                  </p>
+                )}
                 {item.author && (
                   <p className="mt-2 text-[14px] leading-[14px] text-koleksi-navy-dark/60 dark:text-ink-dark/50">
                     {t.common.by}: {item.author}
