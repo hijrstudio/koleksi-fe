@@ -15,8 +15,6 @@ const nextConfig: NextConfig = {
     serverActions: { bodySizeLimit: "13mb" },
     proxyClientMaxBodySize: "13mb",
   },
-  // Berita dipisah dari Panduan Praktis: URL lama (sudah tersebar / terindeks) dialihkan permanen.
-  // Query (?tags=) ikut terbawa otomatis.
   /**
    * Indonesia (default) tanpa prefix: /kegiatan dilayani diam-diam oleh app/[lang]/kegiatan (lang = "id").
    * Sengaja di sini, BUKAN NextResponse.rewrite di proxy.ts: di VPS server Next berjalan dengan HOSTNAME=127.0.0.1,
@@ -35,10 +33,15 @@ const nextConfig: NextConfig = {
       fallback: [],
     };
   },
+  // Berita & galeri foto dipisah dari Panduan Praktis: URL lama (sudah tersebar / terindeks) dialihkan permanen.
+  // Query (?tags=) ikut terbawa otomatis.
   async redirects() {
     return ["", "/en"].flatMap((prefix) => [
       { source: `${prefix}/panduan-praktis/berita`, destination: `${prefix}/berita`, permanent: true },
       { source: `${prefix}/panduan-praktis/berita/:slug`, destination: `${prefix}/berita/:slug`, permanent: true },
+      { source: `${prefix}/panduan-praktis/galeri-foto`, destination: `${prefix}/kegiatan/galeri/foto`, permanent: true },
+      // /kegiatan/galeri belum punya halaman sendiri: arahkan ke foto (sementara, supaya bisa diganti halaman galeri)
+      { source: `${prefix}/kegiatan/galeri`, destination: `${prefix}/kegiatan/galeri/foto`, permanent: false },
     ]);
   },
   images: {

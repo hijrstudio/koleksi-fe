@@ -1,6 +1,12 @@
-import { getLocale } from "@/lib/i18n/server";
+import type { Metadata } from "next";
+import { getDictionary, getLocale } from "@/lib/i18n/server";
 import { getGalleryAlbums } from "@/services/gallery";
 import GalleryList from "./GalleryList";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getDictionary();
+  return { title: `${t.guide.gallery.title} - KOLEKSI` };
+}
 
 export default async function GaleriFotoPage() {
   const initialPage = await getGalleryAlbums({ page: 1 }, await getLocale());

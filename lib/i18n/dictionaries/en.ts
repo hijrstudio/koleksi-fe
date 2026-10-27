@@ -161,7 +161,6 @@ const en: Dictionary = {
       news: "News",
       videos: "Educational Videos",
       infographics: "Infographics",
-      gallery: "Photo Gallery",
       playbook: "Web Playbook",
       regulations: "Regulatory Documents",
       glossary: "EV Glossary",
@@ -192,7 +191,7 @@ const en: Dictionary = {
       empty: "No infographics match this search/filter.",
     },
     gallery: {
-      title: "Photo Gallery",
+      title: "Event Gallery",
       error: "Failed to load the gallery. Please try again.",
       empty: "No albums match this search.",
       previousPhoto: "Previous photo",
@@ -225,6 +224,12 @@ const en: Dictionary = {
     metaDescription:
       "KOLEKSI event calendar: touring, gatherings, and Indonesian electric car community activities.",
     calendar: "Event Calendar",
+    videos: {
+      title: "Event Videos",
+      error: "Failed to load videos. Please try again.",
+      empty: "No event videos yet. KOLEKSI event coverage will appear here soon.",
+      noResults: "No videos match this search.",
+    },
     phases: { ongoing: "Ongoing", upcoming: "Upcoming", done: "Done" },
     error: "Failed to load events. Please try again.",
     empty: "No events match this search/filter.",

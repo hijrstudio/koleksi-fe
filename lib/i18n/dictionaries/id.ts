@@ -165,7 +165,6 @@ const id = {
       news: "Berita",
       videos: "Video Edukasi",
       infographics: "Infografis",
-      gallery: "Galeri Foto",
       playbook: "Web Playbook",
       regulations: "Dokumen Regulasi",
       glossary: "Glosarium EV",
@@ -196,7 +195,7 @@ const id = {
       empty: "Tidak ada infografis yang cocok dengan pencarian/filter ini.",
     },
     gallery: {
-      title: "Galeri Foto",
+      title: "Galeri Kegiatan",
       error: "Gagal memuat galeri. Silakan coba lagi.",
       empty: "Tidak ada galeri yang cocok dengan pencarian ini.",
       previousPhoto: "Foto sebelumnya",
@@ -228,6 +227,12 @@ const id = {
     metaDescription:
       "Kalender kegiatan KOLEKSI: touring, gathering, dan agenda komunitas mobil elektrik Indonesia.",
     calendar: "Kalender Kegiatan",
+    videos: {
+      title: "Video Kegiatan",
+      error: "Gagal memuat video. Silakan coba lagi.",
+      empty: "Belum ada video kegiatan. Nantikan dokumentasi kegiatan KOLEKSI di sini.",
+      noResults: "Tidak ada video yang cocok dengan pencarian ini.",
+    },
     phases: { ongoing: "On Going", upcoming: "On Plan", done: "Done" },
     error: "Gagal memuat kegiatan. Silakan coba lagi.",
     empty: "Tidak ada kegiatan yang cocok dengan pencarian/filter ini.",

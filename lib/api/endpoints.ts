@@ -17,6 +17,7 @@ export const API_ENDPOINTS = {
   articleView: (slug: string) => `/guides/articles/${encodeURIComponent(slug)}/view`,
   videos: "/guides/videos",
   videoCategories: "/guides/videos/categories",
+  eventVideos: "/event-videos",
   infographics: "/guides/infographics",
   infographicCategories: "/guides/infographics/categories",
   playbooks: "/guides/playbooks",

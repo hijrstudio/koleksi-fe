@@ -461,6 +461,35 @@ export interface VideoPage {
   totalPages: number;
 }
 
+/* ---------- Video kegiatan ---------- */
+
+export interface EventVideoCardResponse {
+  id: number;
+  title: LocalizedText;
+  image: string | null;
+  youtube_id: string;
+  published_at: string | null;
+}
+
+export interface EventVideoListResponse {
+  data: EventVideoCardResponse[];
+  meta: { current_page: number; last_page: number; per_page: number; total: number };
+}
+
+export interface EventVideoQuery {
+  search?: string;
+  page?: number;
+}
+
+/** Sama dengan VideoListItem (video edukasi) tanpa kategori. */
+export type EventVideoListItem = Omit<VideoListItem, "category">;
+
+export interface EventVideoPage {
+  items: EventVideoListItem[];
+  page: number;
+  totalPages: number;
+}
+
 /* ---------- Infografis ---------- */
 
 export interface InfographicCardResponse {

@@ -20,8 +20,8 @@ export function getNavItems(t: Dictionary): NavItem[] {
       href: "/kegiatan",
       children: [
         { label: nav.events, href: "/kegiatan" },
-        { label: nav.gallery, href: "/panduan-praktis/galeri-foto" },
-        { label: nav.video, href: "/panduan-praktis/video-edukasi" },
+        { label: nav.gallery, href: "/kegiatan/galeri/foto" },
+        { label: nav.video, href: "/kegiatan/galeri/video" },
       ],
     },
     {

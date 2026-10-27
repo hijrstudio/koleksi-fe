@@ -10,7 +10,6 @@ export default function Sidebar() {
     { label: sidebar.articles, href: "/panduan-praktis/artikel" },
     { label: sidebar.videos, href: "/panduan-praktis/video-edukasi" },
     { label: sidebar.infographics, href: "/panduan-praktis/infografis" },
-    { label: sidebar.gallery, href: "/panduan-praktis/galeri-foto" },
     { label: sidebar.playbook, href: "/panduan-praktis/web-playbook" },
     { label: sidebar.regulations, href: "/panduan-praktis/dokumen-regulasi" },
     { label: sidebar.glossary, href: "/panduan-praktis/glosarium-ev" },
