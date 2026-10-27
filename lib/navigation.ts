@@ -5,7 +5,7 @@ import type { NavItem } from "@/types";
 export function getNavItems(t: Dictionary): NavItem[] {
   const nav = t.nav;
 
-  return [
+  const items: NavItem[] = [
     { label: nav.aboutUs, href: "/tentang-kami" },
     {
       label: nav.community,
@@ -33,7 +33,8 @@ export function getNavItems(t: Dictionary): NavItem[] {
         { label: nav.coverage, href: "/berita?tags=liputan" },
       ],
     },
-    { label: nav.products, href: "/produk" },
+    // Produk disembunyikan dulu (halaman /produk tetap ada); hapus `hidden` untuk menampilkan lagi.
+    { label: nav.products, href: "/produk", hidden: true },
     {
       label: nav.evEcosystem,
       href: "/ev-garage",
@@ -43,4 +44,6 @@ export function getNavItems(t: Dictionary): NavItem[] {
       ],
     },
   ];
+
+  return items.filter((item) => !item.hidden);
 }

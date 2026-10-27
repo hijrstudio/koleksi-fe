@@ -2,6 +2,8 @@ export interface NavItem {
   label: string;
   href: string;
   children?: { label: string; href: string }[];
+  /** true = disembunyikan sementara dari menu (desktop & mobile); halamannya tetap ada. */
+  hidden?: boolean;
 }
 
 export type Locale = "id" | "en";
