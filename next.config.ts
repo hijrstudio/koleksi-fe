@@ -14,6 +14,12 @@ const nextConfig: NextConfig = {
     // lewat Server Action (lib/profile/validation.ts) + overhead multipart. Default Next: 1 MB (action) & 10 MB (proxy).
     serverActions: { bodySizeLimit: "13mb" },
     proxyClientMaxBodySize: "13mb",
+    // Prerender saat build memanggil API production (VPS dengan batas thread): terlalu banyak koneksi TLS bersamaan
+    // diputus server (ECONNRESET) dan menggagalkan build. Halaman diproses lebih sedikit sekaligus, dan halaman
+    // yang gagal dicoba ulang sebelum build dibatalkan. Maks. 4 worker × 2 halaman = 8 koneksi bersamaan.
+    cpus: 4,
+    staticGenerationMaxConcurrency: 2,
+    staticGenerationRetryCount: 3,
   },
   /**
    * Indonesia (default) tanpa prefix: /kegiatan dilayani diam-diam oleh app/[lang]/kegiatan (lang = "id").

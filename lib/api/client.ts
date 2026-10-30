@@ -37,7 +37,7 @@ const DEFAULT_REVALIDATE = 60;
  * GET dicoba ulang kalau koneksi putus (mis. ECONNRESET saat TLS handshake ketika build memanggil API paralel)
  * atau gateway sibuk. Hanya GET: POST/PUT (login, pembayaran) tidak boleh terkirim dua kali.
  */
-const RETRY_DELAYS_MS = [300, 1000];
+const RETRY_DELAYS_MS = [500, 1500, 3000];
 const RETRY_STATUSES = new Set([502, 503, 504]);
 
 /** fetch + retry untuk request GET (lihat RETRY_DELAYS_MS). */
