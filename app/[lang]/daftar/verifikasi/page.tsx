@@ -12,14 +12,16 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * Tujuan redirect backend setelah link verifikasi di e-mail diklik:
- * /daftar/verifikasi?status=verified|already|expired|invalid  (teks: t.auth.verify.results)
+ * Tujuan redirect backend setelah link verifikasi di e-mail diklik, kalau tidak lanjut ke halaman bayar
+ * (/daftar/bayar): /daftar/verifikasi?status=active|expired|invalid  (teks: t.auth.verify.results).
+ * verified/already tetap dikenali untuk link lama — pendaftar diminta mengirim ulang link pembayaran.
  */
 const RESULTS = {
-  verified: { ok: true },
-  already: { ok: true },
-  expired: { ok: false },
-  invalid: { ok: false },
+  verified: { ok: true, resend: true },
+  already: { ok: true, resend: true },
+  active: { ok: true, resend: false },
+  expired: { ok: false, resend: true },
+  invalid: { ok: false, resend: true },
 } as const;
 
 type Status = keyof typeof RESULTS;
@@ -54,12 +56,12 @@ export default async function VerifikasiPage({
         </p>
 
         <div className="mt-10">
-          {result.ok ? (
-            <Link href="/" className={authOutlineClass}>
-              {t.common.backToHome}
-            </Link>
-          ) : (
+          {result.resend ? (
             <ResendVerificationForm askEmail />
+          ) : (
+            <Link href="/masuk" className={authOutlineClass}>
+              {t.auth.registerPayment.login}
+            </Link>
           )}
         </div>
       </div>

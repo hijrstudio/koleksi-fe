@@ -590,7 +590,6 @@ function ProfileFields({
                     <Field
                       id="profil-vin"
                       label={t.form.vin}
-                      required
                       aside={format(t.form.characters, { count: form.vin.length, max: VIN_LENGTH })}
                       error={errorFor("vin")}
                     >
@@ -601,7 +600,6 @@ function ProfileFields({
                         spellCheck={false}
                         placeholder="ABCDEFG1234567890"
                         maxLength={VIN_LENGTH}
-                        required
                         value={form.vin}
                         onChange={(e) =>
                           set(

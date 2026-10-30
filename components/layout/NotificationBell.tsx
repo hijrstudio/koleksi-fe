@@ -102,6 +102,7 @@ function notificationRow(n: MemberNotification, t: Dictionary, locale: Locale): 
         }).format(new Date(changedAt)) + " WIB"
       : "",
     amount: typeof n.params.amount === "number" ? formatRupiah(n.params.amount) : "",
+    number: typeof n.params.no_lambung === "number" ? `#${String(n.params.no_lambung).padStart(3, "0")}` : "",
   };
 
   return {

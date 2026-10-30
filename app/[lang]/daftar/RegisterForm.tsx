@@ -464,7 +464,6 @@ export default function RegisterForm({ regencies, brands }: RegisterFormProps) {
                       <Field
                         id="daftar-vin"
                         label={t.form.vin}
-                        required
                         aside={format(t.form.characters, { count: form.vin.length, max: VIN_LENGTH })}
                         error={errorFor("vin")}
                       >
@@ -475,7 +474,6 @@ export default function RegisterForm({ regencies, brands }: RegisterFormProps) {
                           spellCheck={false}
                           placeholder="ABCDEFG1234567890"
                           maxLength={VIN_LENGTH}
-                          required
                           value={form.vin}
                           onChange={(e) =>
                             set(
@@ -591,6 +589,7 @@ export default function RegisterForm({ regencies, brands }: RegisterFormProps) {
                         <Field
                           id="daftar-merek"
                           label={t.form.brand}
+                          required
                           error={errorFor("vehicle_brand_id")}
                         >
                           <SelectInput
@@ -608,6 +607,7 @@ export default function RegisterForm({ regencies, brands }: RegisterFormProps) {
                         <Field
                           id="daftar-tipe"
                           label={t.form.model}
+                          required
                           error={errorFor("vehicle_model_id")}
                         >
                           <SelectInput

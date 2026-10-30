@@ -125,7 +125,8 @@ export function validateProfile(f: ProfileFormValues, docs: DocumentCheck, m: Di
   if (f.village_code && !f.district_code) e.district_code = m.districtFirst;
 
   if (f.has_vehicle === "ya") {
-    if (f.vin.length !== VIN_LENGTH) e.vin = format(m.vinLength, { length: VIN_LENGTH });
+    // No. rangka & dokumen bukti opsional; kalau No. rangka diisi harus lengkap
+    if (f.vin && f.vin.length !== VIN_LENGTH) e.vin = format(m.vinLength, { length: VIN_LENGTH });
     if (!/^[A-Z]{1,2}$/.test(f.plat_kode) || !/^\d{1,4}$/.test(f.plat_nomor)) {
       e.plat = m.plateIncomplete;
     } else if (f.plat_seri && !/^[A-Z]{1,3}$/.test(f.plat_seri)) {
@@ -137,8 +138,7 @@ export function validateProfile(f: ProfileFormValues, docs: DocumentCheck, m: Di
       e.tahun = format(m.yearRange, { min: MIN_VEHICLE_YEAR, max: maxYear });
     }
 
-    if (docs.count === 0) e.documents = m.documentsRequired;
-    else if (docs.newCount > MAX_DOCUMENTS) e.documents = format(m.documentsCount, { max: MAX_DOCUMENTS });
+    if (docs.newCount > MAX_DOCUMENTS) e.documents = format(m.documentsCount, { max: MAX_DOCUMENTS });
     else if (docs.newBytes > MAX_DOCUMENTS_MB * 1024 * 1024) e.documents = format(m.documentsSize, { max: MAX_DOCUMENTS_MB });
   }
 

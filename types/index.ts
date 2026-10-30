@@ -239,7 +239,7 @@ export interface MemberNotification {
   /** Teks bahasa Indonesia dari backend — dipakai kalau `type` belum dikenal website. */
   title: string;
   message: string;
-  params: Partial<Record<"changed_at" | "amount" | "period_label" | "renewal_date" | "active_until" | "days_left", string | number>>;
+  params: Partial<Record<"changed_at" | "amount" | "period_label" | "renewal_date" | "active_until" | "days_left" | "no_lambung", string | number>>;
   read: boolean;
   created_at: string | null;
 }
@@ -815,6 +815,26 @@ export interface IuranPayment {
   items: { period_label: string; amount: number }[];
   /** Hanya pada GET (polling). */
   membership?: { status: "active" | "inactive"; active_until: string | null; paid_until: string | null };
+  /** Hanya pada polling halaman bayar iuran pendaftaran. */
+  registration?: RegistrationStatus;
+}
+
+/** Status pendaftar di halaman bayar iuran pendaftaran (/daftar/bayar). */
+export interface RegistrationStatus {
+  status: "awaiting_payment" | "active";
+  /** Nama panggilan / nama lengkap pendaftar (sapaan). */
+  name: string;
+  payment_due_at: string | null;
+  /** "#309" setelah lunas; null selama belum bayar. */
+  no_lambung: string | null;
+}
+
+/** Response POST /registrations/payment. */
+export interface RegistrationPaymentSummary extends RegistrationStatus {
+  amount: number | null;
+  periods: string[];
+  /** QR yang masih berlaku (kalau pendaftar sudah pernah menampilkan QRIS). */
+  payment: IuranPayment | null;
 }
 
 /** Response mentah GET /spklu-operators (item). */

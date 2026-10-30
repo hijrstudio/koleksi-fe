@@ -1,7 +1,8 @@
 /**
  * Form "Daftar" — tipe & validasi yang dipakai bersama oleh Client Component (umpan balik instan) dan
- * Server Action (sebelum diteruskan ke backend). Data pribadi & kendaraan memakai aturan form "Ubah profil";
- * backend tetap memvalidasi ulang (keunikan e-mail/No. HP/VIN/plat, kata sandi bocor, wilayah, merek/tipe).
+ * Server Action (sebelum diteruskan ke backend). Data pribadi & kendaraan memakai aturan form "Ubah profil",
+ * ditambah merek & tipe kendaraan wajib (No. rangka & dokumen opsional). Backend tetap memvalidasi ulang
+ * (keunikan e-mail/No. HP/VIN/plat, kata sandi bocor, wilayah, merek/tipe).
  */
 
 import { passwordStrengthError } from "@/lib/auth/password";
@@ -93,6 +94,11 @@ export function validateRegister(
 
   if (!v.password_confirmation) e.password_confirmation = m.repeatPassword;
   else if (v.password_confirmation !== v.password) e.password_confirmation = m.passwordMismatch;
+
+  if (v.has_vehicle === "ya") {
+    if (!v.vehicle_brand_id) e.vehicle_brand_id = m.brandRequired;
+    if (!v.vehicle_model_id) e.vehicle_model_id = m.modelRequired;
+  }
 
   if (v.heard_from.length > 60) e.heard_from = m.invalidChoice;
 

@@ -97,6 +97,10 @@ const en: Dictionary = {
         title: "Registration approved",
         body: "Activate your membership now by paying the annual fee of {amount} from the member dashboard.",
       },
+      "membership.registration_activated": {
+        title: "Welcome to KOLEKSI",
+        body: "Your membership is active with member number {number}.",
+      },
     },
   },
 
@@ -464,27 +468,50 @@ const en: Dictionary = {
         ". Please check your inbox (or spam folder) and click the link within 24 hours.",
       steps: [
         "Open the e-mail from KOLEKSI and click the Verify E-mail button.",
-        "The KOLEKSI committee reviews your registration details & documents.",
-        "Once approved, you'll receive an e-mail to activate your membership by paying the annual fee.",
+        "You'll be taken straight to the annual fee payment page (QRIS). Complete it within 24 hours.",
+        "Once the payment succeeds, your account is active, gets a member number, and you can sign in to the dashboard.",
       ],
       noEmail: "Didn't receive the e-mail?",
+    },
+    registerPayment: {
+      metaTitle: "Pay Registration Fee - KOLEKSI",
+      title: "Pay Registration Fee",
+      greeting: "Hello {name},",
+      intro:
+        "Your e-mail has been verified. Complete your registration by paying the annual fee via QRIS (any e-wallet & mobile banking). Once the payment succeeds, your account is active right away.",
+      total: "Total fee",
+      deadline: "Pay before {date}",
+      showQr: "Show QRIS",
+      successTitle: "Payment successful. Welcome aboard!",
+      successBody: "Your KOLEKSI membership is now active. We've also sent a confirmation to your e-mail.",
+      memberNumber: "Your member number",
+      activating: "Payment received, activating your account…",
+      login: "Go to Dashboard",
+      invalidTitle: "This payment link is invalid or has expired.",
+      invalidBody:
+        "Enter your registration e-mail to receive a new payment link. If the payment deadline has passed, the registration is removed automatically and you can register again.",
+      registerAgain: "Register again",
     },
     verify: {
       metaTitle: "E-mail Verification - KOLEKSI",
       title: "E-mail Verification",
       emailLabel: "Registration e-mail address",
-      resend: "Resend verification link",
+      resend: "Resend link",
       resent:
-        "If that e-mail is registered and not yet verified, a new verification link has been sent.",
+        "If that e-mail is registered and the registration isn't complete yet, a new link (verification or payment) has been sent.",
       resendFailed: "Failed to resend. Please try again in a moment.",
       results: {
         verified: {
           title: "Your e-mail has been verified.",
-          body: "Thank you! Your registration is now being reviewed by the KOLEKSI committee. We'll e-mail you once it's approved, with information on activating your membership by paying the annual fee.",
+          body: "Continue by paying the registration fee. You can also have the payment link resent to your e-mail with the form below.",
         },
         already: {
           title: "Your e-mail is already verified.",
-          body: "Your registration is being or has been reviewed by the KOLEKSI committee. Keep an eye on your inbox for further information.",
+          body: "Continue by paying the registration fee. The payment link can be resent to your e-mail with the form below.",
+        },
+        active: {
+          title: "Your membership is already active.",
+          body: "We've received your registration fee. Please sign in with the e-mail and password you created when registering.",
         },
         expired: {
           title: "This verification link has expired.",
@@ -550,8 +577,8 @@ const en: Dictionary = {
       "Complete the region code (1–2 letters) and plate number (1–4 digits).",
     plateSeries: "Plate suffix must be 1–3 letters.",
     yearRange: "Year must be between {min} and {max}.",
-    documentsRequired:
-      "Upload at least one supporting document (STNK, SPK, or Invoice).",
+    brandRequired: "Select the vehicle brand.",
+    modelRequired: "Select the vehicle model.",
     documentsCount: "Up to {max} documents per upload.",
     documentsSize: "New documents can total at most {max} MB.",
   },
@@ -627,7 +654,7 @@ const en: Dictionary = {
     vehicleInfo: "Vehicle Information",
     hasVehicle: "Do you own a vehicle? *",
     yesNo: { ya: "Yes", tidak: "No" },
-    vin: "Chassis number (VIN)",
+    vin: "Chassis number (VIN), optional",
     characters: "{count}/{max} characters",
     plate: "License plate number",
     plateRegion: "Region code",
@@ -638,7 +665,7 @@ const en: Dictionary = {
     brand: "Brand",
     model: "Model",
     year: "Year",
-    documents: "Supporting documents (STNK, SPK, Invoice) *",
+    documents: "Supporting documents (STNK, SPK, Invoice), optional",
     maxSize: "(maximum {max} MB)",
     dropDocuments: "Drag documents here or",
     upload: "Upload",

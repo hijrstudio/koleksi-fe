@@ -100,6 +100,10 @@ const id = {
         title: "Pendaftaran disetujui",
         body: "Segera aktifkan keanggotaan Anda dengan membayar iuran tahunan sebesar {amount} melalui dasbor anggota.",
       },
+      "membership.registration_activated": {
+        title: "Selamat bergabung di KOLEKSI",
+        body: "Keanggotaan Anda aktif dengan No. anggota {number}.",
+      },
     },
   },
 
@@ -469,28 +473,51 @@ const id = {
         ". Silakan cek kotak masuk (atau folder spam) dan klik link tersebut dalam 24 jam.",
       steps: [
         "Buka e-mail dari KOLEKSI dan klik tombol Verifikasi E-mail.",
-        "Pengurus KOLEKSI mereview data & dokumen pendaftaran Anda.",
-        "Setelah disetujui, Anda menerima e-mail untuk aktivasi keanggotaan dengan membayar iuran tahunan.",
+        "Anda langsung diarahkan ke halaman pembayaran iuran tahunan (QRIS). Selesaikan dalam 24 jam.",
+        "Setelah pembayaran berhasil, akun Anda aktif, mendapat No. anggota, dan bisa masuk ke dasbor.",
       ],
       noEmail: "Tidak menerima e-mail?",
+    },
+    registerPayment: {
+      metaTitle: "Bayar Iuran Pendaftaran - KOLEKSI",
+      title: "Bayar Iuran Pendaftaran",
+      greeting: "Halo {name},",
+      intro:
+        "E-mail Anda sudah terverifikasi. Selesaikan pendaftaran dengan membayar iuran tahunan melalui QRIS (semua e-wallet & mobile banking). Setelah pembayaran berhasil, akun Anda langsung aktif.",
+      total: "Total iuran",
+      deadline: "Bayar sebelum {date}",
+      showQr: "Tampilkan QRIS",
+      successTitle: "Pembayaran berhasil. Selamat bergabung!",
+      successBody: "Keanggotaan KOLEKSI Anda kini aktif. Kami juga mengirim konfirmasi ke e-mail Anda.",
+      memberNumber: "No. anggota (lambung) Anda",
+      activating: "Pembayaran diterima, akun sedang diaktifkan…",
+      login: "Masuk ke Dasbor",
+      invalidTitle: "Link pembayaran tidak valid atau sudah kedaluwarsa.",
+      invalidBody:
+        "Masukkan e-mail pendaftaran Anda untuk menerima link pembayaran baru. Kalau batas bayar sudah lewat, pendaftaran otomatis dihapus dan Anda bisa mendaftar lagi.",
+      registerAgain: "Daftar lagi",
     },
     verify: {
       metaTitle: "Verifikasi E-mail - KOLEKSI",
       title: "Verifikasi E-mail",
       emailLabel: "Alamat e-mail pendaftaran",
-      resend: "Kirim ulang link verifikasi",
+      resend: "Kirim ulang link",
       resent:
-        "Kalau e-mail tersebut terdaftar dan belum diverifikasi, link verifikasi baru sudah dikirim.",
+        "Kalau e-mail tersebut terdaftar dan pendaftarannya belum selesai, link baru (verifikasi atau pembayaran) sudah dikirim.",
       resendFailed:
         "Gagal mengirim ulang. Silakan coba lagi beberapa saat lagi.",
       results: {
         verified: {
           title: "E-mail berhasil diverifikasi.",
-          body: "Terima kasih! Pendaftaran Anda kini direview oleh pengurus KOLEKSI. Kami akan mengirim e-mail setelah pendaftaran disetujui, berisi informasi aktivasi keanggotaan dengan membayar iuran tahunan.",
+          body: "Lanjutkan dengan membayar iuran pendaftaran. Link pembayaran juga bisa dikirim ulang ke e-mail Anda lewat form di bawah.",
         },
         already: {
           title: "E-mail Anda sudah terverifikasi.",
-          body: "Pendaftaran Anda sedang atau sudah direview pengurus KOLEKSI. Pantau kotak masuk e-mail Anda untuk informasi selanjutnya.",
+          body: "Lanjutkan dengan membayar iuran pendaftaran. Link pembayaran bisa dikirim ulang ke e-mail Anda lewat form di bawah.",
+        },
+        active: {
+          title: "Keanggotaan Anda sudah aktif.",
+          body: "Pembayaran iuran pendaftaran Anda sudah kami terima. Silakan masuk dengan e-mail dan kata sandi yang Anda buat saat mendaftar.",
         },
         expired: {
           title: "Link verifikasi sudah kedaluwarsa.",
@@ -556,8 +583,8 @@ const id = {
       "Lengkapi kode wilayah (1–2 huruf) dan nomor plat (1–4 angka).",
     plateSeries: "Huruf belakang plat 1–3 huruf.",
     yearRange: "Tahun antara {min} dan {max}.",
-    documentsRequired:
-      "Unggah minimal satu dokumen bukti (STNK, SPK, atau Invoice).",
+    brandRequired: "Pilih merek kendaraan.",
+    modelRequired: "Pilih tipe kendaraan.",
     documentsCount: "Maksimal {max} dokumen sekali unggah.",
     documentsSize: "Total dokumen baru maksimal {max} MB.",
   },
@@ -626,7 +653,7 @@ const id = {
     vehicleInfo: "Informasi Kendaraan",
     hasVehicle: "Apakah Anda memiliki kendaraan? *",
     yesNo: { ya: "Ya", tidak: "Tidak" },
-    vin: "No. rangka (VIN)",
+    vin: "No. rangka (VIN), opsional",
     characters: "{count}/{max} karakter",
     plate: "No. plat (Nopol)",
     plateRegion: "Kode wilayah",
@@ -637,7 +664,7 @@ const id = {
     brand: "Merek",
     model: "Tipe",
     year: "Tahun",
-    documents: "Bukti dokumen (STNK, SPK, Invoice) *",
+    documents: "Bukti dokumen (STNK, SPK, Invoice), opsional",
     maxSize: "(maksimum {max} MB)",
     dropDocuments: "Drag dokumen atau",
     upload: "Unggah",
