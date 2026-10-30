@@ -55,6 +55,12 @@ function toListItem(news: NewsResponse, locale: Locale): NewsListItem {
   };
 }
 
+/** Tujuan klik kartu homepage per slot; News Release tetap ke halaman detailnya. */
+const SLOT_LIST_HREF: Partial<Record<LatestNewsSlot, string>> = {
+  latest: "/berita?tags=berita-ev",
+  archive: "/berita",
+};
+
 /**
  * Berita homepage: News Release terbaru, Berita EV terbaru ("Berita Terkini") & Berita EV terlama
  * ("Kumpulan Berita"); maks. 3, urutan dari backend. Tag kartu = label slot; Berita Terkini & Kumpulan Berita
@@ -70,11 +76,13 @@ export async function getLatestNews(
       tags: ["news"],
     });
 
-    return data.map((news) => ({
-      ...toNewsCard(news, locale),
-      tag: slotLabels[news.slot],
-      badge: news.slot !== "news_release",
-    }));
+    return data.map((news) => {
+      const card = { ...toNewsCard(news, locale), tag: slotLabels[news.slot], badge: news.slot !== "news_release" };
+      const listHref = SLOT_LIST_HREF[news.slot];
+
+      // Berita Terkini & Kumpulan Berita membuka list /berita (terbaru di atas), bukan berita aslinya
+      return listHref ? { ...card, href: listHref, external: false } : card;
+    });
   } catch (error) {
     console.error("[getLatestNews]", error);
     return [];
