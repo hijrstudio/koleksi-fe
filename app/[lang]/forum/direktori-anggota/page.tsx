@@ -51,7 +51,7 @@ export default function DirektoriAnggotaPage() {
   return (
     <div className="grid grid-cols-1 xl:grid-cols-[1fr_270px] xl:gap-10">
       <div>
-        <h2 className="text-xl font-bold text-koleksi-navy-dark dark:text-ink-dark">
+        <h2 className="text-xl font-bold text-koleksi-navy-dark dark:text-badge-liputan">
           {t.forum.directory}
         </h2>
 

@@ -47,7 +47,7 @@ export default function Pagination({
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
         aria-label={t.pagination.previous}
-        className="flex h-10 w-10 items-center justify-center rounded-full border border-koleksi-navy-deep text-koleksi-navy-deep transition hover:bg-koleksi-navy-deep/5 disabled:opacity-30 disabled:hover:bg-transparent"
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-koleksi-navy-deep text-koleksi-navy-deep transition hover:bg-koleksi-navy-deep/5 disabled:opacity-30 disabled:hover:bg-transparent dark:border-white dark:text-white dark:hover:bg-white/10"
       >
         <ChevronLeft size={18} />
       </button>
@@ -56,7 +56,7 @@ export default function Pagination({
         item === "..." ? (
           <span
             key={`ellipsis-${i}`}
-            className="flex h-10 w-10 items-center justify-center text-base font-bold leading-6 text-koleksi-navy-deep"
+            className="flex h-10 w-10 items-center justify-center text-base font-bold leading-6 text-koleksi-navy-deep dark:text-white"
           >
             …
           </span>
@@ -69,8 +69,8 @@ export default function Pagination({
             className={clsx(
               "flex h-10 w-10 items-center justify-center rounded-full text-base font-bold leading-6 transition",
               item === currentPage
-                ? "bg-koleksi-navy-deep text-white"
-                : "border border-koleksi-navy-deep text-koleksi-navy-deep hover:bg-koleksi-navy-deep/5",
+                ? "bg-koleksi-navy-deep text-white dark:bg-koleksi-green"
+                : "border border-koleksi-navy-deep text-koleksi-navy-deep hover:bg-koleksi-navy-deep/5 dark:border-white dark:text-white dark:hover:bg-white/10",
             )}
           >
             {item}
@@ -83,7 +83,7 @@ export default function Pagination({
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
         aria-label={t.pagination.next}
-        className="flex h-10 w-10 items-center justify-center rounded-full border border-koleksi-navy-deep text-koleksi-navy-deep transition hover:bg-koleksi-navy-deep/5 disabled:opacity-30 disabled:hover:bg-transparent"
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-koleksi-navy-deep text-koleksi-navy-deep transition hover:bg-koleksi-navy-deep/5 disabled:opacity-30 disabled:hover:bg-transparent dark:border-white dark:text-white dark:hover:bg-white/10"
       >
         <ChevronRight size={18} />
       </button>

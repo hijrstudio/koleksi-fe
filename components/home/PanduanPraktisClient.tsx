@@ -9,7 +9,9 @@ import type { Swiper as SwiperType } from "swiper";
 import SectionContainer from "@/components/ui/SectionContainer";
 import SectionHeader from "@/components/ui/SectionHeader";
 import ViewAllLink from "@/components/ui/ViewAllLink";
-import YoutubeModal, { type YoutubeModalVideo } from "@/components/ui/YoutubeModal";
+import YoutubeModal, {
+  type YoutubeModalVideo,
+} from "@/components/ui/YoutubeModal";
 import PdfViewerModal from "@/app/[lang]/panduan-praktis/web-playbook/PdfViewerModal";
 import { RevealGrid, RevealItem } from "@/components/ui/Reveal";
 import clsx from "@/lib/clsx";
@@ -18,16 +20,24 @@ import { useI18n } from "@/components/i18n/I18nProvider";
 
 import "swiper/css";
 
-export default function PanduanPraktisClient({ items }: { items: ArticleCard[] }) {
+export default function PanduanPraktisClient({
+  items,
+}: {
+  items: ArticleCard[];
+}) {
   const swiperRef = useRef<SwiperType | null>(null);
   const { t } = useI18n();
   const bleedRef = useRef<HTMLDivElement | null>(null);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
   const [bleedWidth, setBleedWidth] = useState<number | undefined>(undefined);
-  const [activeVideo, setActiveVideo] = useState<YoutubeModalVideo | null>(null);
+  const [activeVideo, setActiveVideo] = useState<YoutubeModalVideo | null>(
+    null,
+  );
   const closeVideo = useCallback(() => setActiveVideo(null), []);
-  const [activePlaybook, setActivePlaybook] = useState<PlaybookListItem | null>(null);
+  const [activePlaybook, setActivePlaybook] = useState<PlaybookListItem | null>(
+    null,
+  );
   const closePlaybook = useCallback(() => setActivePlaybook(null), []);
   // Homepage statis (tanpa sesi di server): status login dicek saat playbook pertama kali dibuka.
   // Hanya menentukan tombol Unduh tampil atau tidak; izin unduh tetap dicek di server.
@@ -125,11 +135,11 @@ export default function PanduanPraktisClient({ items }: { items: ArticleCard[] }
                     >
                       {item.tag}
                     </span>
-                    <h3 className="text-card-title mt-3 font-bold transition group-hover:text-koleksi-green">
+                    <h3 className="text-card-title mt-3 font-bold transition group-hover:text-koleksi-green dark:text-white">
                       {item.title}
                     </h3>
                     {item.author && (
-                      <p className="mt-2 text-[14px] leading-3.5 text-koleksi-navy-dark/60">
+                      <p className="mt-2 text-[14px] leading-3.5 text-koleksi-navy-dark/60 dark:text-white/60">
                         {t.common.by}: {item.author}
                       </p>
                     )}
@@ -181,7 +191,11 @@ export default function PanduanPraktisClient({ items }: { items: ArticleCard[] }
       <ViewAllLink href="/panduan-praktis" />
 
       <YoutubeModal video={activeVideo} onClose={closeVideo} />
-      <PdfViewerModal playbook={activePlaybook} canDownload={canDownload} onClose={closePlaybook} />
+      <PdfViewerModal
+        playbook={activePlaybook}
+        canDownload={canDownload}
+        onClose={closePlaybook}
+      />
     </SectionContainer>
   );
 }

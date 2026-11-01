@@ -24,10 +24,10 @@ export default function ProfileCard({
           />
         </div>
       )}
-      <p className={clsx("text-base font-bold leading-6 text-koleksi-navy-dark", photo && "mt-4")}>
+      <p className={clsx("text-base font-bold leading-6 text-koleksi-navy-dark dark:text-white", photo && "mt-4")}>
         {name}
       </p>
-      <p className="text-[14px] font-normal leading-[21px] text-koleksi-navy-dark/60">
+      <p className="text-[14px] font-normal leading-[21px] text-koleksi-navy-dark/60 dark:text-white/60">
         {role}
       </p>
     </div>

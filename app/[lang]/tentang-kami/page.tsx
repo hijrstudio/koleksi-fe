@@ -18,10 +18,10 @@ import ContactForm from "./ContactForm";
 const BODY_TEXT = "text-[14px] font-normal leading-[21px]";
 
 const DOC_BUTTON_CLASS =
-  "inline-flex items-center rounded-full border hover:border-koleksi-navy-deep/60 px-6 py-2.5 text-base font-bold text-koleksi-navy-deep transition border-koleksi-navy-deep dark:border-border-dark";
+  "inline-flex items-center rounded-full border hover:border-koleksi-navy-deep/60 px-6 py-2.5 text-base font-bold text-koleksi-navy-deep transition border-koleksi-navy-deep dark:border-white dark:text-white dark:hover:border-koleksi-green dark:hover:text-koleksi-green";
 
 function EmptyNote({ children }: { children: React.ReactNode }) {
-  return <p className={`${BODY_TEXT} text-koleksi-navy-dark/60`}>{children}</p>;
+  return <p className={`${BODY_TEXT} text-koleksi-navy-dark/60 dark:text-white/60`}>{children}</p>;
 }
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -45,7 +45,7 @@ export default async function TentangKamiPage() {
               {about.summary && (
                 <RichText
                   html={about.summary}
-                  className="space-y-6 text-card-title font-bold"
+                  className="space-y-6 text-card-title font-bold dark:text-white"
                 />
               )}
             </RevealItem>
@@ -81,7 +81,7 @@ export default async function TentangKamiPage() {
               <RevealItem>
                 <RichText
                   html={about.profilOrganisasi}
-                  className={`${BODY_TEXT} columns-1 gap-x-12 text-koleksi-navy-dark/80 sm:columns-2 [&_p]:mb-4 [&_p]:break-inside-avoid`}
+                  className={`${BODY_TEXT} columns-1 gap-x-12 text-koleksi-navy-dark/80 dark:text-white/80 sm:columns-2 [&_p]:mb-4 [&_p]:break-inside-avoid`}
                 />
               </RevealItem>
             )}
@@ -94,10 +94,10 @@ export default async function TentangKamiPage() {
 
               {management ? (
                 <>
-                  <p className="text-[20px] font-bold leading-6 text-koleksi-navy-dark">
+                  <p className="text-[20px] font-bold leading-6 text-koleksi-navy-dark dark:text-white">
                     {format(t.about.period, { period: management.periodLabel })}
                   </p>
-                  <p className={`mt-4 ${BODY_TEXT} text-koleksi-navy-dark/60`}>
+                  <p className={`mt-4 ${BODY_TEXT} text-koleksi-navy-dark/60 dark:text-white/60`}>
                     {t.about.advisors}
                   </p>
                 </>
@@ -128,10 +128,10 @@ export default async function TentangKamiPage() {
                 <RevealGrid className="mt-16 grid grid-cols-1 gap-x-16 gap-y-6 sm:grid-cols-2">
                   {management.pengurusBidang.map((person) => (
                     <RevealItem key={person.id}>
-                      <p className="text-base font-bold leading-6 text-koleksi-navy-dark">
+                      <p className="text-base font-bold leading-6 text-koleksi-navy-dark dark:text-white">
                         {person.name}
                       </p>
-                      <p className={`${BODY_TEXT} text-koleksi-navy-dark/60`}>
+                      <p className={`${BODY_TEXT} text-koleksi-navy-dark/60 dark:text-white/60`}>
                         {person.role}
                       </p>
                     </RevealItem>
@@ -147,24 +147,24 @@ export default async function TentangKamiPage() {
             className="mt-24 scroll-mt-28 grid grid-cols-1 gap-10 sm:grid-cols-2"
           >
             <RevealItem>
-              <h3 className="font-display text-2xl font-bold leading-8 text-koleksi-navy">
+              <h3 className="font-display text-2xl font-bold leading-8 text-koleksi-navy dark:text-badge-liputan">
                 {t.about.vision}
               </h3>
               {about.visi && (
-                <p className={`mt-4 whitespace-pre-line ${BODY_TEXT} text-koleksi-navy-dark/80`}>
+                <p className={`mt-4 whitespace-pre-line ${BODY_TEXT} text-koleksi-navy-dark/80 dark:text-white/80`}>
                   {about.visi}
                 </p>
               )}
             </RevealItem>
 
             <RevealItem>
-              <h3 className="font-display text-2xl font-bold leading-8 text-koleksi-navy">
+              <h3 className="font-display text-2xl font-bold leading-8 text-koleksi-navy dark:text-badge-liputan">
                 {t.about.mission}
               </h3>
               {about.misi && (
                 <RichText
                   html={about.misi}
-                  className={`mt-4 ${BODY_TEXT} text-koleksi-navy-dark/80 [&_ul]:mt-2`}
+                  className={`mt-4 ${BODY_TEXT} text-koleksi-navy-dark/80 dark:text-white/80 [&_ul]:mt-2`}
                 />
               )}
             </RevealItem>
@@ -179,7 +179,7 @@ export default async function TentangKamiPage() {
             <RevealItem>
               {documents.aturan_ad_art ? (
                 <>
-                  <p className={`${BODY_TEXT} text-koleksi-navy-dark/60`}>
+                  <p className={`${BODY_TEXT} text-koleksi-navy-dark/60 dark:text-white/60`}>
                     {t.about.pdfDocument}
                   </p>
                   <a
@@ -205,38 +205,38 @@ export default async function TentangKamiPage() {
 
             <RevealGrid className="grid grid-cols-1 gap-10 sm:grid-cols-2">
               <RevealItem>
-                <h3 className="text-xl leading-6 font-bold leading-8 text-koleksi-navy-dark">
+                <h3 className="text-xl leading-6 font-bold leading-8 text-koleksi-navy-dark dark:text-white">
                   {t.about.requirements}
                 </h3>
                 {about.syaratAnggota && (
                   <RichText
                     html={about.syaratAnggota}
-                    className={`mt-4 ${BODY_TEXT} text-koleksi-navy-dark/80`}
+                    className={`mt-4 ${BODY_TEXT} text-koleksi-navy-dark/80 dark:text-white/80`}
                   />
                 )}
 
                 <Link
                   href="/daftar"
-                  className="mt-8 inline-flex items-center rounded-full bg-koleksi-navy-dark px-6 py-2.5 text-base font-bold leading-6 text-white transition hover:bg-koleksi-navy"
+                  className="mt-8 inline-flex items-center rounded-full bg-koleksi-navy-dark px-6 py-2.5 text-base font-bold leading-6 text-white transition hover:bg-koleksi-navy dark:bg-koleksi-green dark:hover:bg-koleksi-green-dark"
                 >
                   {t.common.register}
                 </Link>
               </RevealItem>
 
               <RevealItem>
-                <h3 className="text-xl leading-6 font-bold leading-8 text-koleksi-navy-dark">
+                <h3 className="text-xl leading-6 font-bold leading-8 text-koleksi-navy-dark dark:text-white">
                   {t.about.reRegistration}
                 </h3>
                 {about.daftarUlangAnggota && (
                   <RichText
                     html={about.daftarUlangAnggota}
-                    className={`mt-4 ${BODY_TEXT} text-koleksi-navy-dark/80`}
+                    className={`mt-4 ${BODY_TEXT} text-koleksi-navy-dark/80 dark:text-white/80`}
                   />
                 )}
 
                 <Link
                   href="/daftar-ulang"
-                  className="mt-8 inline-flex items-center rounded-full border border-koleksi-navy-deep px-6 py-2.5 text-base font-bold leading-6 text-koleksi-navy-deep transition hover:border-koleksi-navy-deep/60"
+                  className="mt-8 inline-flex items-center rounded-full border border-koleksi-navy-deep px-6 py-2.5 text-base font-bold leading-6 text-koleksi-navy-deep transition hover:border-koleksi-navy-deep/60 dark:border-white dark:text-white dark:hover:border-koleksi-green dark:hover:text-koleksi-green"
                 >
                   {t.about.reRegister}
                 </Link>
@@ -256,7 +256,7 @@ export default async function TentangKamiPage() {
             <RevealItem>
               {documents.sponsor || documents.mitra ? (
                 <>
-                  <p className={`${BODY_TEXT} text-koleksi-navy-dark/60`}>
+                  <p className={`${BODY_TEXT} text-koleksi-navy-dark/60 dark:text-white/60`}>
                     {t.about.downloadDocuments}
                   </p>
                   <div className="mt-4 flex flex-wrap gap-3">
@@ -293,7 +293,7 @@ export default async function TentangKamiPage() {
             <RevealItem>
               <SectionHeader title={t.about.tabs.faq} />
 
-              <h3 className="mb-6  text-xl font-bold leading-6 text-koleksi-navy-dark">
+              <h3 className="mb-6  text-xl font-bold leading-6 text-koleksi-navy-dark dark:text-white">
                 {t.about.faqGeneral}
               </h3>
             </RevealItem>

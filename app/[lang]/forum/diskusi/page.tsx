@@ -80,7 +80,7 @@ export default function DiskusiPage() {
     <div>
       <div className="grid grid-cols-1 xl:grid-cols-[1fr_270px] xl:gap-10">
         <div>
-          <h1 className="font-display text-[32px] font-bold leading-10 text-koleksi-navy dark:text-ink-dark">
+          <h1 className="font-display text-[32px] font-bold leading-10 text-koleksi-navy dark:text-badge-liputan">
             {t.forum.title}
           </h1>
           <p className="mt-6 text-base leading-6 text-koleksi-navy-dark/80 dark:text-ink-dark/60">
@@ -96,7 +96,7 @@ export default function DiskusiPage() {
       <div className="mt-10 grid grid-cols-1 gap-10 md:mt-16 xl:grid-cols-[1fr_270px]">
         {/* Discussion list */}
         <div>
-          <h2 className="text-xl font-bold text-koleksi-navy-dark dark:text-ink-dark">
+          <h2 className="text-xl font-bold text-koleksi-navy-dark dark:text-badge-liputan">
             {t.forum.discussions}
           </h2>
 
@@ -185,7 +185,7 @@ export default function DiskusiPage() {
               type="button"
               onClick={handleLoadMore}
               disabled={isLoading}
-              className="mt-8 inline-flex items-center gap-2 rounded-full border border-koleksi-navy-deep px-6 py-2.5 text-sm font-bold text-koleksi-navy-deep transition hover:border-koleksi-navy-deep/60 disabled:opacity-60"
+              className="mt-8 inline-flex items-center gap-2 rounded-full border border-koleksi-navy-deep px-6 py-2.5 text-sm font-bold text-koleksi-navy-deep transition hover:border-koleksi-navy-deep/60 disabled:opacity-60 dark:border-white dark:text-white dark:hover:border-koleksi-green dark:hover:text-koleksi-green"
             >
               {isLoading && <Loader2 size={16} className="animate-spin" />}
               {isLoading ? t.common.loading : t.list.loadMore}

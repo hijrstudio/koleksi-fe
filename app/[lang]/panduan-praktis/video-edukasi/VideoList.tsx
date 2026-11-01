@@ -103,7 +103,7 @@ export default function VideoList({
     <div>
       <h2
         ref={listTopRef}
-        className="scroll-mt-28 text-xl font-bold text-koleksi-navy-dark dark:text-ink-dark"
+        className="scroll-mt-28 text-xl font-bold text-koleksi-navy-dark dark:text-badge-liputan"
       >
         {t.guide.videos.title}
       </h2>

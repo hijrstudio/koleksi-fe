@@ -20,7 +20,7 @@ export default async function PartnerKami() {
   return (
     <SectionContainer withGuides withOrnament topDivider variant="white">
       <RevealItem>
-        <h2 className="font-display text-center text-2xl font-bold text-koleksi-navy dark:text-ink-dark leading-10 md:text-[32px]">
+        <h2 className="font-display text-center text-2xl font-bold text-koleksi-navy dark:text-badge-liputan leading-10 md:text-[32px]">
           {t.home.partners}
         </h2>
       </RevealItem>

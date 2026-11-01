@@ -36,7 +36,7 @@ function CommentField({
 }
 
 const SEND_BUTTON_CLASS =
-  "rounded-full bg-koleksi-navy-deep px-6 py-2.5 text-sm font-bold text-white transition hover:bg-koleksi-navy";
+  "rounded-full bg-koleksi-navy-deep px-6 py-2.5 text-sm font-bold text-white transition hover:bg-koleksi-navy dark:bg-koleksi-green dark:hover:bg-koleksi-green-dark";
 
 // Mock "user yang sedang login" untuk komentar baru.
 const CURRENT_USER = {

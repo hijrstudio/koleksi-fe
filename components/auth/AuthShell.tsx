@@ -53,7 +53,7 @@ export default function AuthShell({
             )}
           >
             <RevealItem className="flex items-center justify-between gap-4">
-              <h1 className="font-display text-[32px] leading-10 font-bold tracking-[-0.03em] text-koleksi-navy dark:text-ink-dark">
+              <h1 className="font-display text-[32px] leading-10 font-bold tracking-[-0.03em] text-koleksi-navy dark:text-badge-liputan">
                 {title}
               </h1>
               <Link

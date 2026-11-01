@@ -167,7 +167,7 @@ export default function Spklu({
   return (
     <SectionContainer withGuides withOrnament variant="white">
       <RevealItem>
-        <h1 className="font-display text-2xl leading-8 font-bold tracking-[-0.03em] text-koleksi-navy uppercase md:text-[32px] md:leading-10 dark:text-ink-dark">
+        <h1 className="font-display text-2xl leading-8 font-bold tracking-[-0.03em] text-koleksi-navy uppercase md:text-[32px] md:leading-10 dark:text-badge-liputan">
           {format(t.spklu.heading, { count: totalOperators })}
         </h1>
         <p className="mt-3 text-sm leading-6 font-normal text-koleksi-navy-dark md:mt-4 md:text-base dark:text-ink-dark/60">

@@ -9,7 +9,10 @@ import { getDictionary, getLocale } from "@/lib/i18n/server";
 
 export default async function KegiatanTerbaru() {
   const locale = await getLocale();
-  const [items, t] = await Promise.all([getLatestEvents(locale), getDictionary(locale)]);
+  const [items, t] = await Promise.all([
+    getLatestEvents(locale),
+    getDictionary(locale),
+  ]);
 
   // Belum ada kegiatan published / API tidak bisa diakses: sembunyikan section.
   if (items.length === 0) return null;
@@ -40,10 +43,10 @@ export default async function KegiatanTerbaru() {
                 )}
               </div>
               <div>
-                <h3 className="max-w-[90%] text-[20px] font-bold leading-6 text-koleksi-navy-dark transition group-hover:text-koleksi-green">
+                <h3 className="max-w-[90%] text-[20px] font-bold leading-6 text-koleksi-navy-dark transition group-hover:text-koleksi-green dark:text-white">
                   {item.title}
                 </h3>
-                <p className="mt-1.5 flex items-center gap-1.5 text-sm font-normal leading-3.5 text-koleksi-navy-dark/60">
+                <p className="mt-1.5 flex items-center gap-1.5 text-sm font-normal leading-3.5 text-koleksi-navy-dark/60 dark:text-white/60">
                   <Image
                     src="/images/icon-kegiatan.svg"
                     alt=""

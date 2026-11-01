@@ -26,11 +26,16 @@ export default async function BeritaSection() {
         {items.map((item) => (
           <RevealItem
             key={item.id}
-            className="rounded-xl border border-border-light transition hover:border-koleksi-green dark:border-border-dark"
+            className="rounded-xl border border-border-light transition hover:border-koleksi-green dark:border-border-dark dark:border-white/20"
           >
             {item.external ? (
               // Berita EV: link ke berita di media lain
-              <a href={item.href} target="_blank" rel="noopener noreferrer" className="block h-full p-5">
+              <a
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block h-full p-5"
+              >
                 {cardBody(item)}
                 <span className="sr-only">{t.common.opensInNewTab}</span>
               </a>
@@ -52,10 +57,10 @@ function cardBody(item: NewsCard) {
   return (
     <>
       <NewsTag tag={item.tag} badge={item.badge} />
-      <h3 className="mt-5 line-clamp-2 text-xl font-bold leading-6 text-koleksi-navy-dark">
+      <h3 className="mt-5 line-clamp-2 text-xl font-bold leading-6 text-koleksi-navy-dark dark:text-white">
         {item.title}
       </h3>
-      <p className="mt-3 text-sm leading-[21px] text-koleksi-navy-dark/60">
+      <p className="mt-3 text-sm leading-[21px] text-koleksi-navy-dark/60 dark:text-white/60">
         {item.date}
       </p>
     </>

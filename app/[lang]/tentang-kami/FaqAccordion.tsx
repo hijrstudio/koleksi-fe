@@ -19,13 +19,13 @@ function FaqItem({ question, answer }: FaqItemData) {
         aria-expanded={isOpen}
         className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
       >
-        <span className="text-base font-bold text-koleksi-navy-dark">
+        <span className="text-base font-bold text-koleksi-navy-dark dark:text-white">
           {question}
         </span>
         <ChevronDown
           size={18}
           className={clsx(
-            "shrink-0 text-koleksi-navy-dark transition-transform duration-300",
+            "shrink-0 text-koleksi-navy-dark transition-transform duration-300 dark:text-white",
             isOpen && "rotate-180",
           )}
         />
@@ -41,7 +41,7 @@ function FaqItem({ question, answer }: FaqItemData) {
           >
             <RichText
               html={answer}
-              className="space-y-2 px-5 pb-4 text-[14px] font-normal leading-[21px] text-koleksi-navy-dark/80"
+              className="space-y-2 px-5 pb-4 text-[14px] font-normal leading-[21px] text-koleksi-navy-dark/80 dark:text-white/80"
             />
           </motion.div>
         )}

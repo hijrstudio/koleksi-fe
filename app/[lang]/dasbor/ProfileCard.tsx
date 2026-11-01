@@ -40,7 +40,7 @@ export default async function ProfileCard({ user }: { user: DashboardProfile }) 
             <span
               id="xp-poin-info"
               role="tooltip"
-              className="pointer-events-none invisible absolute top-[calc(100%+8px)] left-1/2 z-20 w-60 -translate-x-1/2 rounded-xl bg-koleksi-navy-dark px-3.5 py-3 text-left text-xs leading-4 text-white opacity-0 shadow-lg transition group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100"
+              className="pointer-events-none invisible absolute top-[calc(100%+8px)] left-1/2 z-20 w-60 -translate-x-1/2 rounded-xl bg-koleksi-navy-dark px-3.5 py-3 text-left text-xs leading-4 text-white opacity-0 shadow-lg dark:bg-koleksi-navy dark:ring-1 dark:ring-white/20 transition group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100"
             >
               {p.xpInfo}
             </span>

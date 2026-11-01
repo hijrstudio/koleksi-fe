@@ -29,7 +29,7 @@ export default function ContentActions({
         className={clsx(
           "flex w-full items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold text-white transition",
           isNavy
-            ? "bg-koleksi-navy-deep hover:bg-koleksi-navy"
+            ? "bg-koleksi-navy-deep hover:bg-koleksi-navy dark:bg-koleksi-navy dark:hover:bg-koleksi-navy-deep dark:ring-1 dark:ring-white/30"
             : "bg-koleksi-green hover:bg-koleksi-green-dark",
         )}
       >

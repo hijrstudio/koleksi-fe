@@ -103,7 +103,7 @@ export default function ArticleList({
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-koleksi-navy-dark dark:text-ink-dark">
+      <h2 className="text-xl font-bold text-koleksi-navy-dark dark:text-badge-liputan">
         {t.guide.articles.title}
       </h2>
 
@@ -209,7 +209,7 @@ export default function ArticleList({
           type="button"
           onClick={() => void load(filters, page + 1, "append")}
           disabled={loading !== null}
-          className="mt-8 inline-flex items-center gap-2 rounded-full border border-koleksi-navy-deep px-6 py-2.5 text-sm font-bold text-koleksi-navy-deep transition hover:border-koleksi-navy-deep/60 disabled:opacity-60"
+          className="mt-8 inline-flex items-center gap-2 rounded-full border border-koleksi-navy-deep px-6 py-2.5 text-sm font-bold text-koleksi-navy-deep transition hover:border-koleksi-navy-deep/60 disabled:opacity-60 dark:border-white dark:text-white dark:hover:border-koleksi-green dark:hover:text-koleksi-green"
         >
           {loading === "append" && <Loader2 size={16} className="animate-spin" />}
           {loading === "append" ? t.common.loading : t.list.loadMore}

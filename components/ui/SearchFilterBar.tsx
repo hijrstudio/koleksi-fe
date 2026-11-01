@@ -58,7 +58,7 @@ export default function SearchFilterBar({
         <Search
           size={16}
           className={clsx(
-            "pointer-events-none absolute top-1/2 -translate-y-1/2 text-koleksi-navy-dark/40",
+            "pointer-events-none absolute top-1/2 -translate-y-1/2 text-koleksi-navy-dark/40 dark:text-white/40",
             iconPosition === "right" ? "right-6" : "left-3.5",
           )}
         />
@@ -69,7 +69,7 @@ export default function SearchFilterBar({
           placeholder={placeholder}
           aria-label={placeholder}
           className={clsx(
-            "w-full rounded-full border border-border-light bg-transparent text-sm text-koleksi-navy-dark placeholder:text-koleksi-navy-dark/40 transition focus:border-koleksi-navy-deep focus:outline-none dark:border-border-dark dark:text-ink-dark",
+            "w-full rounded-full border border-border-light bg-transparent text-sm text-koleksi-navy-dark placeholder:text-koleksi-navy-dark/40 transition focus:border-koleksi-navy-deep focus:outline-none dark:border-border-dark dark:text-white dark:placeholder:text-white/40 dark:focus:border-koleksi-green",
             tall ? "py-3" : "py-2.5",
             iconPosition === "right" ? "pl-5 pr-14" : "pl-10 pr-4",
           )}

@@ -81,7 +81,7 @@ export default function PollingVotingPage() {
         <div className="mt-14 flex flex-col gap-20">
           {filteredVoting.length > 0 && (
             <section>
-              <h2 className="text-xl font-bold text-koleksi-navy-dark dark:text-ink-dark">
+              <h2 className="text-xl font-bold text-koleksi-navy-dark dark:text-badge-liputan">
                 Voting
               </h2>
               <div className="mt-9 flex flex-col gap-5">
@@ -105,7 +105,7 @@ export default function PollingVotingPage() {
 
           {filteredPolling.length > 0 && (
             <section>
-              <h2 className="text-xl font-bold text-koleksi-navy-dark dark:text-ink-dark">
+              <h2 className="text-xl font-bold text-koleksi-navy-dark dark:text-badge-liputan">
                 Polling
               </h2>
               <div className="divide-y divide-border-light dark:divide-border-dark">

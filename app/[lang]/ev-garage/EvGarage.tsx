@@ -121,7 +121,7 @@ export default function EvGarage({
 
   return (
     <SectionContainer withGuides withOrnament variant="white">
-      <h1 className="font-display text-2xl leading-8 font-bold tracking-[-0.03em] text-koleksi-navy md:text-[32px] md:leading-10 dark:text-ink-dark">
+      <h1 className="font-display text-2xl leading-8 font-bold tracking-[-0.03em] text-koleksi-navy md:text-[32px] md:leading-10 dark:text-badge-liputan">
         {t.evGarage.title}
       </h1>
       <p className="mt-5 text-base leading-6 font-normal text-koleksi-navy-dark/80 dark:text-ink-dark/60">
@@ -153,7 +153,7 @@ export default function EvGarage({
                 className={clsx(
                   "relative aspect-7/3 w-full cursor-pointer border bg-white transition",
                   selected
-                    ? "border-koleksi-navy-deep"
+                    ? "border-koleksi-navy-deep dark:border-koleksi-green dark:ring-2 dark:ring-koleksi-green"
                     : "border-border-light hover:border-koleksi-navy-dark/30",
                 )}
               >

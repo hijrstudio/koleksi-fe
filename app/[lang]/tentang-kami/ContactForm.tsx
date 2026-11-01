@@ -4,9 +4,9 @@ import { FormEvent, useState } from "react";
 import { useI18n } from "@/components/i18n/I18nProvider";
 
 const inputClass =
-  "w-full rounded-lg border border-koleksi-navy-dark/20 bg-transparent px-4 py-3 text-sm text-koleksi-navy-dark placeholder:text-koleksi-navy-dark/40 transition focus:border-koleksi-navy-deep focus:outline-none dark:border-border-dark dark:text-ink-dark";
+  "w-full rounded-lg border border-koleksi-navy-dark/20 bg-transparent px-4 py-3 text-sm text-koleksi-navy-dark placeholder:text-koleksi-navy-dark/40 transition focus:border-koleksi-navy-deep focus:outline-none dark:border-border-dark dark:text-white dark:placeholder:text-white/40 dark:focus:border-koleksi-green";
 
-const labelClass = "mb-2 block text-sm text-koleksi-navy-dark";
+const labelClass = "mb-2 block text-sm text-koleksi-navy-dark dark:text-white";
 
 export default function ContactForm() {
   const { t } = useI18n();
@@ -73,7 +73,7 @@ export default function ContactForm() {
 
         <button
           type="submit"
-          className="mt-6 inline-flex w-fit items-center rounded-full bg-koleksi-navy-dark px-6 py-2.5 text-base font-bold leading-6 text-white transition hover:bg-koleksi-navy"
+          className="mt-6 inline-flex w-fit items-center rounded-full bg-koleksi-navy-dark px-6 py-2.5 text-base font-bold leading-6 text-white transition hover:bg-koleksi-navy dark:bg-koleksi-green dark:hover:bg-koleksi-green-dark"
         >
           {t.common.send}
         </button>

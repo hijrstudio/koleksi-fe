@@ -25,7 +25,7 @@ export default function SectionHeader({
 
   return (
     <div className="mb-9 flex items-center justify-between">
-      <h2 className="font-display text-2xl leading-8 font-bold tracking-[-3%] text-koleksi-navy md:text-[32px] md:leading-10 dark:text-ink-dark">
+      <h2 className="font-display text-2xl leading-8 font-bold tracking-[-3%] text-koleksi-navy md:text-[32px] md:leading-10 dark:text-badge-liputan">
         {title}
       </h2>
       {showArrows && (
@@ -38,8 +38,8 @@ export default function SectionHeader({
             className={clsx(
               "flex h-9 w-9 items-center justify-center transition",
               prevDisabled
-                ? "cursor-not-allowed text-koleksi-navy-dark/25"
-                : "text-koleksi-navy-dark hover:text-koleksi-green dark:text-ink-dark",
+                ? "cursor-not-allowed text-koleksi-navy-dark/25 dark:text-white/25"
+                : "text-koleksi-navy-dark hover:text-koleksi-green dark:text-white",
             )}
           >
             <ArrowLeft size={24} />
@@ -52,8 +52,8 @@ export default function SectionHeader({
             className={clsx(
               "flex h-9 w-9 items-center justify-center transition",
               nextDisabled
-                ? "cursor-not-allowed text-koleksi-navy-dark/25"
-                : "text-koleksi-navy-dark hover:text-koleksi-green dark:text-ink-dark",
+                ? "cursor-not-allowed text-koleksi-navy-dark/25 dark:text-white/25"
+                : "text-koleksi-navy-dark hover:text-koleksi-green dark:text-white",
             )}
           >
             <ArrowRight size={24} />

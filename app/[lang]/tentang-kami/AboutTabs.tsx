@@ -38,7 +38,7 @@ export default function AboutTabs() {
               "rounded-[22px] px-5 py-2.5 text-base font-bold leading-6 transition cursor-pointer",
               isActive
                 ? "bg-muted-steel text-white"
-                : "bg-koleksi-navy-deep/10 text-koleksi-navy-deep hover:bg-koleksi-navy-deep/15",
+                : "bg-koleksi-navy-deep/10 text-koleksi-navy-deep hover:bg-koleksi-navy-deep/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15",
             )}
           >
             {t.about.tabs[tab.key]}

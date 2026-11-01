@@ -88,7 +88,7 @@ export default function PlaybookList({
     <div>
       <h2
         ref={listTopRef}
-        className="scroll-mt-28 text-xl font-bold text-koleksi-navy-dark dark:text-ink-dark"
+        className="scroll-mt-28 text-xl font-bold text-koleksi-navy-dark dark:text-badge-liputan"
       >
         {t.guide.playbook.title}
       </h2>
@@ -108,7 +108,7 @@ export default function PlaybookList({
                 "rounded-full px-5 py-2.5 text-base font-bold leading-6 transition",
                 isActive
                   ? "bg-muted-steel text-white"
-                  : "bg-koleksi-navy-deep/10 text-koleksi-navy-deep hover:bg-koleksi-navy-deep/15",
+                  : "bg-koleksi-navy-deep/10 text-koleksi-navy-deep hover:bg-koleksi-navy-deep/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/15",
               )}
             >
               {opt}

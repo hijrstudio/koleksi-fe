@@ -22,10 +22,10 @@ export default async function WelcomeStats() {
         {/* Left: text + stats */}
         <div>
           <RevealItem>
-            <p className="font-display uppercase text-2xl leading-8 font-bold text-koleksi-navy">
+            <p className="font-display uppercase text-2xl leading-8 font-bold text-koleksi-navy dark:text-badge-liputan">
               {welcome.eyebrow}
             </p>
-            <h2 className="max-w-2xl mt-4.5 font-display uppercase text-3xl font-bold leading-14 text-koleksi-navy dark:text-white sm:text-5xl">
+            <h2 className="max-w-2xl mt-4.5 font-display uppercase text-3xl font-bold leading-14 sm:leading-8 text-koleksi-navy dark:text-white sm:text-5xl">
               {welcome.title}
             </h2>
           </RevealItem>
@@ -71,10 +71,10 @@ export default async function WelcomeStats() {
           <RevealItem className="mt-14 flex flex-wrap items-center gap-5">
             <Link
               href="/panduan-praktis"
-              className="inline-flex items-center gap-4 rounded-full border border-border-light py-2.5 pl-6 pr-3 text-[20px] leading-8 font-bold text-koleksi-navy-deep transition hover:border-koleksi-navy-deep dark:border-border-dark"
+              className="inline-flex items-center gap-4 rounded-full border border-border-light py-2.5 pl-6 pr-3 text-[20px] leading-8 font-bold text-koleksi-navy-deep transition hover:border-koleksi-navy-deep dark:border-white dark:text-koleksi-green dark:hover:border-white"
             >
               {welcome.viewCommunity}
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-koleksi-navy-deep text-white">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-koleksi-navy-deep text-white dark:bg-white dark:text-koleksi-navy">
                 <ChevronRight size={24} />
               </span>
             </Link>
@@ -98,10 +98,10 @@ export default async function WelcomeStats() {
               sizes="(min-width: 1024px) 45vw, 100vw"
             />
           </div>
-          <p className="mt-4 text-card-title font-bold">
+          <p className="mt-4 text-card-title font-bold dark:text-white">
             {welcome.featuredTitle}
           </p>
-          <p className="mt-2 text-card-caption">
+          <p className="mt-2 text-card-caption dark:text-white/40">
             {welcome.watchOn}{" "}
             <a
               href="https://www.youtube.com/@komunitasmobilelektrikindo193"

@@ -22,7 +22,7 @@ export default async function ArtikelPage() {
       <div className="grid grid-cols-1 xl:grid-cols-[1fr_270px] xl:gap-10">
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div>
-            <h1 className="lg:max-w-[80%] font-display text-[32px] font-bold leading-10 text-koleksi-navy dark:text-ink-dark">
+            <h1 className="lg:max-w-[80%] font-display text-[32px] font-bold leading-10 text-koleksi-navy dark:text-badge-liputan">
               {t.guide.articles.heading}
             </h1>
             <p className="mt-6 text-base leading-6 text-koleksi-navy-dark/80 dark:text-ink-dark/60">

@@ -49,7 +49,7 @@ export default function KategoriRoomPage() {
             transition={{ duration: 0.5, ease: EASE_OUT }}
             className="mt-16"
           >
-            <h2 className="text-xl font-bold text-koleksi-navy-dark dark:text-ink-dark">
+            <h2 className="text-xl font-bold text-koleksi-navy-dark dark:text-badge-liputan">
               {t.forum.category}
             </h2>
             <div className="mt-9 flex flex-wrap gap-3">
@@ -87,7 +87,7 @@ export default function KategoriRoomPage() {
             transition={{ duration: 0.5, ease: EASE_OUT, delay: 0.08 }}
             className="mt-16"
           >
-            <h2 className="text-xl font-bold text-koleksi-navy-dark dark:text-ink-dark">
+            <h2 className="text-xl font-bold text-koleksi-navy-dark dark:text-badge-liputan">
               {t.forum.room}
             </h2>
             <div className="mt-9 flex flex-col gap-10">

@@ -101,7 +101,7 @@ export default function GalleryList({ initialPage }: { initialPage: GalleryAlbum
     <div>
       <h2
         ref={listTopRef}
-        className="scroll-mt-28 text-xl font-bold text-koleksi-navy-dark dark:text-ink-dark"
+        className="scroll-mt-28 text-xl font-bold text-koleksi-navy-dark dark:text-badge-liputan"
       >
         {t.guide.gallery.title}
       </h2>
