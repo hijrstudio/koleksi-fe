@@ -25,16 +25,17 @@ export default async function KegiatanTerbaru() {
           <RevealItem key={item.id}>
             <Link
               href={item.href ?? "/kegiatan"}
-              className="group flex items-center gap-8"
+              className="group flex items-center gap-4 lg:gap-8"
             >
-              <div className="relative h-40 w-[270px] shrink-0 overflow-hidden rounded-2xl bg-koleksi-navy-dark/10">
+              {/* 160px di HP & tablet (teks di sebelahnya tetap lega), 270px mulai laptop; rasio 270:160 dipertahankan */}
+              <div className="relative aspect-27/16 w-40 shrink-0 overflow-hidden rounded-2xl bg-koleksi-navy-dark/10 lg:w-67.5">
                 {item.image && (
                   <Image
                     src={item.image}
                     alt={item.title}
                     fill
                     className="object-cover transition duration-500 group-hover:scale-105"
-                    sizes="270px"
+                    sizes="(min-width: 1024px) 270px, 160px"
                   />
                 )}
               </div>

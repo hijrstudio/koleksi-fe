@@ -92,14 +92,15 @@ export default function PanduanPraktisClient({ items }: { items: ArticleCard[] }
             {items.map((item) => {
               const card = (
                 <>
-                  <div className="relative h-40 w-[270px] shrink-0 overflow-hidden rounded-2xl bg-koleksi-navy-dark/10">
+                  {/* 160px di HP & tablet, 270px mulai laptop; rasio 270:160 dipertahankan (sama dengan Kegiatan Terbaru) */}
+                  <div className="relative aspect-27/16 w-40 shrink-0 overflow-hidden rounded-2xl bg-koleksi-navy-dark/10 lg:w-67.5">
                     {item.image && (
                       <Image
                         src={item.image}
                         alt={item.title}
                         fill
                         className="object-cover transition duration-500 group-hover:scale-105"
-                        sizes="270px"
+                        sizes="(min-width: 1024px) 270px, 160px"
                       />
                     )}
                     {item.isVideo && (
@@ -136,7 +137,7 @@ export default function PanduanPraktisClient({ items }: { items: ArticleCard[] }
                 </>
               );
 
-              const cardClass = "group flex w-full gap-6 text-left";
+              const cardClass = "group flex w-full gap-4 text-left lg:gap-6";
 
               return (
                 <SwiperSlide key={item.id} className="w-auto!">
