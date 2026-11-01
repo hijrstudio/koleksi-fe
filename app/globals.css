@@ -109,11 +109,17 @@
      --gutter buat ornament di kiri-kanan, gak akan ke-overlap konten. */
   --gutter: 70px;
   --content-max-w: min(1240px, calc(100% - 2 * var(--gutter)));
+  /* Lebar konten SectionContainer. Sama dengan --content-max-w, kecuali di mobile (lihat di bawah). */
+  --section-max-w: var(--content-max-w);
 }
 
 @media (max-width: 767px) {
   :root {
     --gutter: 25px;
+    /* Di mobile garis panduan disembunyikan & ornamen pindah ke atas section, jadi gutter kiri-kanan cuma
+       ruang kosong. Konten section dibuat selebar layar; jarak ke tepi = padding px-6 (24px), sejajar
+       Header & Footer. */
+    --section-max-w: 100%;
   }
 }
 

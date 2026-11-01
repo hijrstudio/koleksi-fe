@@ -67,7 +67,7 @@ export default function SectionContainer({
       {topDivider && <PlusDivider center={topDividerCenter} />}
       <div
         className="relative z-10 mx-auto py-12 sm:py-16 px-6 xxl:px-0"
-        style={{ maxWidth: "var(--content-max-w)" }}
+        style={{ maxWidth: "var(--section-max-w)" }}
       >
         {children}
       </div>
