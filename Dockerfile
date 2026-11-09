@@ -16,9 +16,12 @@ ARG BACKEND_API_URL
 ARG BACKEND_STORAGE_URL
 # true kalau API_DOMAIN di-resolve ke 127.0.0.1 di container (VPS NAT), lihat next.config.ts
 ARG IMAGES_ALLOW_LOCAL_IP=false
+# Google Analytics (NEXT_PUBLIC_* ditanam ke bundle saat build). Kosong = GA tidak dipasang.
+ARG NEXT_PUBLIC_GA_ID=
 ENV BACKEND_API_URL=$BACKEND_API_URL \
     BACKEND_STORAGE_URL=$BACKEND_STORAGE_URL \
     IMAGES_ALLOW_LOCAL_IP=$IMAGES_ALLOW_LOCAL_IP \
+    NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID \
     NEXT_TELEMETRY_DISABLED=1
 # Token lewat build secret supaya tidak tersimpan di layer image.
 RUN --mount=type=secret,id=backend_api_token,env=BACKEND_API_TOKEN npm run build

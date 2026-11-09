@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Plus_Jakarta_Sans, Space_Grotesk } from "next/font/google";
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import I18nProvider from "@/components/i18n/I18nProvider";
 import { HTML_LANG, LOCALES, isLocale } from "@/lib/i18n/config";
@@ -52,6 +53,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
         <I18nProvider locale={lang} dictionary={dictionary}>
           <ThemeProvider>{children}</ThemeProvider>
         </I18nProvider>
+        <GoogleAnalytics />
       </body>
     </html>
   );
