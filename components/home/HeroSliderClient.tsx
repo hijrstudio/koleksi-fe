@@ -27,7 +27,9 @@ export default function HeroSliderClient({ slides }: { slides: HeroSlide[] }) {
       >
         {slides.map((slide, index) => (
           <SwiperSlide key={slide.id}>
-            <div className="relative aspect-16/6 w-full">
+            {/* Tinggi tetap: 480px HP, 520px tablet, 600px desktop. Gambar/video di-crop (object-cover) dari tengah,
+                jadi isi penting banner sebaiknya di bagian tengah. */}
+            <div className="relative h-120 w-full md:h-130 lg:h-150">
               {slide.type === "video" ? (
                 <video
                   className="absolute inset-0 h-full w-full object-cover"
