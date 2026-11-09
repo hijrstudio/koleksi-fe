@@ -2,14 +2,14 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "@/components/i18n/Link";
 import { ChevronDown, Menu, Search, X } from "lucide-react";
 import { useTheme } from "@/components/providers/ThemeProvider";
 import { useI18n } from "@/components/i18n/I18nProvider";
 import clsx from "@/lib/clsx";
 import { localizePath, splitLocale } from "@/lib/i18n/config";
-import { getNavItems } from "@/lib/navigation";
+import { getNavItems, isNavItemActive } from "@/lib/navigation";
 import type { Locale } from "@/types";
 import { TbMoonFilled, TbSunHighFilled } from "react-icons/tb";
 import { ID, GB } from "country-flag-icons/react/3x2";
@@ -55,6 +55,10 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
   const router = useRouter();
   const lang = LANGUAGES.find((l) => l.code === locale) ?? LANGUAGES[0];
   const navItems = getNavItems(t);
+  // Path tanpa prefix bahasa ("/en/berita" → "/berita") untuk menandai menu aktif
+  const currentPath = splitLocale(usePathname() ?? "/").path;
+  /** Menu halaman aktif: teks kuning + garis bawah. */
+  const activeClass = "text-badge-liputan underline decoration-2 underline-offset-8";
 
   /** Halaman yang sama dalam bahasa lain: /kegiatan?x=1 ↔ /en/kegiatan?x=1 (query & anchor ikut). */
   function switchLanguage(next: Locale) {
@@ -130,14 +134,23 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
                 onMouseLeave={() => item.children && setOpenDropdown(null)}
               >
                 {item.children ? (
-                  <span className="flex cursor-default items-center gap-1 rounded-full px-3 py-2 text-sm font-semibold text-white transition hover:bg-white/10 hover:text-white/90">
+                  <span
+                    className={clsx(
+                      "flex cursor-default items-center gap-1 rounded-full px-3 py-2 text-sm font-semibold transition hover:bg-white/10",
+                      isNavItemActive(item, currentPath) ? activeClass : "text-white hover:text-white/90",
+                    )}
+                  >
                     {item.label}
                     <ChevronDown size={14} />
                   </span>
                 ) : (
                   <Link
                     href={item.href}
-                    className="flex items-center gap-1 rounded-full px-3 py-2 text-sm font-semibold text-white transition hover:bg-white/10 hover:text-white/90"
+                    aria-current={isNavItemActive(item, currentPath) ? "page" : undefined}
+                    className={clsx(
+                      "flex items-center gap-1 rounded-full px-3 py-2 text-sm font-semibold transition hover:bg-white/10",
+                      isNavItemActive(item, currentPath) ? activeClass : "text-white hover:text-white/90",
+                    )}
                   >
                     {item.label}
                   </Link>
@@ -302,9 +315,12 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
                         prev === item.label ? null : item.label,
                       )
                     }
-                    className="flex w-full items-center justify-between text-left text-2xl leading-none font-bold text-white"
+                    className={clsx(
+                      "flex w-full items-center justify-between text-left text-2xl leading-none font-bold",
+                      isNavItemActive(item, currentPath) ? "text-badge-liputan" : "text-white",
+                    )}
                   >
-                    {item.label}
+                    <span className={clsx(isNavItemActive(item, currentPath) && activeClass)}>{item.label}</span>
                     <ChevronDown
                       size={16}
                       strokeWidth={3}
@@ -318,7 +334,11 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
                   <Link
                     href={item.href}
                     onClick={closeMobileMenu}
-                    className="block text-2xl leading-none font-bold text-white"
+                    aria-current={isNavItemActive(item, currentPath) ? "page" : undefined}
+                    className={clsx(
+                      "block text-2xl leading-none font-bold",
+                      isNavItemActive(item, currentPath) ? activeClass : "text-white",
+                    )}
                   >
                     {item.label}
                   </Link>

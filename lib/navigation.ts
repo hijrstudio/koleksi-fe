@@ -47,3 +47,17 @@ export function getNavItems(t: Dictionary): NavItem[] {
 
   return items.filter((item) => !item.hidden);
 }
+
+/** "/berita" cocok dengan "/berita" dan "/berita/judul", tidak dengan "/beritaku". Query (?tags=..) diabaikan. */
+function matchesPath(path: string, href: string): boolean {
+  const base = href.split(/[?#]/)[0];
+  return base !== "/" && (path === base || path.startsWith(`${base}/`));
+}
+
+/**
+ * Menu aktif = halaman saat ini ada di bawah href menu itu sendiri atau salah satu submenunya
+ * (mis. Komunitas aktif di /panduan-praktis/* dan /forum/*). `path` tanpa prefix bahasa (splitLocale).
+ */
+export function isNavItemActive(item: NavItem, path: string): boolean {
+  return matchesPath(path, item.href) || (item.children ?? []).some((child) => matchesPath(path, child.href));
+}
