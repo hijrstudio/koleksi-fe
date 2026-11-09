@@ -25,7 +25,7 @@ export default async function WelcomeStats() {
             <p className="font-display uppercase text-2xl leading-8 font-bold text-koleksi-navy dark:text-badge-liputan">
               {welcome.eyebrow}
             </p>
-            <h2 className="max-w-2xl mt-4.5 font-display uppercase text-3xl font-bold leading-14 sm:leading-8 text-koleksi-navy dark:text-white sm:text-5xl">
+            <h2 className="max-w-2xl mt-4.5 font-display uppercase text-3xl font-bold leading-8 sm:leading-14 text-koleksi-navy dark:text-white sm:text-5xl">
               {welcome.title}
             </h2>
           </RevealItem>
