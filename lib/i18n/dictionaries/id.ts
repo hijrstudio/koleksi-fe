@@ -236,7 +236,8 @@ const id = {
     videos: {
       title: "Video Kegiatan",
       error: "Gagal memuat video. Silakan coba lagi.",
-      empty: "Belum ada video kegiatan. Nantikan dokumentasi kegiatan KOLEKSI di sini.",
+      empty:
+        "Belum ada video kegiatan. Nantikan dokumentasi kegiatan KOLEKSI di sini.",
       noResults: "Tidak ada video yang cocok dengan pencarian ini.",
     },
     phases: { ongoing: "On Going", upcoming: "On Plan", done: "Done" },
@@ -488,7 +489,8 @@ const id = {
       deadline: "Bayar sebelum {date}",
       showQr: "Tampilkan QRIS",
       successTitle: "Pembayaran berhasil. Selamat bergabung!",
-      successBody: "Keanggotaan KOLEKSI Anda kini aktif. Kami juga mengirim konfirmasi ke e-mail Anda.",
+      successBody:
+        "Keanggotaan KOLEKSI Anda kini aktif. Kami juga mengirim konfirmasi ke e-mail Anda.",
       memberNumber: "No. anggota (lambung) Anda",
       activating: "Pembayaran diterima, akun sedang diaktifkan…",
       login: "Masuk ke Dasbor",
@@ -653,7 +655,7 @@ const id = {
     vehicleInfo: "Informasi Kendaraan",
     hasVehicle: "Apakah Anda memiliki kendaraan? *",
     yesNo: { ya: "Ya", tidak: "Tidak" },
-    vin: "No. rangka (VIN), opsional",
+    vin: "No. rangka (VIN)",
     characters: "{count}/{max} karakter",
     plate: "No. plat (Nopol)",
     plateRegion: "Kode wilayah",

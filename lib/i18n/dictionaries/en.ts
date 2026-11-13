@@ -233,7 +233,8 @@ const en: Dictionary = {
     videos: {
       title: "Event Videos",
       error: "Failed to load videos. Please try again.",
-      empty: "No event videos yet. KOLEKSI event coverage will appear here soon.",
+      empty:
+        "No event videos yet. KOLEKSI event coverage will appear here soon.",
       noResults: "No videos match this search.",
     },
     phases: { ongoing: "Ongoing", upcoming: "Upcoming", done: "Done" },
@@ -483,7 +484,8 @@ const en: Dictionary = {
       deadline: "Pay before {date}",
       showQr: "Show QRIS",
       successTitle: "Payment successful. Welcome aboard!",
-      successBody: "Your KOLEKSI membership is now active. We've also sent a confirmation to your e-mail.",
+      successBody:
+        "Your KOLEKSI membership is now active. We've also sent a confirmation to your e-mail.",
       memberNumber: "Your member number",
       activating: "Payment received, activating your account…",
       login: "Go to Dashboard",
@@ -654,7 +656,7 @@ const en: Dictionary = {
     vehicleInfo: "Vehicle Information",
     hasVehicle: "Do you own a vehicle? *",
     yesNo: { ya: "Yes", tidak: "No" },
-    vin: "Chassis number (VIN), optional",
+    vin: "Chassis number (VIN)",
     characters: "{count}/{max} characters",
     plate: "License plate number",
     plateRegion: "Region code",

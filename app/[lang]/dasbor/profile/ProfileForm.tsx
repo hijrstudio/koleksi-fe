@@ -69,10 +69,7 @@ const cancelClass =
   "inline-flex min-w-35.75 items-center justify-center rounded-full border border-koleksi-navy-dark px-8 py-2.5 text-xl leading-8 font-bold text-koleksi-navy-dark transition hover:border-koleksi-green hover:text-koleksi-green dark:border-ink-dark/40 dark:text-ink-dark";
 
 /** Warna badge status verifikasi kendaraan; label dari dictionary (t.profile.verification). */
-const VERIFICATION: Record<
-  VehicleVerificationStatus,
-  { className: string }
-> = {
+const VERIFICATION: Record<VehicleVerificationStatus, { className: string }> = {
   pending: {
     className: "bg-[#f3e5c9] text-koleksi-navy-dark",
   },
@@ -204,12 +201,16 @@ function ProfileFields({
   );
 
   const clientErrors: ProfileErrors = submitted
-    ? validateProfile(form, {
-        count: existingDocs.length + newFiles.length,
-        newCount: newFiles.length,
-        newBytes: newFiles.reduce((sum, f) => sum + f.size, 0),
-        photo,
-      }, t.validation)
+    ? validateProfile(
+        form,
+        {
+          count: existingDocs.length + newFiles.length,
+          newCount: newFiles.length,
+          newBytes: newFiles.reduce((sum, f) => sum + f.size, 0),
+          photo,
+        },
+        t.validation,
+      )
     : {};
   const errorFor = (key: ProfileErrorKey) =>
     clientErrors[key] ?? (edited[key] ? undefined : state.errors?.[key]);
@@ -240,12 +241,16 @@ function ProfileFields({
     e.preventDefault();
     setSubmitted(true);
 
-    const errors = validateProfile(form, {
-      count: existingDocs.length + newFiles.length,
-      newCount: newFiles.length,
-      newBytes: newFiles.reduce((sum, f) => sum + f.size, 0),
-      photo,
-    }, t.validation);
+    const errors = validateProfile(
+      form,
+      {
+        count: existingDocs.length + newFiles.length,
+        newCount: newFiles.length,
+        newBytes: newFiles.reduce((sum, f) => sum + f.size, 0),
+        photo,
+      },
+      t.validation,
+    );
     if (Object.keys(errors).length > 0) {
       requestAnimationFrame(() =>
         document.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus(),
@@ -542,7 +547,7 @@ function ProfileFields({
               <h2 id="profil-kendaraan" className={authSectionTitleClass}>
                 {t.form.vehicleInfo}
               </h2>
-              {hasVehicle && verification && (
+              {/* {hasVehicle && verification && (
                 <span
                   className={clsx(
                     "shrink-0 rounded-md px-2 py-1 text-[11px] leading-3 font-semibold",
@@ -551,7 +556,7 @@ function ProfileFields({
                 >
                   {t.profile.verification[profile.vehicle!.verification_status]}
                 </span>
-              )}
+              )} */}
             </div>
 
             <div className="mt-10">
@@ -570,7 +575,9 @@ function ProfileFields({
                 profile.vehicle?.verification_status === "rejected" &&
                 profile.vehicle.rejection_reason && (
                   <p className={authErrorClass}>
-                    {format(t.profile.rejectedReason, { reason: profile.vehicle.rejection_reason })}
+                    {format(t.profile.rejectedReason, {
+                      reason: profile.vehicle.rejection_reason,
+                    })}
                   </p>
                 )}
             </div>
@@ -590,7 +597,10 @@ function ProfileFields({
                     <Field
                       id="profil-vin"
                       label={t.form.vin}
-                      aside={format(t.form.characters, { count: form.vin.length, max: VIN_LENGTH })}
+                      aside={format(t.form.characters, {
+                        count: form.vin.length,
+                        max: VIN_LENGTH,
+                      })}
                       error={errorFor("vin")}
                     >
                       <input
@@ -699,7 +709,10 @@ function ProfileFields({
                       <RadioGroup
                         name="plat_status"
                         ariaLabelledBy="profil-status-plat-label"
-                        options={optionsOf(PLATE_STATUS_VALUES, t.form.plateStatuses)}
+                        options={optionsOf(
+                          PLATE_STATUS_VALUES,
+                          t.form.plateStatuses,
+                        )}
                         value={form.plat_status}
                         onChange={(v) => set("plat_status", v)}
                         required
@@ -803,7 +816,9 @@ function ProfileFields({
                               </span>
                               <button
                                 type="button"
-                                aria-label={format(t.form.remove, { name: doc.original_name })}
+                                aria-label={format(t.form.remove, {
+                                  name: doc.original_name,
+                                })}
                                 onClick={() => {
                                   setRemovedIds((ids) => [...ids, doc.id]);
                                   setEdited((e) => ({ ...e, documents: true }));
@@ -837,7 +852,9 @@ function ProfileFields({
                       )}
                       {removedIds.length > 0 && (
                         <p className="mt-2 text-xs text-koleksi-navy-dark/60 dark:text-ink-dark/60">
-                          {format(t.profile.documentsToRemove, { count: removedIds.length })}
+                          {format(t.profile.documentsToRemove, {
+                            count: removedIds.length,
+                          })}
                         </p>
                       )}
                     </div>
