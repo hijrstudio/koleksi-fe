@@ -25,7 +25,9 @@ export function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));
 }
 
-export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: LayoutProps<"/[lang]">): Promise<Metadata> {
   const { lang } = await params;
   if (!isLocale(lang)) return {};
   const t = await getDictionary(lang);
@@ -35,10 +37,16 @@ export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Prom
     description: t.meta.siteDescription,
     // Beritahu mesin pencari pasangan halaman ID & EN
     alternates: { languages: { id: "/", en: "/en" } },
+    other: {
+      "facebook-domain-verification": "rfv4aq8lhe68zssk6qkij210chszig",
+    },
   };
 }
 
-export default async function RootLayout({ children, params }: LayoutProps<"/[lang]">) {
+export default async function RootLayout({
+  children,
+  params,
+}: LayoutProps<"/[lang]">) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
   const dictionary = await getDictionary(lang);
