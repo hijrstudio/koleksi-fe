@@ -1067,6 +1067,31 @@ export interface DirectoryCity {
   name: string;
 }
 
+/* ------------------------------------------------------------------ Poin & papan peringkat */
+export type LeaderboardPeriod = "month" | "all";
+
+export interface LeaderboardRow {
+  rank: number;
+  name: string;
+  avatar: string;
+  city: string | null;
+  points: number;
+  is_me: boolean;
+}
+
+export interface PointRule {
+  action: "visit" | "discussion" | "comment" | "poll" | "author" | "read" | "menu";
+  points: number;
+  daily_cap: number | null;
+}
+
+export interface Leaderboard {
+  period: LeaderboardPeriod;
+  rows: LeaderboardRow[];
+  me: { rank: number; points: number } | null;
+  rules: PointRule[];
+}
+
 /** Halaman daftar bernomor (untuk komponen Pagination). */
 export interface NumberedPage<T> {
   items: T[];

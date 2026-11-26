@@ -1,101 +1,33 @@
-"use client";
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { ApiError } from "@/lib/api/client";
+import { getSessionToken } from "@/lib/auth/session";
+import { expiredPath } from "@/lib/auth/validation";
+import { getDictionary, getLocale } from "@/lib/i18n/server";
+import { getLeaderboard } from "@/services/points";
+import LeaderboardView from "./LeaderboardView";
 
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { FaTrophy } from "react-icons/fa";
-import clsx from "@/lib/clsx";
-import { format, useI18n } from "@/components/i18n/I18nProvider";
-import { peringkatList } from "./data";
+const PATH = "/forum/papan-peringkat";
 
-const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1];
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getDictionary();
+  return { title: t.forum.leaderboard, robots: { index: false } };
+}
 
-// Warna trofi juara 1-3 (emas, perak, perunggu) -- diambil dari desain.
-const TROPHY_COLORS = ["text-[#ccb129]", "text-[#bfbfbf]", "text-[#bf6c31]"];
+/** Papan peringkat XP (khusus member). Kedua periode diambil di server; pindah tab tanpa request lagi. */
+export default async function PapanPeringkatPage() {
+  const token = await getSessionToken();
+  const locale = await getLocale();
+  if (!token) redirect(expiredPath(PATH, locale));
 
-export default function PapanPeringkatPage() {
-  const { t } = useI18n();
+  let data;
+  try {
+    data = await Promise.all([getLeaderboard(token, "month"), getLeaderboard(token, "all")]);
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 401) redirect(expiredPath(PATH, locale));
+    throw error;
+  }
 
-  return (
-    <div className="grid grid-cols-1 xl:grid-cols-[1fr_270px] xl:gap-10">
-      <div>
-        <h2 className="text-xl font-bold text-koleksi-navy-dark dark:text-badge-liputan">
-          {t.forum.leaderboard}
-        </h2>
-
-        <ol className="mt-9 flex flex-col gap-2">
-          {peringkatList.map((item, index) => {
-            const rank = index + 1;
-            const isTop = rank <= 3;
-
-            return (
-              <motion.li
-                key={item.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.5,
-                  ease: EASE_OUT,
-                  delay: index * 0.05,
-                }}
-                // Top 3: bg rgba(10,22,40,0.0333) tanpa garis; 4+: putih + border.
-                className={clsx(
-                  "flex items-center gap-5.5 rounded-[10px] border p-5",
-                  isTop
-                    ? "border-transparent bg-koleksi-navy-dark/[0.0333] dark:bg-white/5"
-                    : "border-border-light dark:border-border-dark",
-                )}
-              >
-                <Image
-                  src={item.avatar}
-                  alt={item.name}
-                  width={48}
-                  height={48}
-                  className="size-12 shrink-0 rounded-full object-cover"
-                />
-
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2.5">
-                    <span
-                      className={clsx(
-                        "inline-block rounded-full border border-muted-steel px-2 py-1 text-[10px] leading-3 font-bold",
-                        isTop ? "bg-muted-steel text-white" : "text-muted-steel",
-                      )}
-                    >
-                      #{rank}
-                    </span>
-                    {isTop && (
-                      <FaTrophy
-                        size={18}
-                        role="img"
-                        aria-label={format(t.forum.rank, { rank })}
-                        className={clsx("shrink-0", TROPHY_COLORS[index])}
-                      />
-                    )}
-                  </div>
-                  <p className="mt-2 flex items-baseline gap-2.5 text-sm leading-5">
-                    <span className="shrink-0 font-bold text-koleksi-navy-dark dark:text-ink-dark">
-                      {item.name}
-                    </span>
-                    <span className="truncate font-normal text-koleksi-navy-dark/60 dark:text-ink-dark/50">
-                      {item.city}
-                    </span>
-                  </p>
-                </div>
-
-                {/* XP sejajar dengan baris badge (rata atas) */}
-                <span className="shrink-0 self-start text-base leading-5 font-bold text-koleksi-navy-dark dark:text-ink-dark">
-                  {item.xp} XP
-                </span>
-              </motion.li>
-            );
-          })}
-        </ol>
-      </div>
-
-      {/* Empty spacer matching the article-list page's right widget
-          column, so this content column is the exact same width even
-          though there's no widget here. */}
-      <div aria-hidden="true" className="hidden xl:block" />
-    </div>
-  );
+  const [month, all] = data;
+  return <LeaderboardView boards={{ month, all }} />;
 }

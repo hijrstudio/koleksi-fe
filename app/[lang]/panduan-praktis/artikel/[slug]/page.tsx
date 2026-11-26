@@ -5,6 +5,7 @@ import Link from "@/components/i18n/Link";
 import { ArrowLeft } from "lucide-react";
 import clsx from "@/lib/clsx";
 import ContentActions from "@/components/ui/ContentActions";
+import ReadTracker from "@/components/points/ReadTracker";
 import { openGraph, plainExcerpt } from "@/lib/seo";
 import RichText from "@/components/ui/RichText";
 import { getArticleDetail } from "@/services/guideArticle";
@@ -144,6 +145,7 @@ export default async function ArtikelDetailPage({
         {/* Right widget */}
         <aside className="hidden md:block">
           <ContentActions bookmark={{ type: "article", slug: article.slug }} shareTitle={article.title} />
+          <ReadTracker type="article" slug={article.slug} />
         </aside>
       </div>
     </div>

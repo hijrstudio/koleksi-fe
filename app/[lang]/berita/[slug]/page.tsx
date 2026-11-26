@@ -5,6 +5,7 @@ import Link from "@/components/i18n/Link";
 import { ArrowLeft } from "lucide-react";
 import NewsTag from "@/components/ui/NewsTag";
 import ContentActions from "@/components/ui/ContentActions";
+import ReadTracker from "@/components/points/ReadTracker";
 import { openGraph, plainExcerpt } from "@/lib/seo";
 import RichText from "@/components/ui/RichText";
 import { getNewsDetail } from "@/services/news";
@@ -137,6 +138,7 @@ export default async function BeritaDetailPage({
         {/* Right widget */}
         <aside className="hidden md:block">
           <ContentActions bookmark={{ type: "news", slug }} shareTitle={berita.title} />
+          <ReadTracker type="news" slug={slug} />
         </aside>
       </div>
     </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { usePointTracker } from "@/components/points/usePointTracker";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "@/components/i18n/Link";
@@ -57,6 +58,8 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
   const navItems = getNavItems(t);
   // Path tanpa prefix bahasa ("/en/berita" → "/berita") untuk menandai menu aktif
   const currentPath = splitLocale(usePathname() ?? "/").path;
+  // Poin kunjungan harian & menu (hanya member yang login)
+  usePointTracker(Boolean(user), currentPath);
   /** Menu halaman aktif: teks kuning + garis bawah. */
   const activeClass = "text-badge-liputan underline decoration-2 underline-offset-8";
 
