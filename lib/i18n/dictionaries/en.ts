@@ -469,7 +469,7 @@ const en: Dictionary = {
         ". Please check your inbox (or spam folder) and click the link within 24 hours.",
       steps: [
         "Open the e-mail from KOLEKSI and click the Verify E-mail button.",
-        "You'll be taken straight to the annual fee payment page (QRIS). Complete it within 24 hours.",
+        "You'll be taken straight to the registration fee payment page (QRIS). Complete it within 24 hours.",
         "Once the payment succeeds, your account is active, gets a member number, and you can sign in to the dashboard.",
       ],
       noEmail: "Didn't receive the e-mail?",
@@ -479,8 +479,8 @@ const en: Dictionary = {
       title: "Pay Registration Fee",
       greeting: "Hello {name},",
       intro:
-        "Your e-mail has been verified. Complete your registration by paying the annual fee via QRIS (any e-wallet & mobile banking). Once the payment succeeds, your account is active right away.",
-      total: "Total fee",
+        "Your e-mail has been verified. Complete your registration by paying the registration fee via QRIS (any e-wallet & mobile banking). Once the payment succeeds, your account is active right away.",
+      total: "Registration fee",
       deadline: "Pay before {date}",
       showQr: "Show QRIS",
       successTitle: "Payment successful. Welcome aboard!",

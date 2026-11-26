@@ -474,7 +474,7 @@ const id = {
         ". Silakan cek kotak masuk (atau folder spam) dan klik link tersebut dalam 24 jam.",
       steps: [
         "Buka e-mail dari KOLEKSI dan klik tombol Verifikasi E-mail.",
-        "Anda langsung diarahkan ke halaman pembayaran iuran tahunan (QRIS). Selesaikan dalam 24 jam.",
+        "Anda langsung diarahkan ke halaman pembayaran biaya pendaftaran (QRIS). Selesaikan dalam 24 jam.",
         "Setelah pembayaran berhasil, akun Anda aktif, mendapat No. anggota, dan bisa masuk ke dasbor.",
       ],
       noEmail: "Tidak menerima e-mail?",
@@ -484,8 +484,8 @@ const id = {
       title: "Bayar Iuran Pendaftaran",
       greeting: "Halo {name},",
       intro:
-        "E-mail Anda sudah terverifikasi. Selesaikan pendaftaran dengan membayar iuran tahunan melalui QRIS (semua e-wallet & mobile banking). Setelah pembayaran berhasil, akun Anda langsung aktif.",
-      total: "Total iuran",
+        "E-mail Anda sudah terverifikasi. Selesaikan pendaftaran dengan membayar biaya pendaftaran melalui QRIS (semua e-wallet & mobile banking). Setelah pembayaran berhasil, akun Anda langsung aktif.",
+      total: "Biaya pendaftaran",
       deadline: "Bayar sebelum {date}",
       showQr: "Tampilkan QRIS",
       successTitle: "Pembayaran berhasil. Selamat bergabung!",
