@@ -8,6 +8,7 @@
 import { passwordStrengthError } from "@/lib/auth/password";
 import type { Dictionary } from "@/lib/i18n/dictionaries/types";
 import {
+  OTHER_OPTION,
   PROFILE_FIELDS,
   type ProfileErrorKey,
   type ProfileFormValues,
@@ -60,6 +61,8 @@ export const EMPTY_REGISTER_VALUES: RegisterFormValues = {
   plat_status: "permanen",
   vehicle_brand_id: "",
   vehicle_model_id: "",
+  brand_other: "",
+  model_other: "",
   tahun: "",
   heard_from: "",
 };
@@ -96,8 +99,9 @@ export function validateRegister(
   else if (v.password_confirmation !== v.password) e.password_confirmation = m.passwordMismatch;
 
   if (v.has_vehicle === "ya") {
+    // Merek & tipe wajib: dari daftar, atau "lain" lalu ditulis (dicek validateProfile)
     if (!v.vehicle_brand_id) e.vehicle_brand_id = m.brandRequired;
-    if (!v.vehicle_model_id) e.vehicle_model_id = m.modelRequired;
+    else if (v.vehicle_brand_id !== OTHER_OPTION && !v.vehicle_model_id) e.vehicle_model_id = m.modelRequired;
   }
 
   if (v.heard_from.length > 60) e.heard_from = m.invalidChoice;

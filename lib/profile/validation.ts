@@ -22,6 +22,16 @@ export const GENDER_VALUES = ["L", "P"] as const;
 export const YES_NO_VALUES = ["ya", "tidak"] as const;
 export const PLATE_STATUS_VALUES = ["permanen", "sementara"] as const;
 
+/**
+ * Pilihan "Merek lain" / "Tipe lain" di dropdown merek & tipe: kendaraan belum ada di katalog, member menulisnya
+ * sendiri (brand_other / model_other). Admin menautkannya ke katalog di CMS.
+ */
+export const OTHER_OPTION = "other";
+/** = kolom member_vehicles.brand_other / model_other (backend VehicleCatalogInput). */
+export const OTHER_BRAND_MAX = 60;
+export const OTHER_MODEL_MAX = 80;
+const OTHER_TEXT_PATTERN = /^[\p{L}\p{N}][\p{L}\p{N} .,\-/()+&']*$/u;
+
 /** Opsi {value, label} untuk SelectInput / RadioGroup. */
 export function optionsOf<V extends string>(values: readonly V[], labels: Record<V, string>): { value: V; label: string }[] {
   return values.map((value) => ({ value, label: labels[value] }));
@@ -45,15 +55,19 @@ export interface ProfileFormValues {
   plat_nomor: string;
   plat_seri: string;
   plat_status: "permanen" | "sementara";
+  /** ID katalog, atau OTHER_OPTION kalau ditulis sendiri. */
   vehicle_brand_id: string;
   vehicle_model_id: string;
+  brand_other: string;
+  model_other: string;
   tahun: string;
 }
 
 export const PROFILE_FIELDS = [
   "nama_lengkap", "nama_panggilan", "tgl_lahir", "jenis_kelamin", "no_hp", "alamat",
   "city_code", "district_code", "village_code", "has_vehicle",
-  "vin", "plat_kode", "plat_nomor", "plat_seri", "plat_status", "vehicle_brand_id", "vehicle_model_id", "tahun",
+  "vin", "plat_kode", "plat_nomor", "plat_seri", "plat_status", "vehicle_brand_id", "vehicle_model_id",
+  "brand_other", "model_other", "tahun",
 ] as const satisfies readonly (keyof ProfileFormValues)[];
 
 /** Kode/nomor/seri plat digabung jadi satu pesan di bawah input plat. */
@@ -138,11 +152,53 @@ export function validateProfile(f: ProfileFormValues, docs: DocumentCheck, m: Di
       e.tahun = format(m.yearRange, { min: MIN_VEHICLE_YEAR, max: maxYear });
     }
 
+    Object.assign(e, validateVehicleOther(f, m));
+
     if (docs.newCount > MAX_DOCUMENTS) e.documents = format(m.documentsCount, { max: MAX_DOCUMENTS });
     else if (docs.newBytes > MAX_DOCUMENTS_MB * 1024 * 1024) e.documents = format(m.documentsSize, { max: MAX_DOCUMENTS_MB });
   }
 
   return e;
+}
+
+/** Merek/tipe yang ditulis sendiri ("lain"): wajib diisi kalau dipilih, panjang & karakter dibatasi. */
+function validateVehicleOther(f: ProfileFormValues, m: Dictionary["validation"]): ProfileErrors {
+  const e: ProfileErrors = {};
+  const check = (value: string, max: number, required: string) => {
+    const text = value.trim();
+    if (!text) return required;
+    if (text.length > max) return format(m.otherTextMax, { max });
+    return OTHER_TEXT_PATTERN.test(text) ? undefined : m.otherTextInvalid;
+  };
+
+  if (f.vehicle_brand_id === OTHER_OPTION) {
+    e.brand_other = check(f.brand_other, OTHER_BRAND_MAX, m.otherBrandRequired);
+  }
+  if (f.vehicle_brand_id === OTHER_OPTION || f.vehicle_model_id === OTHER_OPTION) {
+    e.model_other = check(f.model_other, OTHER_MODEL_MAX, m.otherModelRequired);
+  }
+
+  return Object.fromEntries(Object.entries(e).filter(([, v]) => v)) as ProfileErrors;
+}
+
+/**
+ * Merek & tipe dalam format API: ID katalog, atau teks (brand_other / model_other) kalau "lain" dipilih.
+ * Merek lain → tipe selalu ditulis (tipe dari merek di luar katalog pasti belum ada di katalog).
+ */
+export function vehicleCatalogApi(v: ProfileFormValues): Record<string, string> {
+  if (v.vehicle_brand_id === OTHER_OPTION) {
+    return { vehicle_brand_id: "", vehicle_model_id: "", brand_other: v.brand_other.trim(), model_other: v.model_other.trim() };
+  }
+  if (v.vehicle_model_id === OTHER_OPTION) {
+    return { vehicle_brand_id: v.vehicle_brand_id, vehicle_model_id: "", brand_other: "", model_other: v.model_other.trim() };
+  }
+
+  return {
+    vehicle_brand_id: v.vehicle_brand_id,
+    vehicle_model_id: v.vehicle_brand_id ? v.vehicle_model_id : "",
+    brand_other: "",
+    model_other: "",
+  };
 }
 
 /** Field API backend → kunci error di form (dokumen & plat digabung). */

@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { ApiError } from "@/lib/api/client";
 import { clientIp } from "@/lib/auth/clientIp";
-import { toApiDate } from "@/lib/profile/validation";
+import { toApiDate, vehicleCatalogApi } from "@/lib/profile/validation";
 import {
   REGISTER_FIELDS,
   type RegisterErrors,
@@ -67,8 +67,7 @@ function toBackendBody(v: RegisterFormValues, documents: File[]): FormData {
       plat_nomor: v.plat_nomor,
       plat_seri: v.plat_seri,
       plat_status: v.plat_status,
-      vehicle_brand_id: v.vehicle_brand_id,
-      vehicle_model_id: v.vehicle_brand_id ? v.vehicle_model_id : "",
+      ...vehicleCatalogApi(v),
       tahun: v.tahun,
     });
     documents.forEach((file) => body.append("documents[]", file, file.name));

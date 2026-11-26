@@ -11,6 +11,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import clsx from "@/lib/clsx";
 import PasswordInput from "@/components/auth/PasswordInput";
 import SelectInput from "@/components/auth/SelectInput";
+import VehicleCatalogFields from "@/components/profile/VehicleCatalogFields";
 import DatePickerInput from "@/components/auth/DatePickerInput";
 import RadioGroup from "@/components/auth/RadioGroup";
 import FileDropzone from "@/components/auth/FileDropzone";
@@ -135,14 +136,6 @@ export default function RegisterForm({ regencies, brands }: RegisterFormProps) {
     value: r.code,
     label: r.name,
   }));
-  const brandOptions = brands.map((b) => ({
-    value: String(b.id),
-    label: b.name,
-  }));
-  const modelOptions =
-    brands
-      .find((b) => String(b.id) === form.vehicle_brand_id)
-      ?.models.map((m) => ({ value: String(m.id), label: m.name })) ?? [];
 
   const platError = errorFor("plat");
   const documentsError = errorFor("documents");
@@ -585,43 +578,14 @@ export default function RegisterForm({ regencies, brands }: RegisterFormProps) {
                         )}
                       </div>
 
-                      <div className="grid grid-cols-2 gap-5">
-                        <Field
-                          id="daftar-merek"
-                          label={t.form.brand}
-                          required
-                          error={errorFor("vehicle_brand_id")}
-                        >
-                          <SelectInput
-                            id="daftar-merek"
-                            options={brandOptions}
-                            value={form.vehicle_brand_id}
-                            onChange={(e) =>
-                              set("vehicle_brand_id", e.target.value, {
-                                vehicle_model_id: "",
-                              })
-                            }
-                            {...invalid("vehicle_brand_id", "daftar-merek")}
-                          />
-                        </Field>
-                        <Field
-                          id="daftar-tipe"
-                          label={t.form.model}
-                          required
-                          error={errorFor("vehicle_model_id")}
-                        >
-                          <SelectInput
-                            id="daftar-tipe"
-                            options={modelOptions}
-                            value={form.vehicle_model_id}
-                            disabled={!form.vehicle_brand_id}
-                            onChange={(e) =>
-                              set("vehicle_model_id", e.target.value)
-                            }
-                            {...invalid("vehicle_model_id", "daftar-tipe")}
-                          />
-                        </Field>
-                      </div>
+                      <VehicleCatalogFields
+                        idPrefix="daftar"
+                        brands={brands}
+                        values={form}
+                        required
+                        onChange={(key, value, patch) => set(key, value, patch)}
+                        errorFor={errorFor}
+                      />
 
                       <Field
                         id="daftar-tahun"

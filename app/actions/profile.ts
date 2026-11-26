@@ -13,6 +13,7 @@ import {
   errorKeyFor,
   toApiDate,
   validateProfile,
+  vehicleCatalogApi,
 } from "@/lib/profile/validation";
 import { updateMemberProfile } from "@/services/memberProfile";
 import type { MemberEditProfile } from "@/types";
@@ -67,8 +68,7 @@ function toBackendBody(
       plat_nomor: v.plat_nomor,
       plat_seri: v.plat_seri,
       plat_status: v.plat_status,
-      vehicle_brand_id: v.vehicle_brand_id,
-      vehicle_model_id: v.vehicle_brand_id ? v.vehicle_model_id : "",
+      ...vehicleCatalogApi(v),
       tahun: v.tahun,
     };
     Object.entries(vehicle).forEach(([k, value]) => body.append(k, value));

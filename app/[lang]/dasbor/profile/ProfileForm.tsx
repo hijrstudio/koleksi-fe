@@ -13,6 +13,7 @@ import clsx from "@/lib/clsx";
 import { format, useI18n } from "@/components/i18n/I18nProvider";
 import Field from "@/components/auth/FormField";
 import SelectInput from "@/components/auth/SelectInput";
+import VehicleCatalogFields from "@/components/profile/VehicleCatalogFields";
 import DatePickerInput from "@/components/auth/DatePickerInput";
 import PhotoInput from "./PhotoInput";
 import RadioGroup from "@/components/auth/RadioGroup";
@@ -28,6 +29,7 @@ import { type ProfileState, updateProfile } from "@/app/actions/profile";
 import {
   GENDER_VALUES,
   MAX_DOCUMENTS_MB,
+  OTHER_OPTION,
   PLATE_STATUS_VALUES,
   type ProfileErrorKey,
   type ProfileErrors,
@@ -101,8 +103,11 @@ function toValues(p: MemberEditProfile): ProfileFormValues {
     plat_nomor: v?.plat_nomor ?? "",
     plat_seri: v?.plat_seri ?? "",
     plat_status: v?.plat_status ?? "permanen",
-    vehicle_brand_id: v?.vehicle_brand_id ? String(v.vehicle_brand_id) : "",
-    vehicle_model_id: v?.vehicle_model_id ? String(v.vehicle_model_id) : "",
+    // Merek/tipe ditulis sendiri → pilihan "lain" + teksnya
+    vehicle_brand_id: v?.vehicle_brand_id ? String(v.vehicle_brand_id) : v?.brand_other ? OTHER_OPTION : "",
+    vehicle_model_id: v?.vehicle_model_id ? String(v.vehicle_model_id) : v?.model_other ? OTHER_OPTION : "",
+    brand_other: v?.brand_other ?? "",
+    model_other: v?.model_other ?? "",
     tahun: v?.tahun ? String(v.tahun) : "",
   };
 }
@@ -286,14 +291,6 @@ function ProfileFields({
     label: r.name,
   }));
   const brandList = withCurrentVehicle(brands, profile.vehicle);
-  const brandOptions = brandList.map((b) => ({
-    value: String(b.id),
-    label: b.name,
-  }));
-  const modelOptions =
-    brandList
-      .find((b) => String(b.id) === form.vehicle_brand_id)
-      ?.models.map((m) => ({ value: String(m.id), label: m.name })) ?? [];
 
   const verification = profile.vehicle
     ? VERIFICATION[profile.vehicle.verification_status]
@@ -724,41 +721,13 @@ function ProfileFields({
                       )}
                     </div>
 
-                    <div className="grid grid-cols-2 gap-5">
-                      <Field
-                        id="profil-merek"
-                        label={t.form.brand}
-                        error={errorFor("vehicle_brand_id")}
-                      >
-                        <SelectInput
-                          id="profil-merek"
-                          options={brandOptions}
-                          value={form.vehicle_brand_id}
-                          onChange={(e) =>
-                            set("vehicle_brand_id", e.target.value, {
-                              vehicle_model_id: "",
-                            })
-                          }
-                          {...invalid("vehicle_brand_id", "profil-merek")}
-                        />
-                      </Field>
-                      <Field
-                        id="profil-tipe"
-                        label={t.form.model}
-                        error={errorFor("vehicle_model_id")}
-                      >
-                        <SelectInput
-                          id="profil-tipe"
-                          options={modelOptions}
-                          value={form.vehicle_model_id}
-                          disabled={!form.vehicle_brand_id}
-                          onChange={(e) =>
-                            set("vehicle_model_id", e.target.value)
-                          }
-                          {...invalid("vehicle_model_id", "profil-tipe")}
-                        />
-                      </Field>
-                    </div>
+                    <VehicleCatalogFields
+                      idPrefix="profil"
+                      brands={brandList}
+                      values={form}
+                      onChange={(key, value, patch) => set(key, value, patch)}
+                      errorFor={errorFor}
+                    />
 
                     <Field
                       id="profil-tahun"

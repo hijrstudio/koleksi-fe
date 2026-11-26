@@ -789,6 +789,9 @@ export interface MemberEditProfile {
     plat_status: "permanen" | "sementara";
     vehicle_brand_id: number | null;
     vehicle_model_id: number | null;
+    /** Merek/tipe ditulis sendiri (belum ada di katalog). */
+    brand_other: string | null;
+    model_other: string | null;
     /** Merek/tipe terpilih (bisa sudah dinonaktifkan di CMS, jadi tidak ada di /vehicle-brands). */
     vehicle_brand: VehicleCatalogRef | null;
     vehicle_model: VehicleCatalogRef | null;
