@@ -1050,6 +1050,23 @@ export interface ForumPoll {
   my_option_id: number | null;
 }
 
+/* ------------------------------------------------------------------ Direktori anggota forum */
+/** Data publik anggota (tanpa email / HP / alamat / plat). */
+export interface DirectoryMember {
+  /** "#007" */
+  no_lambung: string;
+  name: string;
+  avatar: string;
+  vehicle_brand: string | null;
+  city: string | null;
+}
+
+export interface DirectoryCity {
+  /** Kode wilayah, mis. "31.74" */
+  code: string;
+  name: string;
+}
+
 /** Halaman daftar bernomor (untuk komponen Pagination). */
 export interface NumberedPage<T> {
   items: T[];

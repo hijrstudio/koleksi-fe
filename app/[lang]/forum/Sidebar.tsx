@@ -20,11 +20,9 @@ export default function Sidebar({
 
   const navItems = [
     { label: s.discussions, href: "/forum/diskusi" },
-    { label: s.categories, href: "/forum/kategori-room" },
     { label: s.members, href: "/forum/direktori-anggota" },
     { label: s.polls, href: "/forum/polling-voting" },
     { label: s.leaderboard, href: "/forum/papan-peringkat" },
-    { label: s.guidelines, href: "/forum/panduan-komunitas" },
   ];
 
   // Dari backend (cache 5 menit). "Aktif" = anggota yang menulis diskusi/komentar 30 hari terakhir.
