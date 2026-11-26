@@ -53,6 +53,8 @@ export const API_ENDPOINTS = {
   forumDiscussion: (slug: string) => `/member/forum/discussions/${encodeURIComponent(slug)}`,
   forumComments: (slug: string) => `/member/forum/discussions/${encodeURIComponent(slug)}/comments`,
   forumRating: (slug: string) => `/member/forum/discussions/${encodeURIComponent(slug)}/rating`,
+  forumPolls: "/member/forum/polls",
+  forumPollVote: (id: number) => `/member/forum/polls/${id}/vote`,
   regencies: "/regions/regencies",
   districts: (regency: string) => `/regions/regencies/${encodeURIComponent(regency)}/districts`,
   villages: (district: string) => `/regions/districts/${encodeURIComponent(district)}/villages`,

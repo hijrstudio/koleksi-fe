@@ -1023,6 +1023,40 @@ export interface ForumPage<T> {
   hasMore: boolean;
 }
 
+/* ------------------------------------------------------------------ Polling & voting forum */
+export type ForumPollType = "voting" | "polling";
+
+export interface ForumPollOption {
+  id: number;
+  label: string;
+  /** Hanya ada bila results_visible (polling; voting yang sudah selesai). */
+  votes?: number;
+  percent?: number;
+}
+
+export interface ForumPoll {
+  id: number;
+  type: ForumPollType;
+  title: string;
+  author: { name: string; role: string };
+  starts_at: string;
+  ends_at: string | null;
+  ended_at: string | null;
+  phase: "open" | "ended";
+  votes_count: number;
+  results_visible: boolean;
+  allows_change: boolean;
+  options: ForumPollOption[];
+  my_option_id: number | null;
+}
+
+/** Halaman daftar bernomor (untuk komponen Pagination). */
+export interface NumberedPage<T> {
+  items: T[];
+  page: number;
+  lastPage: number;
+}
+
 /* ------------------------------------------------------------------ Simpanan (bookmark) member */
 
 export type BookmarkType = "discussion" | "news" | "article";
