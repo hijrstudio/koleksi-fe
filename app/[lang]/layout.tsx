@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import I18nProvider from "@/components/i18n/I18nProvider";
 import { HTML_LANG, LOCALES, isLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/server";
+import { SITE_URL, openGraph } from "@/lib/seo";
 import "../globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -33,10 +34,13 @@ export async function generateMetadata({
   const t = await getDictionary(lang);
 
   return {
+    metadataBase: new URL(SITE_URL),
     title: t.meta.siteTitle,
     description: t.meta.siteDescription,
     // Beritahu mesin pencari pasangan halaman ID & EN
     alternates: { languages: { id: "/", en: "/en" } },
+    // Preview link default (halaman tanpa gambar sendiri, termasuk forum yang khusus member)
+    ...openGraph({ title: t.meta.siteTitle, description: t.meta.siteDescription, locale: lang }),
     other: {
       "facebook-domain-verification": "rfv4aq8lhe68zssk6qkij210chszig",
     },

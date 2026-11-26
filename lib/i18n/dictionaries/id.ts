@@ -40,6 +40,7 @@ const id = {
     sort: "Sort",
     categoryTag: "Kategori/Tag",
     loadMore: "Muat lebih banyak",
+    allCategories: "Semua kategori",
   },
 
   nav: {
@@ -92,6 +93,14 @@ const id = {
     },
     // Notifikasi tersimpan di backend, dikenali dari `type`; tipe lain memakai teks dari backend
     types: {
+      "forum.comment": {
+        title: "Komentar baru",
+        body: "{actor} mengomentari diskusi Anda “{title}”.",
+      },
+      "forum.reply": {
+        title: "Balasan baru",
+        body: "{actor} membalas komentar Anda di “{title}”.",
+      },
       "account.password_changed": {
         title: "Kata sandi diubah",
         body: "Kata sandi akun KOLEKSI Anda diubah pada {date}.",
@@ -698,7 +707,7 @@ const id = {
       semua: { title: "Semua", description: "Seluruh aktivitas Anda" },
       tersimpan: {
         title: "Item Tersimpan",
-        description: "Artikel, berita & kegiatan yang Anda simpan",
+        description: "Diskusi, berita & artikel yang Anda simpan",
       },
       forum: { title: "Forum", description: "Diskusi, balasan & polling Anda" },
       transaksi: {
@@ -820,6 +829,26 @@ const id = {
     createFailed: "Gagal membuat QRIS. Silakan coba lagi beberapa saat lagi.",
   },
 
+  bookmark: {
+    save: "Simpan",
+    saved: "Tersimpan",
+    loginToSave: "Masuk untuk menyimpan",
+    pageTitle: "Tersimpan",
+    pageIntro: "Diskusi, berita, dan artikel yang Anda simpan.",
+    empty: "Belum ada yang disimpan. Klik tombol Simpan di diskusi, berita, atau artikel.",
+    remove: "Hapus dari simpanan",
+    types: { discussion: "Diskusi", news: "Berita", article: "Artikel" },
+  },
+  share: {
+    title: "Bagikan ke",
+    whatsapp: "WhatsApp",
+    facebook: "Facebook",
+    x: "X (Twitter)",
+    telegram: "Telegram",
+    copy: "Salin link",
+    copied: "Link disalin",
+    more: "Lainnya…",
+  },
   forum: {
     sidebar: {
       discussions: "Diskusi",
@@ -832,7 +861,7 @@ const id = {
       stats: "Statistik",
       statDiscussions: "Diskusi",
       statMessages: "Pesan",
-      statOnline: "Online",
+      statOnline: "Aktif",
       report: "Lapor Pelanggaran",
     },
     title: "Forum KOLEKSI",
@@ -874,6 +903,35 @@ const id = {
     votes: "{count} Vote",
     vote: "Vote",
     voted: "Sudah vote",
+    pinned: "Disematkan",
+    locked: "Komentar untuk diskusi ini sudah ditutup moderator.",
+    hiddenComment: "Komentar ini disembunyikan moderator.",
+    loadMoreComments: "Muat komentar lainnya",
+    ownRating: "Anda tidak bisa memberi rating untuk diskusi sendiri.",
+    ratingSaved: "Terima kasih, rating Anda tersimpan.",
+    noTrending: "Belum ada topik trending.",
+    loadError: "Gagal memuat. Coba lagi.",
+    noActiveMembers: "Belum ada anggota aktif.",
+    sessionExpired: "Sesi Anda berakhir. Silakan masuk lagi.",
+    create: {
+      metaTitle: "Buat Diskusi - Forum KOLEKSI",
+      title: "Buat Diskusi",
+      intro: "Bagikan pertanyaan, pengalaman, atau ide seputar kendaraan listrik. Diskusi langsung tampil untuk semua anggota.",
+      category: "Kategori",
+      chooseCategory: "Pilih kategori",
+      titleLabel: "Judul",
+      titlePlaceholder: "Mis. Apakah EV pilihan tepat sebagai mobil pertama?",
+      titleMin: "Judul minimal 5 karakter.",
+      bodyMin: "Isi diskusi minimal 10 karakter.",
+      body: "Isi Diskusi",
+      bodyPlaceholder: "Tulis isi diskusi...",
+      image: "Gambar Sampul (opsional)",
+      imageHint: "JPG, PNG, atau WEBP, maks 2 MB.",
+      removeImage: "Hapus gambar",
+      submit: "Terbitkan Diskusi",
+      submitting: "Menerbitkan...",
+      guidelines: "Dengan menerbitkan, Anda setuju mengikuti Panduan Komunitas.",
+    },
   },
 };
 

@@ -10,6 +10,7 @@ import {
   CalendarClock,
   CircleAlert,
   KeyRound,
+  MessageSquare,
   ShieldCheck,
   UserRound,
   type LucideIcon,
@@ -103,15 +104,31 @@ function notificationRow(n: MemberNotification, t: Dictionary, locale: Locale): 
       : "",
     amount: typeof n.params.amount === "number" ? formatRupiah(n.params.amount) : "",
     number: typeof n.params.no_lambung === "number" ? `#${String(n.params.no_lambung).padStart(3, "0")}` : "",
+    actor: typeof n.params.actor_name === "string" ? n.params.actor_name : "",
+    title: typeof n.params.discussion_title === "string" ? n.params.discussion_title : "",
   };
+  // Notifikasi forum → buka diskusinya (slug divalidasi: link tetap di dalam website)
+  const discussionSlug = typeof n.params.discussion_slug === "string" && /^[a-z0-9-]{1,190}$/.test(n.params.discussion_slug)
+    ? n.params.discussion_slug
+    : null;
 
   return {
     key: n.id,
-    icon: n.type === "account.password_changed" ? ShieldCheck : n.type.startsWith("membership.") ? BadgeCheck : Bell,
+    icon: n.type === "account.password_changed"
+      ? ShieldCheck
+      : n.type.startsWith("membership.")
+        ? BadgeCheck
+        : n.type.startsWith("forum.")
+          ? MessageSquare
+          : Bell,
     // Tipe yang belum dikenal website: teks (bahasa Indonesia) dari backend
     title: known?.title ?? n.title,
     body: known ? format(known.body, values) : n.message,
-    href: n.type === "account.password_changed" ? "/dasbor/profile/ubah-kata-sandi" : "/dasbor",
+    href: n.type === "account.password_changed"
+      ? "/dasbor/profile/ubah-kata-sandi"
+      : discussionSlug
+        ? `/forum/diskusi/${discussionSlug}`
+        : "/dasbor",
     unread: !n.read,
     time: relativeTime(n.created_at, locale),
     notificationId: n.id,

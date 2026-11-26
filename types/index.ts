@@ -239,7 +239,13 @@ export interface MemberNotification {
   /** Teks bahasa Indonesia dari backend — dipakai kalau `type` belum dikenal website. */
   title: string;
   message: string;
-  params: Partial<Record<"changed_at" | "amount" | "period_label" | "renewal_date" | "active_until" | "days_left" | "no_lambung", string | number>>;
+  params: Partial<
+    Record<
+      | "changed_at" | "amount" | "period_label" | "renewal_date" | "active_until" | "days_left" | "no_lambung"
+      | "actor_name" | "discussion_slug" | "discussion_title",
+      string | number
+    >
+  >;
   read: boolean;
   created_at: string | null;
 }
@@ -954,4 +960,80 @@ export interface GaragePage {
   page: number;
   totalPages: number;
   total: number;
+}
+
+/* ------------------------------------------------------------------ Forum (API /member/forum, khusus member) */
+
+/** Penulis konten forum. Admin CMS tampil sebagai "Moderator". */
+export interface ForumAuthor {
+  name: string;
+  avatar: string;
+  role: string;
+}
+
+export interface ForumCategory {
+  /** Ada di GET /forum/categories (dipakai form buat diskusi); tidak dikirim di kategori milik diskusi. */
+  id?: number;
+  slug: string;
+  name: string;
+}
+
+export interface ForumDiscussionSummary {
+  slug: string;
+  title: string;
+  excerpt: string;
+  /** null = tanpa gambar sampul (pakai gambar default website). */
+  image: string | null;
+  category: ForumCategory;
+  author: ForumAuthor;
+  is_pinned: boolean;
+  is_locked: boolean;
+  comments_count: number;
+  views_count: number;
+  rating: { average: number; count: number };
+  created_at: string;
+}
+
+export interface ForumDiscussionDetail extends ForumDiscussionSummary {
+  body: string;
+  is_mine: boolean;
+  my_rating: number | null;
+}
+
+/** Komentar + balasan (maks 3 tingkat). Disembunyikan admin → body & author null. */
+export interface ForumComment {
+  id: number;
+  hidden: boolean;
+  body: string | null;
+  author: ForumAuthor | null;
+  depth: number;
+  created_at: string;
+  replies: ForumComment[];
+}
+
+export interface ForumOverview {
+  stats: { discussions: number; comments: number; active_members: number };
+  trending: { slug: string; title: string; created_at: string }[];
+  active_members: ForumAuthor[];
+}
+
+/** Satu halaman daftar (load more). */
+export interface ForumPage<T> {
+  items: T[];
+  hasMore: boolean;
+}
+
+/* ------------------------------------------------------------------ Simpanan (bookmark) member */
+
+export type BookmarkType = "discussion" | "news" | "article";
+
+export interface BookmarkTarget {
+  type: BookmarkType;
+  slug: string;
+}
+
+export interface BookmarkItem extends BookmarkTarget {
+  title: string;
+  image: string | null;
+  saved_at: string;
 }

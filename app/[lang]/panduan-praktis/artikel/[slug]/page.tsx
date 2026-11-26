@@ -5,6 +5,7 @@ import Link from "@/components/i18n/Link";
 import { ArrowLeft } from "lucide-react";
 import clsx from "@/lib/clsx";
 import ContentActions from "@/components/ui/ContentActions";
+import { openGraph, plainExcerpt } from "@/lib/seo";
 import RichText from "@/components/ui/RichText";
 import { getArticleDetail } from "@/services/guideArticle";
 import { getDictionary, getLocale } from "@/lib/i18n/server";
@@ -16,9 +17,17 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const article = await getArticleDetail(slug, await getLocale());
+  const locale = await getLocale();
+  const article = await getArticleDetail(slug, locale);
+  if (!article) return {};
 
-  return article ? { title: `${article.title} - KOLEKSI` } : {};
+  // Preview link: judul, ringkasan & gambar sampul artikel
+  const description = plainExcerpt(article.content);
+  return {
+    title: `${article.title} - KOLEKSI`,
+    description,
+    ...openGraph({ title: article.title, description, image: article.image, type: "article", locale }),
+  };
 }
 
 export default async function ArtikelDetailPage({
@@ -86,7 +95,7 @@ export default async function ArtikelDetailPage({
 
           <div className="mt-8 h-px w-full bg-koleksi-navy-dark/10" />
           {/* Aksi artikel -- mobile only, di atas Artikel Terkait */}
-          <ContentActions className="mt-8 md:hidden" />
+          <ContentActions className="mt-8 md:hidden" bookmark={{ type: "article", slug: article.slug }} shareTitle={article.title} />
 
           {/* Related articles */}
           {article.related.length > 0 && (
@@ -134,7 +143,7 @@ export default async function ArtikelDetailPage({
 
         {/* Right widget */}
         <aside className="hidden md:block">
-          <ContentActions />
+          <ContentActions bookmark={{ type: "article", slug: article.slug }} shareTitle={article.title} />
         </aside>
       </div>
     </div>

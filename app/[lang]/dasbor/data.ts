@@ -96,4 +96,6 @@ export const MEMBER_COUNTS: Record<
 export const RIWAYAT_KATEGORI = ["semua", "tersimpan", "forum", "transaksi"] as const;
 
 // TODO: halaman riwayat belum ada -- href disiapkan dulu.
-export const riwayatHref = (kategori: (typeof RIWAYAT_KATEGORI)[number]) => `/dasbor/riwayat?kategori=${kategori}`;
+export const riwayatHref = (kategori: (typeof RIWAYAT_KATEGORI)[number]) =>
+  // Item tersimpan punya halaman sendiri (simpanan diskusi, berita, artikel)
+  kategori === "tersimpan" ? "/dasbor/tersimpan" : `/dasbor/riwayat?kategori=${kategori}`;

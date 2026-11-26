@@ -5,6 +5,7 @@ import Link from "@/components/i18n/Link";
 import { ArrowLeft } from "lucide-react";
 import NewsTag from "@/components/ui/NewsTag";
 import ContentActions from "@/components/ui/ContentActions";
+import { openGraph, plainExcerpt } from "@/lib/seo";
 import RichText from "@/components/ui/RichText";
 import { getNewsDetail } from "@/services/news";
 import { getDictionary, getLocale } from "@/lib/i18n/server";
@@ -15,9 +16,17 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const berita = await getNewsDetail(slug, await getLocale());
+  const locale = await getLocale();
+  const berita = await getNewsDetail(slug, locale);
+  if (!berita) return {};
 
-  return berita ? { title: `${berita.title} - KOLEKSI` } : {};
+  // Preview link: judul, ringkasan & foto berita
+  const description = berita.summary || plainExcerpt(berita.content);
+  return {
+    title: `${berita.title} - KOLEKSI`,
+    description,
+    ...openGraph({ title: berita.title, description, image: berita.image, type: "article", locale }),
+  };
 }
 
 export default async function BeritaDetailPage({
@@ -79,7 +88,7 @@ export default async function BeritaDetailPage({
           <div className="mt-8 h-px w-full bg-koleksi-navy-dark/10" />
 
           {/* Aksi berita -- mobile only, di atas Berita Terkait */}
-          <ContentActions className="mt-8 md:hidden" />
+          <ContentActions className="mt-8 md:hidden" bookmark={{ type: "news", slug }} shareTitle={berita.title} />
 
           {/* Berita terkait: kategori yang sama */}
           {berita.related.length > 0 && (
@@ -127,7 +136,7 @@ export default async function BeritaDetailPage({
 
         {/* Right widget */}
         <aside className="hidden md:block">
-          <ContentActions />
+          <ContentActions bookmark={{ type: "news", slug }} shareTitle={berita.title} />
         </aside>
       </div>
     </div>

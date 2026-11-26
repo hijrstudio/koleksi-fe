@@ -38,6 +38,7 @@ const en: Dictionary = {
     sort: "Sort",
     categoryTag: "Category/Tag",
     loadMore: "Load more",
+    allCategories: "All categories",
   },
 
   nav: {
@@ -89,6 +90,14 @@ const en: Dictionary = {
       },
     },
     types: {
+      "forum.comment": {
+        title: "New comment",
+        body: "{actor} commented on your discussion “{title}”.",
+      },
+      "forum.reply": {
+        title: "New reply",
+        body: "{actor} replied to your comment in “{title}”.",
+      },
       "account.password_changed": {
         title: "Password changed",
         body: "Your KOLEKSI account password was changed on {date}.",
@@ -699,7 +708,7 @@ const en: Dictionary = {
       semua: { title: "All", description: "All of your activity" },
       tersimpan: {
         title: "Saved Items",
-        description: "Articles, news & events you've saved",
+        description: "Discussions, news & articles you've saved",
       },
       forum: {
         title: "Forum",
@@ -822,6 +831,26 @@ const en: Dictionary = {
     createFailed: "Failed to create the QRIS. Please try again in a moment.",
   },
 
+  bookmark: {
+    save: "Save",
+    saved: "Saved",
+    loginToSave: "Sign in to save",
+    pageTitle: "Saved",
+    pageIntro: "Discussions, news and articles you saved.",
+    empty: "Nothing saved yet. Use the Save button on a discussion, news item or article.",
+    remove: "Remove from saved",
+    types: { discussion: "Discussion", news: "News", article: "Article" },
+  },
+  share: {
+    title: "Share to",
+    whatsapp: "WhatsApp",
+    facebook: "Facebook",
+    x: "X (Twitter)",
+    telegram: "Telegram",
+    copy: "Copy link",
+    copied: "Link copied",
+    more: "More…",
+  },
   forum: {
     sidebar: {
       discussions: "Discussions",
@@ -834,7 +863,7 @@ const en: Dictionary = {
       stats: "Statistics",
       statDiscussions: "Discussions",
       statMessages: "Messages",
-      statOnline: "Online",
+      statOnline: "Active",
       report: "Report a Violation",
     },
     title: "KOLEKSI Forum",
@@ -876,6 +905,35 @@ const en: Dictionary = {
     votes: "{count} Votes",
     vote: "Vote",
     voted: "Voted",
+    pinned: "Pinned",
+    locked: "Comments on this discussion were closed by a moderator.",
+    hiddenComment: "This comment was hidden by a moderator.",
+    loadMoreComments: "Load more comments",
+    ownRating: "You can't rate your own discussion.",
+    ratingSaved: "Thanks, your rating is saved.",
+    noTrending: "No trending topics yet.",
+    loadError: "Failed to load. Please try again.",
+    noActiveMembers: "No active members yet.",
+    sessionExpired: "Your session has ended. Please sign in again.",
+    create: {
+      metaTitle: "New Discussion - KOLEKSI Forum",
+      title: "New Discussion",
+      intro: "Share a question, experience or idea about electric vehicles. Discussions are visible to all members right away.",
+      category: "Category",
+      chooseCategory: "Choose a category",
+      titleLabel: "Title",
+      titlePlaceholder: "E.g. Is an EV the right first car?",
+      titleMin: "The title needs at least 5 characters.",
+      bodyMin: "The discussion needs at least 10 characters.",
+      body: "Discussion",
+      bodyPlaceholder: "Write your discussion...",
+      image: "Cover Image (optional)",
+      imageHint: "JPG, PNG or WEBP, max 2 MB.",
+      removeImage: "Remove image",
+      submit: "Publish Discussion",
+      submitting: "Publishing...",
+      guidelines: "By publishing, you agree to follow the Community Guidelines.",
+    },
   },
 };
 
