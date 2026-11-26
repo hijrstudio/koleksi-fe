@@ -676,6 +676,8 @@ export interface NewsDetail extends NewsListItem {
 /** Response GET /member/me (`data`) & POST /member/login (`member`). */
 export interface MemberProfile {
   id: number;
+  /** Total poin papan peringkat sepanjang waktu. */
+  xp?: number;
   no_lambung: number;
   no_lambung_label: string;
   nama_lengkap: string;
@@ -1065,6 +1067,29 @@ export interface DirectoryCity {
   /** Kode wilayah, mis. "31.74" */
   code: string;
   name: string;
+}
+
+/* ------------------------------------------------------------------ Pencarian website */
+export type SearchType = "news" | "article" | "event" | "video";
+
+export interface SearchItem {
+  type: SearchType;
+  slug: string | null;
+  title: string;
+  excerpt: string | null;
+  image: string | null;
+  /** YYYY-MM-DD */
+  date: string | null;
+  /** Nama media / kategori / lokasi */
+  meta: string | null;
+  /** Link luar (berita dari media lain, video YouTube); null = halaman di website ini. */
+  url: string | null;
+}
+
+export interface SearchGroup {
+  type: SearchType;
+  total: number;
+  items: SearchItem[];
 }
 
 /* ------------------------------------------------------------------ Poin & papan peringkat */

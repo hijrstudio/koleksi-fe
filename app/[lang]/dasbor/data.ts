@@ -6,9 +6,7 @@ export interface DashboardProfile {
   name: string;
   avatar: string;
   noLambung: string;
-  level: number;
   xp: number;
-  points: number;
   location: string;
   isActive: boolean;
   validFrom: string;
@@ -26,10 +24,8 @@ export function toDashboardProfile(member: MemberProfile, locale: Locale): Dashb
     name: member.nama_lengkap,
     avatar: member.photo_url,
     noLambung: member.no_lambung_label,
-    // Level/XP/Poin belum ada di backend.
-    level: 1,
-    xp: 0,
-    points: 0,
+    // XP = total poin papan peringkat sepanjang waktu
+    xp: member.xp ?? 0,
     location: member.city_name ?? "-",
     isActive: membership.is_active,
     validFrom: formatPlainDate(membership.valid_from, locale, "short") || "-",

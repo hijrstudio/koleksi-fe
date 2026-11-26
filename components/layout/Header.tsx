@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { usePointTracker } from "@/components/points/usePointTracker";
+import HeaderSearch, { searchHref } from "./HeaderSearch";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "@/components/i18n/Link";
@@ -196,13 +197,7 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
                 </Link>
               )}
 
-              <button
-                type="button"
-                aria-label={t.common.search}
-                className="flex h-9 w-9 items-center justify-center rounded-full text-white transition hover:bg-white/10"
-              >
-                <Search size={18} />
-              </button>
+              <HeaderSearch />
 
               <button
                 type="button"
@@ -407,15 +402,29 @@ export default function Header({ user: serverUser }: { user?: HeaderUser }) {
               </form>
             )}
 
-            <label className="flex h-15 items-center gap-5 rounded-full border-2 border-white/20 bg-transparent pl-7 pr-6 text-white focus-within:border-white/40">
-              <Search size={22} className="shrink-0" />
-              <input
-                type="search"
-                placeholder={t.common.search}
-                aria-label={t.common.search}
-                className="min-w-0 flex-1 bg-transparent text-lg text-white outline-none placeholder:text-white/40"
-              />
-            </label>
+            <form
+              role="search"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const href = searchHref(String(new FormData(e.currentTarget).get("q") ?? ""), locale);
+                if (!href) return;
+                closeMobileMenu();
+                router.push(href);
+              }}
+            >
+              <label className="flex h-15 items-center gap-5 rounded-full border-2 border-white/20 bg-transparent pl-7 pr-6 text-white focus-within:border-white/40">
+                <Search size={22} className="shrink-0" />
+                <input
+                  type="search"
+                  name="q"
+                  maxLength={100}
+                  enterKeyHint="search"
+                  placeholder={t.common.search}
+                  aria-label={t.common.search}
+                  className="min-w-0 flex-1 bg-transparent text-lg text-white outline-none placeholder:text-white/40"
+                />
+              </label>
+            </form>
           </div>
 
           {/* Tema (kiri) & Bahasa (kanan) */}

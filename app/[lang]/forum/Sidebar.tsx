@@ -67,13 +67,6 @@ export default function Sidebar({
             </dl>
           </>
         )}
-
-        <Link
-          href="/forum/lapor-pelanggaran"
-          className="mt-8 inline-block text-xs text-koleksi-navy-dark/60 underline transition hover:text-koleksi-navy-dark dark:text-ink-dark/60"
-        >
-          {s.report}
-        </Link>
       </div>
     </SectionSidebar>
   );

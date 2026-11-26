@@ -56,6 +56,7 @@ export const API_ENDPOINTS = {
   forumPolls: "/member/forum/polls",
   forumMembers: "/member/forum/members",
   forumLeaderboard: "/member/forum/leaderboard",
+  search: "/search",
   pointsVisit: "/member/points/visit",
   pointsReadStart: "/member/points/read/start",
   pointsReadClaim: "/member/points/read/claim",

@@ -2,11 +2,12 @@ import Image from "next/image";
 import { Info } from "lucide-react";
 import clsx from "@/lib/clsx";
 import { format } from "@/lib/i18n/config";
-import { getDictionary } from "@/lib/i18n/server";
+import { getDictionary, getLocale } from "@/lib/i18n/server";
 import type { DashboardProfile } from "./data";
 
 export default async function ProfileCard({ user }: { user: DashboardProfile }) {
-  const p = (await getDictionary()).dashboard.profile;
+  const locale = await getLocale();
+  const p = (await getDictionary(locale)).dashboard.profile;
 
   return (
     <div className="flex flex-col items-center gap-5 rounded-2xl border border-border-light p-4 text-center sm:flex-row sm:items-center sm:text-left dark:border-border-dark">
@@ -21,24 +22,24 @@ export default async function ProfileCard({ user }: { user: DashboardProfile }) 
       <div className="min-w-0">
         <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 sm:justify-start">
           <span className="rounded-md bg-muted-light px-1.5 py-0.5 text-[10px] leading-3 text-koleksi-navy-dark dark:bg-muted-dark dark:text-ink-dark">
-            Level {user.level}
+            {p.memberBadge}
           </span>
           <span className="text-sm text-koleksi-navy-dark/60 dark:text-ink-dark/60">
-            {format(p.points, { xp: user.xp, points: user.points })}
+            {format(p.points, { xp: new Intl.NumberFormat(locale === "en" ? "en" : "id").format(user.xp) })}
           </span>
 
-          {/* Keterangan XP & Poin -- muncul saat hover/focus. */}
+          {/* Keterangan XP -- muncul saat hover/focus. */}
           <span className="group relative inline-flex">
             <button
               type="button"
               aria-label={p.xpInfoLabel}
-              aria-describedby="xp-poin-info"
+              aria-describedby="xp-info"
               className="rounded-full text-koleksi-navy-dark/30 transition hover:text-koleksi-navy-dark/60 focus-visible:text-koleksi-navy-dark/60 focus-visible:outline-none dark:text-ink-dark/30"
             >
               <Info size={16} fill="currentColor" stroke="white" />
             </button>
             <span
-              id="xp-poin-info"
+              id="xp-info"
               role="tooltip"
               className="pointer-events-none invisible absolute top-[calc(100%+8px)] left-1/2 z-20 w-60 -translate-x-1/2 rounded-xl bg-koleksi-navy-dark px-3.5 py-3 text-left text-xs leading-4 text-white opacity-0 shadow-lg dark:bg-koleksi-navy dark:ring-1 dark:ring-white/20 transition group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100"
             >
